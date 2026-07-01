@@ -5,10 +5,8 @@ import '../repository/profile_repository.dart';
 
 class GetProfileUseCase {
   final ProfileRepository _repository;
-
   const GetProfileUseCase(this._repository);
 
-  Future<Either<Failure, EmployeeProfile>> call() {
-    return _repository.getProfile();
-  }
+  Future<Either<Failure, EmployeeProfile>> call() =>
+      _repository.getProfile();
 }

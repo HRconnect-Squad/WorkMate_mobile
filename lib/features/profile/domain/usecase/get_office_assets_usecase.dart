@@ -5,10 +5,8 @@ import '../repository/profile_repository.dart';
 
 class GetOfficeAssetsUseCase {
   final ProfileRepository _repository;
-
   const GetOfficeAssetsUseCase(this._repository);
 
-  Future<Either<Failure, List<OfficeAsset>>> call() {
-    return _repository.getOfficeAssets();
-  }
+  Future<Either<Failure, List<OfficeAsset>>> call() =>
+      _repository.getOfficeAssets();
 }
