@@ -1,7 +1,7 @@
+import 'package:flutter/foundation.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:fpdart/fpdart.dart';
 import 'package:workmate/core/domain/failure/domain_failure.dart';
-import '../../../features/auth/domain/failures/failure.dart';
 
 abstract class BaseCubit<STATE> extends Cubit<STATE> {
   BaseCubit(super.initialState);
@@ -16,71 +16,22 @@ abstract class BaseCubit<STATE> extends Cubit<STATE> {
 
     final result = await call();
 
-    result.fold((failure) {
-      onError(failure);
+    result.fold(
+          (failure) {
+        onError(failure);
 
-      if (failure is SessionExpiredFailure ||
-          failure is InvalidCredentialsFailure) {
-        if (failure is SessionExpiredFailure) {
-          _handleUnauthorized();
+        if (failure is RequiresReauthentication) {
+          onSessionExpired();
         }
-      }
-    }, (data) => onSuccess(data));
+      },
+      onSuccess,
+    );
   }
 
   void updateState(STATE Function(STATE currentState) updater) {
     emit(updater(state));
   }
 
-  // UiError _mapFailureToUiError(Failure failure) {
-  //   return switch (failure) {
-  //     NetworkFailure() => const NetworkUiError(),
-  //     TimeoutFailure() => const TimeoutUiError(),
-  //     ServerFailure(:final message) => ServerUiError(message),
-  //     CacheFailure(:final message) => CacheUiError(message),
-  //     InvalidCredentialsFailure(:final message) => InvalidCredentialsUiError(message,),
-  //     SessionExpiredFailure(:final message) => UnauthorizedUiError(message),
-  //     UserNotFoundFailure(:final message) => NotFoundUiError(message),
-  //     InvalidOtpFailure(:final message) => InvalidOtpUiError(message),
-  //     OtpExpiredFailure(:final message) => InvalidOtpUiError(message),
-  //     EmailAlreadyExistsFailure(:final message) => AccountExistsUiError(message,),
-  //     PhoneAlreadyExistsFailure(:final message) => AccountExistsUiError(message,),
-  //     AccountNotVerifiedFailure(:final message) => AccountNotVerifiedUiError(message,),
-  //     AccountDisabledFailure(:final message) => AccountDisabledUiError(message),
-  //     TooManyAttemptsFailure(:final message) => TooManyAttemptsUiError(message),
-  //
-  //     ValidationFailure(:final message, :final fieldErrors) =>
-  //       ValidationUiError(message: message, fieldErrors: fieldErrors),
-  //
-  //     ProfileUpdateFailure(:final message) => ProfileUpdateUiError(message),
-  //     ProfileNotCompletedFailure(:final message) => ProfileNotCompletedUiError(message),
-  //     ProfileFetchFailure(:final message) => ProfileFetchUiError(message),
-  //     ProfileImageUploadFailure(:final message) => ProfileImageUploadUiError(message),
-  //
-  //     PayrollFetchFailure(:final message) => PayrollFetchUiError(message),
-  //     PayrollNotFoundFailure(:final message) => PayrollNotFoundUiError(message),
-  //
-  //     ProfileAlreadyExistsFailure(:final message) => ProfileAlreadyExistsUiError(message),
-  //
-  //     ChangePasswordFailure(:final message) => ChangePasswordUiError(message),
-  //     SamePasswordFailure(:final message) => SamePasswordUiError(message),
-  //     InvalidCurrentPasswordFailure(:final message) => InvalidCurrentPasswordUiError(message),
-  //
-  //     ExpenseFetchFailure(:final message) => ExpenseFetchUiError(message),
-  //     ExpenseNotFoundFailure(:final message) => ExpenseNotFoundUiError(message),
-  //     ExpenseAlreadyProcessedFailure(:final message) => ExpenseAlreadyProcessedUiError(message),
-  //     ExpenseCreateFailure(:final message) => ExpenseCreateUiError(message),
-  //     ExpenseUpdateFailure(:final message) => ExpenseUpdateUiError(message),
-  //     ExpenseDeleteFailure(:final message) => ExpenseDeleteUiError(message),
-  //     ReceiptUploadFailure(:final message) => ReceiptUploadUiError(message),
-  //     ExpenseValidationFailure(:final message, :final fieldErrors) =>
-  //     ValidationUiError(message: message, fieldErrors: fieldErrors),
-  //     UnknownFailure(:final message) => UnknownUiError(message),
-  //     _ => const UnknownUiError("Unknown error occurred")
-  //   };
-  // }
-
-  void _handleUnauthorized() {
-    // Override in app-level base cubit or specific cubits
-  }
+  @protected
+  void onSessionExpired() {}
 }

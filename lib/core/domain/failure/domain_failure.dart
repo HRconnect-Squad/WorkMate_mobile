@@ -1,5 +1,8 @@
 import 'package:workmate/core/domain/failure/validation_error.dart';
 
+//Marker
+abstract interface class RequiresReauthentication {}
+
 abstract class Failure {
   final String message;
   final int? statusCode;
@@ -45,7 +48,7 @@ class BadRequestFailure extends Failure {
   const BadRequestFailure({super.message = 'Bad request'});
 }
 
-class UnauthorizedFailure extends Failure {
+class UnauthorizedFailure extends Failure implements RequiresReauthentication {
   const UnauthorizedFailure({super.message = 'Unauthorized'});
 }
 

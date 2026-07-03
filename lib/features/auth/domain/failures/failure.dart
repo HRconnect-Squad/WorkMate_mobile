@@ -10,7 +10,7 @@ class InvalidCredentialsFailure extends AuthFailure {
   });
 }
 
-class SessionExpiredFailure extends AuthFailure {
+class SessionExpiredFailure extends AuthFailure implements RequiresReauthentication {
   const SessionExpiredFailure({
     super.message = 'Session expired. Please sign in again',
   });
