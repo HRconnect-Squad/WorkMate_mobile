@@ -169,6 +169,7 @@ The app uses `flutter_dotenv` for configuration. Ensure the following keys are s
 ## 📸 Screenshots
 
 <img width="1380" height="752" alt="WorkMate" src="https://github.com/user-attachments/assets/7735a681-2cb5-4738-b86e-9b908ccf54c3" />
+
 ---
 
 ## 🤝 Contributing
@@ -187,4 +188,5 @@ Distributed under the MIT License. See `LICENSE` for more information.
 
 ---
 Developed with ❤️ by the WorkMate Team.
+
 If you found this project helpful, consider giving it a ⭐.
