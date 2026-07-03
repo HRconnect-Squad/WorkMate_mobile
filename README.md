@@ -1,12 +1,12 @@
 <p align="center">
-  <img alt="WorkMate" src="docs/banner.png" width="100%">
+  <img alt="WorkMate" src="docs/banner.png" height="20%" width="20%">
 </p>
 
-<h1 align="center">
-WorkMate 💼
+<h1 align="left">
+WorkMate
 </h1>
 
-<p align="center">
+<p align="left">
 WorkMate is a professional workspace and HR management mobile application designed to bridge the gap between HR departments and employees. Built with Flutter, it provides a seamless experience for managing payroll, leave requests, expenses, and employee profiles in one centralized location.
 </p>
 
@@ -167,8 +167,6 @@ The app uses `flutter_dotenv` for configuration. Ensure the following keys are s
 | `ENV` | Current environment (development/production) |
 
 ## 📸 Screenshots
-
-<img width="1380" height="752" alt="WorkMate" src="https://github.com/user-attachments/assets/7735a681-2cb5-4738-b86e-9b908ccf54c3" />
 
 ---
 
