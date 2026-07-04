@@ -1,8 +1,11 @@
-import 'package:workmate/features/auth/presentation/reset_password/logic/reset_password_state.dart';
+import '../../../../../core/domain/failure/domain_failure.dart';
 import '../../../../../core/presentation/base_viewmodel/base_cubit.dart';
+import '../../../../../core/presentation/mapper/failure_ui_mapper.dart';
 import '../../../../../core/presentation/routes/config/app_state_notifier.dart';
 import '../../../../../core/presentation/util/validator.dart';
+import '../../../domain/failures/failure.dart';
 import '../../../domain/use_cases/reset_password_use_case.dart';
+import 'reset_password_state.dart';
 
 class ResetPasswordCubit extends BaseCubit<ResetPasswordState> {
   final ResetPasswordUseCase _resetPasswordUseCase;
@@ -32,11 +35,32 @@ class ResetPasswordCubit extends BaseCubit<ResetPasswordState> {
         updateState((s) => s.copyWith(isLoading: false, isSuccess: true, user: user));
       },
       onError: (failure) {
-        updateState((s) => s.copyWith(
-          isLoading: false,
-          apiError: failure.message,
-          isSuccess: false,
-        ));
+        switch (failure) {
+          case OtpExpiredFailure():
+          case InvalidOtpFailure():
+            updateState((s) => s.copyWith(
+              isLoading: false,
+              otp: '',
+              otpError: failure.message,
+              isSuccess: false,
+            ));
+
+          case ValidationFailure(:final errors):
+            updateState((s) => s.copyWith(
+              isLoading: false,
+              otpError: errors?.firstErrorFor('code'),
+              passwordError: errors?.firstErrorFor('password'),
+              confirmPasswordError: errors?.firstErrorFor('password_confirmation'),
+              isSuccess: false,
+            ));
+
+          default:
+            updateState((s) => s.copyWith(
+              isLoading: false,
+              apiError: FailureUiMapper.map(failure),
+              isSuccess: false,
+            ));
+        }
       },
     );
   }

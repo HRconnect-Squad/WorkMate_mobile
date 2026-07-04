@@ -261,7 +261,7 @@
   "serial_number": "Serial Number",
   "description": "Description",
   "no_assets_assigned": "No Assets Assigned",
-  "no_assets_description": "You don't have any office assets assigned to you yet."
-
-
+  "no_assets_description": "You don't have any office assets assigned to you yet.",
+  "resend_code": "Resend it",
+  "in": "in"
 }

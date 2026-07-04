@@ -1,4 +1,5 @@
 import '../../../../../core/presentation/base_viewmodel/base_cubit.dart';
+import '../../../../../core/presentation/mapper/failure_ui_mapper.dart';
 import '../../../../../core/presentation/util/validator.dart';
 import '../../../domain/entity/auth_type.dart';
 import '../../../domain/use_cases/forgot_password_use_case.dart';
@@ -29,7 +30,7 @@ class ForgotPasswordCubit extends BaseCubit<ForgotPasswordState> {
       onError: (failure) {
         updateState((s) => s.copyWith(
           isLoading: false,
-          apiError: failure.message,
+          apiError: FailureUiMapper.map(failure),
           isSuccess: false,
         ));
       },
@@ -69,7 +70,6 @@ class ForgotPasswordCubit extends BaseCubit<ForgotPasswordState> {
   void clearError() {
     updateState((s) => s.copyWith(clearApiError: true, clearEmailError: true));
   }
-
 
   bool _validate() {
     final emailError = Validators.validateEmail(state.email.trim());

@@ -1,7 +1,8 @@
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:iconsax/iconsax.dart';
-import '../../../../core/presentation/design_system/theme/helper/theme_extention.dart';
+
+import '../../../../design_system/theme/helper/theme_extention.dart';
 
 class BottomNavBar extends StatelessWidget {
   const BottomNavBar({

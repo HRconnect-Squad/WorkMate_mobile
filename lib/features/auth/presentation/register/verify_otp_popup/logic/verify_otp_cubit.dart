@@ -1,10 +1,12 @@
-import 'package:workmate/features/auth/presentation/register/verify_otp_popup/logic/verify_otp_state.dart';
 import '../../../../../../../core/presentation/base_viewmodel/base_cubit.dart';
+import '../../../../../../../core/presentation/mapper/failure_ui_mapper.dart';
 import '../../../../../../../core/presentation/util/validator.dart';
 import '../../../../../../core/presentation/routes/config/app_state_notifier.dart';
 import '../../../../domain/entity/verification_type.dart';
 import '../../../../domain/entity/verify_otp.dart';
+import '../../../../domain/failures/failure.dart';
 import '../../../../domain/use_cases/otp_use_case.dart';
+import 'verify_otp_state.dart';
 
 class VerifyOtpCubit extends BaseCubit<VerifyOtpState> {
   final VerifyOTPUseCase _verifyOtpUseCase;
@@ -53,16 +55,26 @@ class VerifyOtpCubit extends BaseCubit<VerifyOtpState> {
           isVerified: true,
         ));
       },
-      onError: (error) {
-        updateState((s) => s.copyWith(
-          isLoading: false,
-          errorMessage: error.message,
-        ));
+      onError: (failure) {
+        switch (failure) {
+          case OtpExpiredFailure():
+          case InvalidOtpFailure():
+            updateState((s) => s.copyWith(
+              isLoading: false,
+              code: '',
+              errorMessage: failure.message,
+            ));
+
+          default:
+            updateState((s) => s.copyWith(
+              isLoading: false,
+              errorMessage: FailureUiMapper.map(failure),
+            ));
+        }
       },
     );
   }
 
   // TODO: Implement resend OTP when backend supports it
-  Future<void> resendOtp() async {
-  }
+  Future<void> resendOtp() async {}
 }

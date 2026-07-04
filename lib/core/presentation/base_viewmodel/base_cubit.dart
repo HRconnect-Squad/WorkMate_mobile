@@ -2,9 +2,13 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:fpdart/fpdart.dart';
 import 'package:workmate/core/domain/failure/domain_failure.dart';
+import '../routes/config/app_state_notifier.dart';
 
 abstract class BaseCubit<STATE> extends Cubit<STATE> {
-  BaseCubit(super.initialState);
+  final AuthStateNotifier _authStateNotifier;
+
+  BaseCubit(super.initialState, {AuthStateNotifier? authStateNotifier})
+      : _authStateNotifier = authStateNotifier ?? AuthStateNotifier.instance;
 
   Future<void> execute<T>({
     required Future<Either<Failure, T>> Function() call,
@@ -33,5 +37,7 @@ abstract class BaseCubit<STATE> extends Cubit<STATE> {
   }
 
   @protected
-  void onSessionExpired() {}
+  void onSessionExpired() {
+    _authStateNotifier.setLoggedOut();
+  }
 }
