@@ -4,6 +4,7 @@ import 'package:workmate/features/auth/data/data_source/local/onboarding_local_d
 import 'package:workmate/features/auth/data/repository_imp/on_boarding_repository_imp.dart';
 import 'package:workmate/features/auth/domain/repository/auth_repository.dart';
 import 'package:workmate/features/auth/domain/repository/on_boarding_repository.dart';
+import 'package:workmate/features/auth/domain/use_cases/check_forgot_password_otp_use_case.dart';
 import 'package:workmate/features/auth/domain/use_cases/load_identifier_use_case.dart';
 import 'package:workmate/features/auth/domain/use_cases/login_use_case.dart';
 import 'package:workmate/features/auth/domain/use_cases/register_use_case.dart';
@@ -20,9 +21,10 @@ import '../../features/auth/domain/use_cases/reset_password_use_case.dart';
 import '../../features/auth/domain/use_cases/check_onboarding_status_use_case.dart';
 import '../../features/auth/domain/use_cases/complete_onboarding_use_case.dart';
 import '../../features/auth/domain/use_cases/otp_use_case.dart';
-import '../../features/auth/domain/use_cases/forgot_password_use_case.dart';
+import '../../features/auth/domain/use_cases/send_otp_use_case.dart';
 import '../../features/auth/presentation/change_password/logic/change_password_cubit.dart';
 import '../../features/auth/presentation/forget_password/logic/forgot_password_cubit.dart';
+import '../../features/auth/presentation/forget_password/logic/verify_forgot_password_otp_cubit.dart';
 import '../../features/auth/presentation/on_boarding/logic/on_boarding_cubit.dart';
 import '../../features/auth/presentation/register/signup/logic/sign_up_cubit.dart';
 import '../../features/auth/presentation/register/verify_otp_popup/logic/verify_otp_cubit.dart';
@@ -118,9 +120,6 @@ Future<void> _initAuth() async {
   );
 
   //domain
-  sl.registerLazySingleton<ForgotPasswordUseCase>(
-    () => ForgotPasswordUseCase(sl<AuthRepository>()),
-  );
   sl.registerLazySingleton<ResetPasswordUseCase>(
     () => ResetPasswordUseCase(sl<AuthRepository>()),
   );
@@ -139,10 +138,24 @@ Future<void> _initAuth() async {
   sl.registerLazySingleton<ChangePasswordUseCase>(
         () => ChangePasswordUseCase(sl<AuthRepository>()),
   );
+  sl.registerLazySingleton<SendOtpUseCase>(
+        () => SendOtpUseCase(sl<AuthRepository>()),
+  );
+  sl.registerLazySingleton<CheckForgotPasswordOtpUseCase>(
+        () => CheckForgotPasswordOtpUseCase(sl<AuthRepository>()),
+  );
+
+
 
   //presentation
   sl.registerFactory<ForgotPasswordCubit>(
-    () => ForgotPasswordCubit(sl<ForgotPasswordUseCase>()),
+    () => ForgotPasswordCubit(sl<SendOtpUseCase>()),
+  );
+  sl.registerFactory<VerifyForgotPasswordOtpCubit>(
+        () => VerifyForgotPasswordOtpCubit(
+      sl<CheckForgotPasswordOtpUseCase>(),
+      sl<SendOtpUseCase>(),
+    ),
   );
   sl.registerFactory<ResetPasswordCubit>(
     () => ResetPasswordCubit(sl<ResetPasswordUseCase>()),
@@ -153,7 +166,7 @@ Future<void> _initAuth() async {
   sl.registerFactory<SignUpCubit>(
           () => SignUpCubit(sl<RegisterUseCase>()));
   sl.registerFactory<VerifyOtpCubit>(
-        () => VerifyOtpCubit(sl<VerifyOTPUseCase>()),
+        () => VerifyOtpCubit(sl<VerifyOTPUseCase>(), sl<SendOtpUseCase>()),
   );
   sl.registerFactory<ChangePasswordCubit>(
         () => ChangePasswordCubit(

@@ -2,31 +2,31 @@ import 'package:fpdart/fpdart.dart';
 import '../../../../core/domain/failure/domain_failure.dart';
 import '../../../../core/domain/failure/validation_error.dart';
 import '../entity/auth_type.dart';
+import '../entity/verification_type.dart';
 import '../repository/auth_repository.dart';
 
-class ForgotPasswordUseCase {
+class SendOtpForForgotPasswordUseCase {
   final AuthRepository _repository;
 
-  const ForgotPasswordUseCase(this._repository);
+  const SendOtpForForgotPasswordUseCase(this._repository);
 
   Future<Either<Failure, String>> call({
     required String identifier,
     required AuthType loginType,
   }) {
     if (identifier.trim().isEmpty) {
-      return Future.value(
-        Left(ValidationFailure(
-          message: 'Please check your input',
-          errors: ValidationErrors({
-            'identifier': ['Email or phone cannot be empty'],
-          }),
-        )),
-      );
+      return Future.value(Left(ValidationFailure(
+        message: 'Please check your input',
+        errors: ValidationErrors({
+          'identifier': ['Email or phone cannot be empty'],
+        }),
+      )));
     }
 
-    return _repository.forgotPassword(
+    return _repository.sendOtp(
       identifier: identifier,
       loginType: loginType,
+      purpose: VerificationType.passwordReset,
     );
   }
 }

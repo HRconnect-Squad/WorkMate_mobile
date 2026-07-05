@@ -1,21 +1,22 @@
-import '../../../../../../../core/presentation/base_viewmodel/base_cubit.dart';
-import '../../../../../../../core/presentation/mapper/failure_ui_mapper.dart';
-import '../../../../../../../core/presentation/util/validator.dart';
-import '../../../../../../core/presentation/routes/config/app_state_notifier.dart';
-import '../../../../domain/entity/auth_identifier.dart';
-import '../../../../domain/entity/verification_type.dart';
-import '../../../../domain/entity/verify_otp.dart';
-import '../../../../domain/failures/failure.dart';
-import '../../../../domain/use_cases/otp_use_case.dart';
-import '../../../../domain/use_cases/send_otp_use_case.dart';
-import 'verify_otp_state.dart';
+import 'package:workmate/features/auth/presentation/forget_password/logic/verify_forgot_password_otp_state.dart';
 
-class VerifyOtpCubit extends BaseCubit<VerifyOtpState> {
-  final VerifyOTPUseCase _verifyOtpUseCase;
+import '../../../../../core/presentation/base_viewmodel/base_cubit.dart';
+import '../../../../../core/presentation/mapper/failure_ui_mapper.dart';
+import '../../../../../core/presentation/util/validator.dart';
+import '../../../domain/entity/auth_identifier.dart';
+import '../../../domain/entity/verification_type.dart';
+import '../../../domain/failures/failure.dart';
+import '../../../domain/use_cases/check_forgot_password_otp_use_case.dart';
+import '../../../domain/use_cases/send_otp_use_case.dart';
+
+class VerifyForgotPasswordOtpCubit extends BaseCubit<VerifyForgotPasswordOtpState> {
+  final CheckForgotPasswordOtpUseCase _checkOtpUseCase;
   final SendOtpUseCase _sendOtpUseCase;
 
-  VerifyOtpCubit(this._verifyOtpUseCase, this._sendOtpUseCase)
-      : super(const VerifyOtpState());
+  VerifyForgotPasswordOtpCubit(
+      this._checkOtpUseCase,
+      this._sendOtpUseCase,
+      ) : super(const VerifyForgotPasswordOtpState());
 
   void setIdentifier(AuthIdentifier identifier) {
     updateState((s) => s.copyWith(identifier: identifier));
@@ -27,28 +28,23 @@ class VerifyOtpCubit extends BaseCubit<VerifyOtpState> {
 
   bool get isOtpComplete => Validators.isOtpComplete(state.code);
 
-  Future<void> verifyOtp({required VerificationType type}) async {
+  Future<void> checkOtp() async {
     final otpError = Validators.validateOtp(state.code);
     if (otpError != null) {
       updateState((s) => s.copyWith(errorMessage: otpError));
       return;
     }
-    if (!isOtpComplete) return;
 
     await execute(
       onLoading: () => updateState((s) => s.copyWith(
         isLoading: true,
         clearError: true,
       )),
-      call: () => _verifyOtpUseCase(
-        verifyOtp: VerifyOTP(
-          identifier: state.identifier.value,
-          code: state.code,
-          type: type,
-        ),
+      call: () => _checkOtpUseCase(
+        identifier: state.identifier.value,
+        code: state.code,
       ),
-      onSuccess: (user) {
-        AuthStateNotifier.instance.setLoggedIn();
+      onSuccess: (_) {
         updateState((s) => s.copyWith(isLoading: false, isVerified: true));
       },
       onError: (failure) {
@@ -80,7 +76,7 @@ class VerifyOtpCubit extends BaseCubit<VerifyOtpState> {
       call: () => _sendOtpUseCase(
         identifier: state.identifier.value,
         loginType: state.identifier.type,
-        purpose: VerificationType.registration,
+        purpose: VerificationType.passwordReset,
       ),
       onSuccess: (_) {
         updateState((s) => s.copyWith(isResending: false, code: ''));

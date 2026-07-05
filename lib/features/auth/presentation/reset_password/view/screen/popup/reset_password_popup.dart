@@ -78,7 +78,6 @@ class ResetPasswordPopup extends StatelessWidget {
           isPrimaryButtonLoading: state.isLoading,
           isPrimaryButtonEnabled: !state.isLoading,
           primaryButtonOnPressed: () {
-            //cubit.onOtpChanged(otp); // Set OTP before submit
             cubit.submit();
           },
         );

@@ -5,13 +5,15 @@ import '../../../../core/domain/failure/domain_failure.dart';
 import '../../domain/entity/auth_type.dart';
 import '../../domain/entity/register.dart';
 import '../../domain/entity/user.dart';
+import '../../domain/entity/verification_type.dart';
 import '../../domain/entity/verify_otp.dart';
 import '../../domain/repository/auth_repository.dart';
 import '../data_source/local/auth_local_data_source.dart';
 import '../data_source/remote/auth_remote_data_source.dart';
-import '../data_source/remote/dto/request/forgot_password_request.dart';
+import '../data_source/remote/dto/request/check_forgot_password_otp_request_dto.dart';
 import '../data_source/remote/dto/request/login_request.dart';
 import '../data_source/remote/dto/request/reset_password_request.dart';
+import '../data_source/remote/dto/request/send_otp_request_dto.dart';
 import '../mappers/auth_mapper.dart';
 import '../mappers/auth_failure_mapper.dart';
 
@@ -99,27 +101,42 @@ class AuthRepositoryImp with SafeApiCall implements AuthRepository {
       );
 
   @override
-  Future<Either<Failure, String>> forgotPassword({
+  Future<Either<Failure, String>> sendOtp({
     required String identifier,
     required AuthType loginType,
+    required VerificationType purpose,
   }) =>
       safeApiCall(
         call: () async {
-          final response = await _remoteDataSource.forgotPassword(
-            ForgotPasswordRequest(
+          final response = await _remoteDataSource.sendOtp(
+            SendOtpRequestDto(
+              type: purpose.value,
+              loginType: loginType.value,
               identifier: identifier,
-              loginType: loginType,
             ),
           );
 
           final responseIdentifier = response.identifier;
           if (responseIdentifier == null || responseIdentifier.isEmpty) {
-            throw const ServerException(
-              message: 'Identifier is missing in response',
-            );
+            throw const ServerException(message: 'Identifier is missing in response');
           }
 
           return responseIdentifier;
+        },
+        onException: AuthFailureMapper.mapException,
+      );
+
+  @override
+  Future<Either<Failure, Unit>> checkForgotPasswordOtp({
+    required String identifier,
+    required String code,
+  }) =>
+      safeApiCall(
+        call: () async {
+          await _remoteDataSource.checkForgotPasswordOtp(
+            CheckForgotPasswordOtpRequestDto(identifier: identifier, code: code),
+          );
+          return unit;
         },
         onException: AuthFailureMapper.mapException,
       );

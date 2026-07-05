@@ -46,7 +46,7 @@ class _LoginCardState extends State<LoginCard> {
           final identifier = state.unverifiedIdentifier!;
           context.read<LoginCubit>().onVerificationHandled();
 
-          VerifyOtpPopUp.show(context, email: identifier);
+          VerifyOtpPopUp.show(context, identifier: identifier, loginType: _loginType);
           return;
         }
 

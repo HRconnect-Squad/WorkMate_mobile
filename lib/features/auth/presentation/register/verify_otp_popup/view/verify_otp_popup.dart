@@ -6,30 +6,31 @@ import '../../../../../../../core/di/injection_container.dart';
 import '../../../../../../../core/presentation/design_system/components/popups/custom_popup.dart';
 import '../../../../../../../core/presentation/design_system/theme/helper/popup_helper.dart';
 import '../../../../../../../core/presentation/design_system/theme/helper/snackbar_helper.dart';
+import '../../../../domain/entity/auth_identifier.dart';
+import '../../../../domain/entity/auth_type.dart';
 import '../../../../domain/entity/verification_type.dart';
-import '../../welcome_to_work_mate_popup/logic/welcome_to_work_mate_popup_cubit.dart';
 import '../../welcome_to_work_mate_popup/view/welcome_to_work_mate_popup.dart';
 import '../logic/verify_otp_cubit.dart';
 import '../logic/verify_otp_state.dart';
 
 class VerifyOtpPopUp extends StatelessWidget {
-  final String email;
+  final String identifier;
 
-  const VerifyOtpPopUp._({
-    required this.email,
-  });
+  const VerifyOtpPopUp._({required this.identifier});
 
   static Future<void> show(
       BuildContext context, {
-        required String email,
+        required String identifier,
+        AuthType loginType = AuthType.email,
       }) {
     return PopupHelper.show(
       context: context,
       isDismissible: false,
       enableDrag: false,
       popup: BlocProvider(
-        create: (_) => sl<VerifyOtpCubit>()..setIdentifier(email),
-        child: VerifyOtpPopUp._(email: email),
+        create: (_) => sl<VerifyOtpCubit>()
+          ..setIdentifier(AuthIdentifier(value: identifier, type: loginType)),
+        child: VerifyOtpPopUp._(identifier: identifier),
       ),
     );
   }
@@ -45,13 +46,7 @@ class VerifyOtpPopUp extends StatelessWidget {
         if (state.isVerified) {
           Navigator.of(context).pop();
           SnackBarHelper.showSuccess(context, 'verification_success'.tr());
-          PopupHelper.show(
-            context: context,
-            popup: BlocProvider(
-              create: (_) => sl<WelcomeToWorkMatePopupCubit>(),
-              child: const WelcomeToWorkMatePopUp(),
-            ),
-          );
+          PopupHelper.show(context: context, popup: const WelcomeToWorkMatePopUp());
           return;
         }
 
@@ -65,7 +60,7 @@ class VerifyOtpPopUp extends StatelessWidget {
         return CustomPopup.otpVerificationPopup(
           icon: Iconsax.sms_notification,
           title: 'verification_code_title'.tr(),
-          description: 'verification_code_desc'.tr(args: [email]),
+          description: 'verification_code_desc'.tr(args: [identifier]),
           primaryButtonText: 'submit'.tr(),
           isPrimaryButtonLoading: state.isLoading,
           isPrimaryButtonEnabled: state.isOtpComplete && !state.isLoading,

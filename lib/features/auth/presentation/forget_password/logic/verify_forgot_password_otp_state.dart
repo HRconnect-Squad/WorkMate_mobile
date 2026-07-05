@@ -1,9 +1,9 @@
 import 'package:equatable/equatable.dart';
-import '../../../../../../core/config/app_constant.dart';
-import '../../../../domain/entity/auth_identifier.dart';
-import '../../../../domain/entity/auth_type.dart';
+import '../../../../../core/config/app_constant.dart';
+import '../../../domain/entity/auth_identifier.dart';
+import '../../../domain/entity/auth_type.dart';
 
-class VerifyOtpState extends Equatable {
+class VerifyForgotPasswordOtpState extends Equatable {
   final AuthIdentifier identifier;
   final String code;
   final bool isLoading;
@@ -11,18 +11,18 @@ class VerifyOtpState extends Equatable {
   final bool isVerified;
   final String? errorMessage;
 
-  const VerifyOtpState({
+  const VerifyForgotPasswordOtpState({
     this.identifier = const AuthIdentifier(value: '', type: AuthType.email),
     this.code = '',
     this.isLoading = false,
-    this.isVerified = false,
     this.isResending = false,
+    this.isVerified = false,
     this.errorMessage,
   });
 
   bool get isOtpComplete => code.length == AppConstant.otpLength;
 
-  VerifyOtpState copyWith({
+  VerifyForgotPasswordOtpState copyWith({
     AuthIdentifier? identifier,
     String? code,
     bool? isLoading,
@@ -31,7 +31,7 @@ class VerifyOtpState extends Equatable {
     String? errorMessage,
     bool clearError = false,
   }) {
-    return VerifyOtpState(
+    return VerifyForgotPasswordOtpState(
       identifier: identifier ?? this.identifier,
       code: code ?? this.code,
       isLoading: isLoading ?? this.isLoading,
@@ -42,12 +42,6 @@ class VerifyOtpState extends Equatable {
   }
 
   @override
-  List<Object?> get props => [
-    identifier,
-    code,
-    isLoading,
-    isResending,
-    isVerified,
-    errorMessage,
-  ];
+  List<Object?> get props =>
+      [identifier, code, isLoading, isResending, isVerified, errorMessage];
 }

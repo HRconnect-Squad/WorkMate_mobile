@@ -50,7 +50,9 @@ mixin SafeApiCall {
       InvalidCredentialsException() => UnauthorizedFailure(message: exception.message),
       TooManyAttemptsException() => TooManyAttemptsFailure(message: exception.message),
       ValidationException() => ValidationFailure(
-          message: "${exception.message}\n${exception.apiError?.validationErrors?.combinedErrors}",
+          message: (exception.apiError?.validationErrors?.isNotEmpty ?? false)
+              ? "${exception.message}\n${exception.apiError!.validationErrors!.combinedErrors}"
+              : exception.message,
           errors: exception.apiError?.validationErrors),
       FileException()             => FileFailure(message: exception.message),
       UnknownException()            => UnknownFailure(message: exception.message),

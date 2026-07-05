@@ -75,14 +75,3 @@ class ChangePasswordFailure extends AuthFailure {
     super.message = 'Failed to change password',
   });
 }
-
-// class AuthValidationFailure extends AuthFailure {
-//   final ValidationErrors? errors;
-//
-//   const AuthValidationFailure({
-//     required super.message,
-//     this.errors,
-//   });
-//
-//   String? errorFor(String field) => errors?.firstErrorFor(field);
-// }
