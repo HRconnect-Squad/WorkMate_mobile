@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:workmate/features/auth/presentation/reset_password/view/screen/popup/password_reset_success_popup.dart';
 import 'package:iconsax/iconsax.dart';
-import '../../../../../../../core/di/injection_container.dart';
+import '../../../../../../../core/di/core_di_container.dart';
 import '../../../../../../../core/presentation/design_system/components/popups/custom_popup.dart';
 import '../../../../../../../core/presentation/design_system/theme/helper/popup_helper.dart';
 import '../../../../../../../core/presentation/design_system/theme/helper/snackbar_helper.dart';

@@ -5,7 +5,7 @@ import 'package:workmate/core/presentation/routes/route_names.dart';
 import 'package:workmate/features/auth/presentation/on_boarding/logic/on_boarding_cubit.dart';
 import 'package:workmate/features/expense/presentation/view/screen/expenses_screen.dart';
 import 'package:workmate/features/home/presentation/view/home_screen.dart';
-import 'package:workmate/core/di/injection_container.dart';
+import 'package:workmate/core/di/core_di_container.dart';
 import '../../../features/auth/presentation/login/logic/login_cubit.dart';
 import '../../../features/auth/presentation/login/view/screen/login_screen.dart';
 import '../../../features/auth/presentation/on_boarding/view/on_boarding_page.dart';
