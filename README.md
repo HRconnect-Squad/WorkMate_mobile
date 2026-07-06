@@ -1,16 +1,5 @@
-# hr_management
+# WorkMate
 
-A new Flutter project.
+A workspace app for HRs and employees to help them manage their businesses.
 
-## Getting Started
-
-This project is a starting point for a Flutter application.
-
-A few resources to get you started if this is your first Flutter project:
-
-- [Lab: Write your first Flutter app](https://docs.flutter.dev/get-started/codelab)
-- [Cookbook: Useful Flutter samples](https://docs.flutter.dev/cookbook)
-
-For help getting started with Flutter development, view the
-[online documentation](https://docs.flutter.dev/), which offers tutorials,
-samples, guidance on mobile development, and a full API reference.
+<img width="1380" height="752" alt="WorkMate" src="https://github.com/user-attachments/assets/7735a681-2cb5-4738-b86e-9b908ccf54c3" />

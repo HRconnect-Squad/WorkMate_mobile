@@ -1,0 +1,37 @@
+# dart run flutter_native_splash:create --path=flutter_native_splash.yaml
+flutter_native_splash:
+  color: "#FFFFFF"
+  color_dark: "#000000"
+  #color_android: "#42a5f5"
+  #color_dark_android: "#042a49"
+  #color_ios: "#42a5f5"
+  #color_dark_ios: "#042a49"
+
+  image:                assets/images/setup/splash/logo/workmate_logo.png
+  #image_dark:          assets/splash-invert.png
+  #image_android:       assets/splash-android.png
+  #image_dark_android:  assets/splash-invert-android.png
+  #image_ios:           assets/splash-ios.png
+  #image_dark_ios:      assets/splash-invert-ios.png
+
+  branding:      assets/images/setup/splash/brand_name/workmate_brand_c.png
+  #branding_dark: assets/dart_dark.png
+  #branding_android:      assets/brand-android.png
+  #branding_dark_android: assets/dart_dark-android.png
+  #branding_ios:          assets/brand-ios.png
+  #branding_dark_ios:     assets/dart_dark-ios.png
+
+  fullscreen: true
+
+  android_12:
+    color: "#FFFFFF"
+    color_dark: "#000000"
+
+    image: assets/images/setup/splash/logo/workmate_logo.png
+    # image_dark: assets/images/logo/logo-splash2.png
+
+    # icon_background_color: "#111111"
+    # icon_background_color_dark: "#eeeeee"
+
+    branding:      assets/images/setup/splash/brand_name/workmate_brand_c.png
+    #branding_dark: assets/dart_dark.png
