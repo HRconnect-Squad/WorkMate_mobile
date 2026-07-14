@@ -1,110 +1,111 @@
 import 'dart:io';
-
 import 'package:file_picker/file_picker.dart';
-
 import '../../config/app_constant.dart';
 
 class ImagePickerHelper {
-  static const int compressionQuality = 50;
+  static const int _compressionQuality = 0;
 
   ImagePickerHelper._();
 
-  static Future<File?> pickImageFromGallery() async {
-    try {
-      final result = await FilePicker.pickFile(
-        type: FileType.image,
-        compressionQuality: compressionQuality,
-      );
-
-      if (result == null || result.path == null || result.path!.isEmpty) {
-        return null;
-      }
-
-      final file = File(result.path!);
-      if (!file.existsSync()) {
-        return null;
-      }
-
-      return file;
-    } catch (e) {
-      return null;
-    }
+  static Future<File?> pickImageFromGallery() {
+    return _pickSingleFile(
+      type: FileType.image,
+      compressionQuality: _compressionQuality,
+    );
   }
 
-  static Future<File?> pickReceipt() async {
-    try {
-      final result = await FilePicker.pickFile(
-        type: FileType.custom,
-        allowedExtensions: ['pdf', 'jpg', 'jpeg', 'png'],
-        compressionQuality: compressionQuality,
-      );
-
-      if (result == null || result.path == null || result.path!.isEmpty) {
-        return null;
-      }
-
-      final file = File(result.path!);
-      if (!file.existsSync()) return null;
-
-      return file;
-    } catch (e) {
-      return null;
-    }
+  static Future<File?> pickReceipt() {
+    return _pickSingleFile(
+      type: FileType.custom,
+      allowedExtensions: const [
+        'pdf',
+        'jpg',
+        'jpeg',
+        'png',
+      ],
+      compressionQuality: _compressionQuality,
+    );
   }
 
-  static Future<List<File>> pickMultipleImages({int? maxImages}) async {
+  static Future<List<File>> pickMultipleImages({
+    int? maxImages,
+  }) async {
     try {
       final result = await FilePicker.pickFiles(
         type: FileType.image,
-        compressionQuality: compressionQuality,
+        allowMultiple: true,
+        compressionQuality: _compressionQuality,
       );
 
-      if (result == null || result.files.isEmpty) {
-        return [];
-      }
+      if (result == null) return [];
 
       var files = result.files
-          .where((file) => file.path != null && file.path!.isNotEmpty)
-          .map((file) => File(file.path!))
+          .map((e) => e.path)
+          .whereType<String>()
+          .map(File.new)
           .where((file) => file.existsSync())
           .toList();
 
-      if (maxImages != null && files.length > maxImages) {
+      if (maxImages != null) {
         files = files.take(maxImages).toList();
       }
 
       return files;
-    } catch (e) {
+    } catch (_) {
       return [];
     }
   }
 
   static Future<File?> pickImageWithExtensions({
-    List<String> allowedExtensions = const ['jpg', 'jpeg', 'png', 'gif', 'webp'],
+    List<String> allowedExtensions = const [
+      'jpg',
+      'jpeg',
+      'png',
+      'gif',
+      'webp',
+    ],
+  }) {
+    return _pickSingleFile(
+      type: FileType.custom,
+      allowedExtensions: allowedExtensions,
+      compressionQuality: _compressionQuality,
+    );
+  }
+
+  static Future<File?> _pickSingleFile({
+    required FileType type,
+    List<String>? allowedExtensions,
+    int compressionQuality = _compressionQuality,
   }) async {
     try {
-      final result = await FilePicker.pickFile(
-        type: FileType.custom,
+      final result = await FilePicker.pickFiles(
+        type: type,
         allowedExtensions: allowedExtensions,
-        compressionQuality: 50,
+        compressionQuality: compressionQuality,
       );
 
-      if (result == null || result.path == null || result.path!.isEmpty) {
+      final path = result?.files.singleOrNull?.path;
+
+      if (path == null || path.isEmpty) {
         return null;
       }
 
-      return File(result.path!);
-    } catch (e) {
+      final file = File(path);
+
+      return file.existsSync() ? file : null;
+    } catch (_) {
       return null;
     }
   }
 
   static double getFileSizeInMB(File file) {
-    final bytes = file.lengthSync();
-    return bytes / (1024 * 1024);
+    return file.lengthSync() / (1024 * 1024);
   }
 
-  static bool isFileSizeValid(File file, {double maxSizeMB = AppConstant.maxImageSizeMB}) {
+  static bool isFileSizeValid(
+      File file, {
+        double maxSizeMB = AppConstant.maxImageSizeMB,
+      }) {
     return getFileSizeInMB(file) <= maxSizeMB;
   }
 
@@ -113,12 +114,21 @@ class ImagePickerHelper {
   }
 
   static bool isValidImageExtension(File file) {
-    final validExtensions = ['jpg', 'jpeg', 'png', 'gif', 'webp'];
-    return validExtensions.contains(getFileExtension(file));
+    return const [
+      'jpg',
+      'jpeg',
+      'png',
+      'gif',
+      'webp',
+    ].contains(getFileExtension(file));
   }
 
   static bool isValidReceiptExtension(File file) {
-    final validExtensions = ['jpg', 'jpeg', 'png', 'pdf'];
-    return validExtensions.contains(getFileExtension(file));
+    return const [
+      'jpg',
+      'jpeg',
+      'png',
+      'pdf',
+    ].contains(getFileExtension(file));
   }
 }

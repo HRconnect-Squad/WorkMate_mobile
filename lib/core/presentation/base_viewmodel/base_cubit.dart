@@ -28,7 +28,7 @@ abstract class BaseCubit<STATE> extends Cubit<STATE> {
           onSessionExpired();
         }
       },
-      onSuccess,
+        (result) => onSuccess(result),
     );
   }
 

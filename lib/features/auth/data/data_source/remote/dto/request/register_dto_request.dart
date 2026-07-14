@@ -1,11 +1,3 @@
-import 'dart:convert';
-
-RegisterDtoRequest registerDtoRequestFromJson(String str) =>
-    RegisterDtoRequest.fromJson(json.decode(str));
-
-String registerDtoRequestToJson(RegisterDtoRequest data) =>
-    json.encode(data.toJson());
-
 class RegisterDtoRequest {
   final String password;
   final String passwordConfirmation;
@@ -36,5 +28,6 @@ class RegisterDtoRequest {
     "password_confirmation": passwordConfirmation,
     "phone": phone,
     "login_type": loginType,
+    "role": "employee",
   };
 }
