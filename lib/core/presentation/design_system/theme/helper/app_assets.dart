@@ -28,5 +28,5 @@ class AppAssets {
   static const emptyExpenseState = 'assets/images/empty_expense.png';
   static const wallet = 'assets/svgs/card-pos.svg';
   static const submitExpenseIllustration = 'assets/images/submit_expense_illustration.png';
-
+  static const clockIn = 'assets/images/clock_in.png';
 }
