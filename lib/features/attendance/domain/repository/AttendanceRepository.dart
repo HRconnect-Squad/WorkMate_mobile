@@ -1,6 +1,7 @@
 import 'package:fpdart/fpdart.dart';
 
 import '../../../../core/domain/failure/domain_failure.dart';
+import '../enitity/UserInfo.dart';
 import '../enitity/attendance_details_entity.dart';
 import '../enitity/attendance_record.dart';
 import '../enitity/attendanceclockIn.dart';
@@ -25,4 +26,5 @@ abstract class AttendanceRepository {
   Future<Either<Failure, AttendanceDetailsEntity>> getAttendanceDetailsById(
     String id,
   );
+  Future<Either<Failure, UserInfo>> getUserInfo();
 }

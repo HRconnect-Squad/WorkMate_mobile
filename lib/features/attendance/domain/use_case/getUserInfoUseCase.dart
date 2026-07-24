@@ -1,22 +1,14 @@
 import 'package:fpdart/fpdart.dart';
-
 import '../../../../core/domain/failure/domain_failure.dart';
 import '../enitity/UserInfo.dart';
+import '../repository/AttendanceRepository.dart';
 
 class GetUserInfoUseCase {
-  GetUserInfoUseCase();
+  final AttendanceRepository _attendanceRepository;
+
+  const GetUserInfoUseCase(this._attendanceRepository);
 
   Future<Either<Failure, UserInfo>> call() async {
-    try {
-      final user = UserInfo(
-        firstname: "Nourhan",
-        lastname: "Adel",
-        imageUser: "https://i.pravatar.cc/150",
-      );
-
-      return Right(user);
-    } catch (e) {
-      return Left(UnknownFailure());
-    }
+    return _attendanceRepository.getUserInfo();
   }
 }

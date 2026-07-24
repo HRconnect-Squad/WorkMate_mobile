@@ -1,5 +1,8 @@
+import '../../../core/data/cache/shared_preferences_service.dart';
 import '../../../core/data/network/dio_client.dart';
 import '../../../core/di/core_di_container.dart';
+import '../data/data_source/local/attendance_local_data_source_impl.dart';
+import '../data/data_source/local/ttendance_local_data_source.dart';
 import '../data/data_source/remote/LocationRemoteDataSource.dart';
 import '../data/data_source/remote/LocationRemoteDataSourceImpl.dart';
 import '../data/data_source/remote/attendance_remote_data_source.dart';
@@ -30,11 +33,17 @@ Future<void> initAttendance() async {
   sl.registerLazySingleton<LocationRemoteDataSource>(
         () => LocationRemoteDataSourceImpl(),
   );
+  sl.registerLazySingleton<AttendanceLocalDataSource>(
+        () => AttendanceLocalDataSourceImpl(
+      preferencesService: sl<PreferencesService>(),
+    ),
+  );
 
   // 2. Repositories
   sl.registerLazySingleton<AttendanceRepository>(
         () => AttendanceRepositoryImpl(
       attendanceRemoteDataSource: sl<AttendanceRemoteDataSource>(),
+      attendanceLocalDataSource: sl<AttendanceLocalDataSource>(),
     ),
   );
   sl.registerLazySingleton<LocationRepository>(
@@ -64,7 +73,7 @@ Future<void> initAttendance() async {
         () => GetCurrentLocationUseCase(sl<LocationRepository>()),
   );
   sl.registerLazySingleton<GetUserInfoUseCase>(
-        () => GetUserInfoUseCase(),
+        () => GetUserInfoUseCase(sl<AttendanceRepository>()),
   );
   sl.registerLazySingleton<GetAttendanceDetailsByIdUseCase>(
         () => GetAttendanceDetailsByIdUseCase(sl<AttendanceRepository>()),
@@ -96,7 +105,7 @@ Future<void> initAttendance() async {
   );
   sl.registerFactory<DetailsHistoryCardCubit>(
         () => DetailsHistoryCardCubit(
-          getDetailsUseCase: sl<GetAttendanceDetailsByIdUseCase>()
+      getDetailsUseCase: sl<GetAttendanceDetailsByIdUseCase>(),
     ),
   );
 }
