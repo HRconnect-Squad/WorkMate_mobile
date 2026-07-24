@@ -2,12 +2,14 @@ import 'package:fpdart/fpdart.dart';
 
 import '../../../../core/data/network/helper/safe_api_call.dart';
 import '../../../../core/domain/failure/domain_failure.dart';
+import '../../domain/enitity/attendance_details_entity.dart';
 import '../../domain/enitity/attendance_record.dart';
 import '../../domain/enitity/attendanceclockIn.dart';
 import '../../domain/enitity/break_record.dart';
 import '../../domain/enitity/history_attendance.dart';
 import '../../domain/repository/AttendanceRepository.dart';
 import '../data_source/remote/attendance_remote_data_source.dart';
+import '../mappers/attendance_details_mapper.dart';
 import '../mappers/attendance_mapper.dart';
 
 class AttendanceRepositoryImpl with SafeApiCall implements AttendanceRepository {
@@ -66,6 +68,16 @@ class AttendanceRepositoryImpl with SafeApiCall implements AttendanceRepository 
     return safeApiCall(call: () async {
       final response = await _attendanceRemoteDataSource.endAttendanceBreak();
       return AttendanceMapper.toDomainBreak(response);
+    });
+  }
+  @override
+  Future<Either<Failure, AttendanceDetailsEntity>> getAttendanceDetailsById(
+      String id,
+      ) async {
+    return safeApiCall(call: () async {
+      final response =
+      await _attendanceRemoteDataSource.attendanceDetailsById(id);
+      return response.toEntity();
     });
   }
 }
