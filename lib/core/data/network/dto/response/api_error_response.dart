@@ -29,7 +29,9 @@ class ApiErrorResponse {
       json.map(
             (key, value) => MapEntry(
           key,
-          List<String>.from(value as List),
+          value is List
+              ? value.map((e) => e.toString()).toList()
+              : <String>[value.toString()],
         ),
       ),
     );

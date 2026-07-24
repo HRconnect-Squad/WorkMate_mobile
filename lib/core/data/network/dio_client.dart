@@ -184,7 +184,7 @@ class DioClient {
       if (e.error is AppException) {
         throw e.error as AppException;
       }
-      logger.e(e.message, e.stackTrace);
+      logger.e(e.message, error: e.error, stackTrace: e.stackTrace);
       throw UnknownException(
         message: e.message ?? 'Unexpected network error',
       );

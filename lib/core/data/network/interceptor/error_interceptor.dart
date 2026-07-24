@@ -129,7 +129,7 @@ class ErrorInterceptor extends Interceptor {
     try {
       return ApiErrorResponse.fromJson(data);
     } catch (e, stackTrace) {
-      logger.e(e, stackTrace);
+      logger.e('Failed to parse API error response', error: e, stackTrace: stackTrace);
       return null;
     }
   }
