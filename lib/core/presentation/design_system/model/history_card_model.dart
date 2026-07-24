@@ -1,6 +1,7 @@
 import 'package:flutter/cupertino.dart';
 
 class HistoryCardModel  {
+  final String id;
   final DateTime date;
   final IconData headerIcon;
   final Color? headerIconColor;
@@ -13,6 +14,7 @@ class HistoryCardModel  {
   final String? statusAddedByName;
   final String? statusImage;
   const HistoryCardModel({
+    required this.id,
     required this.date,
     required this.headerIcon,
     this.headerIconColor,
