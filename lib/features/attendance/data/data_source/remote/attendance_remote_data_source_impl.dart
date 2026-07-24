@@ -1,4 +1,7 @@
+import 'dart:convert';
+
 import 'package:dio/dio.dart';
+import 'package:workmate/features/attendance/data/data_source/remote/dto/attendance_details_dto.dart';
 
 import '../../../../../core/data/network/constant/api_constant.dart';
 import '../../../../../core/data/network/dio_client.dart';
@@ -89,5 +92,17 @@ class AttendanceRemoteDataSourceImpl implements AttendanceRemoteDataSource {
     );
 
     return  apiResponse.data ?? AttendanceRecordResponse();
+  }
+
+  @override
+  Future<AttendanceDetailsDataDto> attendanceDetailsById(String id) async {
+    final response = await _dioClient.get(
+      ApiConstants.attendanceDetails(id),
+    );
+    final apiResponse = ApiResponse.fromJson(
+      response.data,
+          (data) => AttendanceDetailsDataDto.fromJson(data),
+    );
+    return apiResponse.requiredData;
   }
 }

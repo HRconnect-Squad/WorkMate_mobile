@@ -1,3 +1,4 @@
+import 'dto/attendance_details_dto.dart';
 import 'dto/attendance_record_response.dart';
 import 'dto/break_response.dart';
 import 'dto/clock_in_attendance_request.dart';
@@ -17,4 +18,6 @@ abstract class AttendanceRemoteDataSource {
   Future<BreakResponse> startAttendanceBreak();
 
   Future<BreakResponse> endAttendanceBreak();
+
+  Future<AttendanceDetailsDataDto> attendanceDetailsById(String id);
 }

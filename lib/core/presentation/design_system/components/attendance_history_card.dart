@@ -8,74 +8,83 @@ import '../theme/helper/theme_extention.dart';
 
 class AttendanceHistoryCard extends StatelessWidget {
   final HistoryCardModel historyCardModel;
+  final VoidCallback? onTap;
 
-  const AttendanceHistoryCard({super.key, required this.historyCardModel});
+  const AttendanceHistoryCard({
+    super.key,
+    required this.historyCardModel,
+    this.onTap,
+  });
 
   @override
   Widget build(BuildContext context) {
     final textTheme = context.textTheme;
     final colors = context.colors;
 
-    return Container(
-      padding: const EdgeInsets.symmetric(vertical: 16, horizontal: 12),
-      decoration: BoxDecoration(
-        color: historyCardModel.backgroundColor ?? Colors.white,
-        borderRadius: BorderRadius.circular(10),
-      ),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Row(
-            children: [
-              Icon(
-                historyCardModel.headerIcon,
-                color: historyCardModel.headerIconColor,
-                size: 20,
-              ),
-              const SizedBox(width: 8),
-              Text(
-                DateFormat(
-                  'd MMMM y',
-                  context.locale.languageCode,
-                ).format(historyCardModel.date),
-                style: textTheme.titleSmallFont,
-              ),
-            ],
-          ),
-
-          const SizedBox(height: 12),
-
-          Container(
-            width: double.infinity,
-            padding: const EdgeInsets.all(12),
-            decoration: BoxDecoration(
-              color: colors.gray100,
-              borderRadius: BorderRadius.circular(8),
-              border: Border.all(color: colors.gray200),
-            ),
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+    return InkWell(
+      onTap: onTap,
+      borderRadius: BorderRadius.circular(12),
+      child: Container(
+        padding: const EdgeInsets.symmetric(vertical: 16, horizontal: 12),
+        decoration: BoxDecoration(
+          color: historyCardModel.backgroundColor ?? Colors.white,
+          borderRadius: BorderRadius.circular(10),
+        ),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Row(
               children: [
-                InfoColumn(item: historyCardModel.infoItems[0]),
-                InfoColumn(item: historyCardModel.infoItems[1]),
+                Icon(
+                  historyCardModel.headerIcon,
+                  color: historyCardModel.headerIconColor,
+                  size: 20,
+                ),
+                const SizedBox(width: 8),
+                Text(
+                  DateFormat(
+                    'd MMMM y',
+                    context.locale.languageCode,
+                  ).format(historyCardModel.date),
+                  style: textTheme.titleSmallFont,
+                ),
               ],
             ),
-          ),
 
-          if (historyCardModel.statusCard != null &&
-              historyCardModel.statusAddedByName != null &&
-              historyCardModel.statusImage != null &&
-              historyCardModel.dateAddedStatus != null) ...[
             const SizedBox(height: 12),
-            historyStatusCard(
-              context,
-              historyCardModel.dateAddedStatus!,
-              historyCardModel.statusCard!,
-              historyCardModel.statusImage,
-              historyCardModel.statusAddedByName!,
+
+            Container(
+              width: double.infinity,
+              padding: const EdgeInsets.all(12),
+              decoration: BoxDecoration(
+                color: colors.gray100,
+                borderRadius: BorderRadius.circular(8),
+                border: Border.all(color: colors.gray200),
+              ),
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  InfoColumn(item: historyCardModel.infoItems[0]),
+                  InfoColumn(item: historyCardModel.infoItems[1]),
+                ],
+              ),
             ),
+
+            if (historyCardModel.statusCard != null &&
+                historyCardModel.statusAddedByName != null &&
+                historyCardModel.statusImage != null &&
+                historyCardModel.dateAddedStatus != null) ...[
+              const SizedBox(height: 12),
+              historyStatusCard(
+                context,
+                historyCardModel.dateAddedStatus!,
+                historyCardModel.statusCard!,
+                historyCardModel.statusImage,
+                historyCardModel.statusAddedByName!,
+              ),
+            ],
           ],
-        ],
+        ),
       ),
     );
   }
@@ -118,12 +127,12 @@ class InfoColumn extends StatelessWidget {
 }
 
 Widget historyStatusCard(
-    BuildContext context,
-    DateTime dateAddStatus,
-    StatusCard cardStatus,
-    String? profileImage,
-    String userName,
-    ) {
+  BuildContext context,
+  DateTime dateAddStatus,
+  StatusCard cardStatus,
+  String? profileImage,
+  String userName,
+) {
   final textTheme = context.textTheme;
   final color = context.colors;
   String formattedDate = DateFormat(

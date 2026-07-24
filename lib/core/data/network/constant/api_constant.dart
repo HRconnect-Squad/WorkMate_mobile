@@ -20,6 +20,6 @@ class ApiConstants {
   static const String attendanceToday = '/api/attendance/today';
   static const String startAttendanceBreak = '/api/attendance/break/start';
   static const String endAttendanceBreak = '/api/attendance/break/end';
-
+  static String attendanceDetails(String id) => '/api/attendance/$id/details';
 
 }
