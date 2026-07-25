@@ -135,28 +135,24 @@ final GoRouter router = GoRouter(
 
     ShellRoute(
       builder: (context, state, child) {
-        // ✅ الـ Cubit هنا بيفضل حي لكل الـ child routes
         return BlocProvider<ClockInFlowCubit>(
           create: (context) => sl<ClockInFlowCubit>(),
-          child: child, // ← الـ child هنا هو أي route من اللي تحت
+          child: child,
         );
       },
       routes: [
-        // 📍 Screen 1: Location
         GoRoute(
           path: RouteNames.clockInMap,
           name: 'clockInMap',
           builder: (context, state) => const ClockInLocationScreen(),
         ),
 
-        // 📸 Screen 2: Camera
         GoRoute(
           path: RouteNames.selfieCamera,
           name: 'selfieCamera',
           builder: (context, state) => const CameraPreviewScreen(),
         ),
 
-        // ✅ Screen 3: Confirmation
         GoRoute(
           path: RouteNames.confirmationScreen,
           name: 'confirmationScreen',
@@ -165,6 +161,7 @@ final GoRouter router = GoRouter(
       ],
     ),
     GoRoute(
+      name: RouteNames.attendanceDetailsName,
       path: RouteNames.attendanceDetails,
       builder: (context, state) {
         final id = state.pathParameters['id']!;

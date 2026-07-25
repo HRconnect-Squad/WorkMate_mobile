@@ -28,6 +28,7 @@ class RouteNames {
   static const String selfieCamera = '/selfie-camera';
   static const String confirmationScreen = '/confirmation';
   static const String attendanceDetails = '/attendance-details/:id';
+  static const String attendanceDetailsName = 'attendanceDetails';
   // Error
   static const String notFound = '/404';
 

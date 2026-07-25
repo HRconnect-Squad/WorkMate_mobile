@@ -101,8 +101,9 @@ class AttendanceScreen extends StatelessWidget {
             infoItems: card.infoItems,
           ),
           onTap: () {
-            context.push(
-              '/attendance-details/${card.id}',
+            context.pushNamed(
+              RouteNames.attendanceDetailsName,
+              pathParameters: {'id': card.id},
             );
           },
         );
