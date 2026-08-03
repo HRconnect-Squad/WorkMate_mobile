@@ -3,6 +3,7 @@ import 'package:workmate/features/profile/presentation/payroll/logic/payroll_sta
 import '../../../../../core/presentation/base_viewmodel/base_cubit.dart';
 import '../../../domain/entity/payroll.dart';
 import '../../../domain/usecase/get_payroll_history_usecase.dart';
+import '../../mapper/profile_failure_ui_mapper.dart';
 
 class PayrollCubit extends BaseCubit<PayrollState> {
   final GetPayrollHistoryUseCase _getPayrollHistoryUseCase;
@@ -25,10 +26,12 @@ class PayrollCubit extends BaseCubit<PayrollState> {
           payrollHistory: payrollList,
         ));
       },
-      onError: (error) {
+      onError: (failure) {
+        //final isNotCompleted = failure is ProfileNotCompletedFailure;
+
         updateState((s) => s.copyWith(
           isLoadingHistory: false,
-          error: error.message,
+          error: ProfileFailureUiMapper.map(failure),
         ));
       },
     );
@@ -55,7 +58,7 @@ class PayrollCubit extends BaseCubit<PayrollState> {
     } catch (e) {
       updateState((s) => s.copyWith(
         isExportingPdf: false,
-        error: 'pdf_export_failed'.tr(),
+        error: 'payroll_export_error'.tr(),
       ));
     }
   }

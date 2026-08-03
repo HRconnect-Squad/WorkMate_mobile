@@ -1,5 +1,4 @@
 import '../../../../../../../core/presentation/base_viewmodel/base_cubit.dart';
-import '../../../../../../../core/presentation/mapper/failure_ui_mapper.dart';
 import '../../../../../../../core/presentation/util/validator.dart';
 import '../../../../../../core/presentation/routes/config/app_state_notifier.dart';
 import '../../../../domain/entity/auth_identifier.dart';
@@ -8,6 +7,7 @@ import '../../../../domain/entity/verify_otp.dart';
 import '../../../../domain/failures/failure.dart';
 import '../../../../domain/use_cases/otp_use_case.dart';
 import '../../../../domain/use_cases/send_otp_use_case.dart';
+import '../../../mapper/auth_failure_ui_mapper.dart';
 import 'verify_otp_state.dart';
 
 class VerifyOtpCubit extends BaseCubit<VerifyOtpState> {
@@ -53,18 +53,17 @@ class VerifyOtpCubit extends BaseCubit<VerifyOtpState> {
       },
       onError: (failure) {
         switch (failure) {
-          case OtpExpiredFailure():
           case InvalidOtpFailure():
             updateState((s) => s.copyWith(
               isLoading: false,
               code: '',
-              errorMessage: failure.message,
+              errorMessage: AuthFailureUiMapper.map(failure),
             ));
 
           default:
             updateState((s) => s.copyWith(
               isLoading: false,
-              errorMessage: FailureUiMapper.map(failure),
+              errorMessage: AuthFailureUiMapper.map(failure),
             ));
         }
       },
@@ -88,7 +87,7 @@ class VerifyOtpCubit extends BaseCubit<VerifyOtpState> {
       onError: (failure) {
         updateState((s) => s.copyWith(
           isResending: false,
-          errorMessage: FailureUiMapper.map(failure),
+          errorMessage: AuthFailureUiMapper.map(failure),
         ));
       },
     );

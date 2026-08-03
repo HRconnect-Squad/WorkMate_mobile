@@ -6,8 +6,9 @@ abstract interface class RequiresReauthentication {}
 abstract class Failure {
   final String message;
   final int? statusCode;
+  final String? errorCode;
 
-  const Failure({required this.message, this.statusCode});
+  const Failure({required this.message, this.statusCode, this.errorCode});
 
   // @override
   // bool operator ==(Object other) =>
@@ -41,7 +42,7 @@ class UnknownFailure extends Failure {
 }
 
 class ServerFailure extends Failure {
-  const ServerFailure({required super.message, super.statusCode});
+  const ServerFailure({required super.message, super.statusCode, super.errorCode});
 }
 
 class BadRequestFailure extends Failure {

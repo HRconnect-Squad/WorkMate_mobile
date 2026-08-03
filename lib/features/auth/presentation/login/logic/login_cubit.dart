@@ -1,11 +1,11 @@
 import '../../../../../core/presentation/base_viewmodel/base_cubit.dart';
-import '../../../../../core/presentation/mapper/failure_ui_mapper.dart';
 import '../../../../../core/presentation/routes/config/app_state_notifier.dart';
 import '../../../../../core/presentation/util/validator.dart';
 import '../../../domain/entity/auth_type.dart';
 import '../../../domain/failures/failure.dart';
 import '../../../domain/use_cases/load_identifier_use_case.dart';
 import '../../../domain/use_cases/login_use_case.dart';
+import '../../mapper/auth_failure_ui_mapper.dart';
 import 'login_state.dart';
 
 class LoginCubit extends BaseCubit<LoginState> {
@@ -81,7 +81,7 @@ class LoginCubit extends BaseCubit<LoginState> {
           default:
             updateState((s) => s.copyWith(
               isLoading: false,
-              apiError: FailureUiMapper.map(failure),
+              apiError: AuthFailureUiMapper.map(failure),
               isSuccess: false,
             ));
         }
@@ -106,7 +106,6 @@ class LoginCubit extends BaseCubit<LoginState> {
 
     result.fold(
           (failure) {
-        // Silently fail - not critical, saved identifier is a convenience feature
       },
           (identifier) {
         if (identifier != null && identifier.isNotEmpty) {

@@ -1,9 +1,10 @@
 import '../../../../../core/presentation/base_viewmodel/base_cubit.dart';
-import '../../../../../core/presentation/mapper/failure_ui_mapper.dart';
 import '../../../../../core/presentation/util/validator.dart';
 import '../../../domain/entity/auth_type.dart';
 import '../../../domain/entity/verification_type.dart';
+import '../../../domain/failures/failure.dart';
 import '../../../domain/use_cases/send_otp_use_case.dart';
+import '../../mapper/auth_failure_ui_mapper.dart';
 import 'forgot_password_state.dart';
 
 class ForgotPasswordCubit extends BaseCubit<ForgotPasswordState> {
@@ -23,7 +24,7 @@ class ForgotPasswordCubit extends BaseCubit<ForgotPasswordState> {
       )),
       call: () => _sendOtpUseCase(
         identifier: state.email.trim(),
-        loginType: AuthType.email, // per docs: password reset is email-only
+        loginType: AuthType.email,
         purpose: VerificationType.passwordReset,
       ),
       onSuccess: (identifier) {
@@ -34,11 +35,21 @@ class ForgotPasswordCubit extends BaseCubit<ForgotPasswordState> {
         ));
       },
       onError: (failure) {
-        updateState((s) => s.copyWith(
-          isLoading: false,
-          apiError: FailureUiMapper.map(failure),
-          isSuccess: false,
-        ));
+        switch (failure) {
+          case UserNotFoundFailure():
+            updateState((s) => s.copyWith(
+              isLoading: false,
+              emailError: AuthFailureUiMapper.map(failure),
+              isSuccess: false,
+            ));
+
+          default:
+            updateState((s) => s.copyWith(
+              isLoading: false,
+              apiError: AuthFailureUiMapper.map(failure),
+              isSuccess: false,
+            ));
+        }
       },
     );
   }

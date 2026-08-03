@@ -34,10 +34,12 @@ mixin SafeApiCall {
   }
 
   Failure _mapAppException(AppException exception) {
+    final code = exception.apiError?.errorCode?.toUpperCase();
     return switch (exception) {
       ServerException()           => ServerFailure(
           message: exception.message,
-          statusCode: exception.statusCode),
+          statusCode: exception.statusCode,
+          errorCode: code),
       BadRequestException()       => BadRequestFailure(message: exception.message),
       UnauthorizedException()     => UnauthorizedFailure(message: exception.message),
       ForbiddenException()        => ForbiddenFailure(message: exception.message),

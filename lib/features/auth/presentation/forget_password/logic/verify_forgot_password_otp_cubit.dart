@@ -1,13 +1,12 @@
-import 'package:workmate/features/auth/presentation/forget_password/logic/verify_forgot_password_otp_state.dart';
-
 import '../../../../../core/presentation/base_viewmodel/base_cubit.dart';
-import '../../../../../core/presentation/mapper/failure_ui_mapper.dart';
 import '../../../../../core/presentation/util/validator.dart';
 import '../../../domain/entity/auth_identifier.dart';
 import '../../../domain/entity/verification_type.dart';
 import '../../../domain/failures/failure.dart';
 import '../../../domain/use_cases/check_forgot_password_otp_use_case.dart';
 import '../../../domain/use_cases/send_otp_use_case.dart';
+import '../../mapper/auth_failure_ui_mapper.dart';
+import 'verify_forgot_password_otp_state.dart';
 
 class VerifyForgotPasswordOtpCubit extends BaseCubit<VerifyForgotPasswordOtpState> {
   final CheckForgotPasswordOtpUseCase _checkOtpUseCase;
@@ -49,18 +48,17 @@ class VerifyForgotPasswordOtpCubit extends BaseCubit<VerifyForgotPasswordOtpStat
       },
       onError: (failure) {
         switch (failure) {
-          case OtpExpiredFailure():
           case InvalidOtpFailure():
             updateState((s) => s.copyWith(
               isLoading: false,
               code: '',
-              errorMessage: failure.message,
+              errorMessage: AuthFailureUiMapper.map(failure),
             ));
 
           default:
             updateState((s) => s.copyWith(
               isLoading: false,
-              errorMessage: FailureUiMapper.map(failure),
+              errorMessage: AuthFailureUiMapper.map(failure),
             ));
         }
       },
@@ -84,7 +82,7 @@ class VerifyForgotPasswordOtpCubit extends BaseCubit<VerifyForgotPasswordOtpStat
       onError: (failure) {
         updateState((s) => s.copyWith(
           isResending: false,
-          errorMessage: FailureUiMapper.map(failure),
+          errorMessage: AuthFailureUiMapper.map(failure),
         ));
       },
     );

@@ -7,7 +7,7 @@ import '../../../../../../core/presentation/design_system/components/custom_prim
 import '../../../../../../core/presentation/design_system/theme/helper/snackbar_helper.dart';
 import '../../../../../../core/presentation/design_system/theme/helper/theme_extention.dart';
 import '../../../../../../core/presentation/design_system/theme/workmate_theme.dart';
-import '../../../../../core/presentation/util/image_picker_helper.dart';
+import '../../../../../core/domain/service/image_picker_helper.dart';
 import '../../logic/expenses_cubit.dart';
 import '../../logic/expenses_state.dart';
 import '../widget/submit_confirm_popup.dart';

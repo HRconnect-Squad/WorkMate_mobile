@@ -33,7 +33,6 @@ class ImagePickerHelper {
     try {
       final result = await FilePicker.pickFiles(
         type: FileType.image,
-        allowMultiple: true,
         compressionQuality: _compressionQuality,
       );
 
@@ -78,13 +77,13 @@ class ImagePickerHelper {
     int compressionQuality = _compressionQuality,
   }) async {
     try {
-      final result = await FilePicker.pickFiles(
+      final result = await FilePicker.pickFile(
         type: type,
         allowedExtensions: allowedExtensions,
         compressionQuality: compressionQuality,
       );
 
-      final path = result?.files.singleOrNull?.path;
+      final path = result?.path;
 
       if (path == null || path.isEmpty) {
         return null;

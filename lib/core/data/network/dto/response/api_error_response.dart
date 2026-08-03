@@ -15,8 +15,8 @@ class ApiErrorResponse {
 
   factory ApiErrorResponse.fromJson(Map<String, dynamic> json) {
     return ApiErrorResponse(
-      success: json['success'] as bool,
-      message: json['message'] as String,
+      success: json['success'] as bool? ?? false,
+      message: json['message'] as String? ?? 'An error occurred while processing your request.',
       errorCode: json['error_code'] as String?,
       validationErrors: json['data'] is Map<String, dynamic>
           ? _parseValidationErrors(json['data'] as Map<String, dynamic>)
@@ -24,13 +24,13 @@ class ApiErrorResponse {
     );
   }
 
-  static ValidationErrors _parseValidationErrors(Map<String, dynamic> json) {
+  static ValidationErrors? _parseValidationErrors(Map<String, dynamic> json) {
+    if (json.isEmpty) return null;
+    if(json.values.first is! List) return null;
+
     return ValidationErrors(
       json.map(
-            (key, value) => MapEntry(
-          key,
-          List<String>.from(value as List),
-        ),
+            (key, value) => MapEntry(key, List<String>.from(value as List)),
       ),
     );
   }
