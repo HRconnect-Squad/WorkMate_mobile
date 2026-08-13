@@ -12,4 +12,11 @@ class ApiConstants {
   static const String multipartContentType = 'multipart/form-data';
   static const String acceptLanguage = 'Accept-Language';
   static const String localDataTokenKey = 'token';
+
+  static const String tasks = '/api/tasks';
+  static String taskById(int taskId) => '/api/tasks/$taskId';
+  static String taskComments(int taskId) =>
+      '/api/tasks/$taskId/comments';
+  static String taskAttachments(int taskId) =>
+      '/api/tasks/$taskId/attachments';
 }

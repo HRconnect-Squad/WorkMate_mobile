@@ -233,7 +233,7 @@ class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
               profileName ?? "Username".tr(),
               style: context.textTheme.titleMediumFont.copyWith(
                 color: foregroundColor,
-                fontWeight: FontWeight.w600,
+                fontSize: 14
               ),
             ),
             if (isVerified) ...[

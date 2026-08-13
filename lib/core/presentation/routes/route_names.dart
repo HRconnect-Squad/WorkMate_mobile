@@ -26,6 +26,9 @@ class RouteNames {
   // Error
   static const String notFound = '/404';
 
+  //task
+  static const String taskDetailScreen = '/task/detail';
+  static const String taskDetail = 'taskDetail';
 
   static const List<String> _protectedRoutes = [
     homeScreen,

@@ -11,6 +11,7 @@ import 'features/auth/di/auth_di_container.dart';
 import 'features/auth/di/onboarding_di_container.dart';
 import 'features/expense/di/expense_di_container.dart';
 import 'features/profile/di/profile_di_container.dart';
+import 'features/task/di/task_container.dart';
 
 
 void main() async {
@@ -23,6 +24,7 @@ void main() async {
   await initAuth();
   await initProfile();
   await initExpenses();
+  await initTask();
   await sl<AppStartupService>().initialize();
   FlutterNativeSplash.remove();
 
