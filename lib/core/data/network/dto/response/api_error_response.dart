@@ -26,13 +26,25 @@ class ApiErrorResponse {
 
   static ValidationErrors? _parseValidationErrors(Map<String, dynamic> json) {
     if (json.isEmpty) return null;
-    if(json.values.first is! List) return null;
 
-    return ValidationErrors(
-      json.map(
-            (key, value) => MapEntry(key, List<String>.from(value as List)),
-      ),
-    );
+    final fields = <String, List<String>>{};
+
+    json.forEach((key, value) {
+      if (value is List) {
+        final stringValues = value
+            .where((e) => e != null)
+            .map((e) => e.toString())
+            .toList();
+
+        if (stringValues.isNotEmpty) {
+          fields[key] = stringValues;
+        }
+      } else if (value != null) {
+        fields[key] = [value.toString()];
+      }
+    });
+
+    return fields.isEmpty ? null : ValidationErrors(fields);
   }
 
   bool get hasValidationErrors => validationErrors != null;

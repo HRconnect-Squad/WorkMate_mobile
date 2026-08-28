@@ -67,6 +67,14 @@ class ServerException extends AppException {
   });
 }
 
+class ConflictException extends AppException {
+  const ConflictException({
+    required super.message,
+    super.statusCode = 409,
+    super.apiError,
+  });
+}
+
 class NetworkException extends AppException {
   const NetworkException({
     required super.message});

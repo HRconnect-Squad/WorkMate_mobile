@@ -33,6 +33,10 @@ class TimeoutFailure extends Failure {
       {super.message = 'Connection timed out. Please try again'});
 }
 
+class ConflictFailure extends Failure {
+  const ConflictFailure({super.message = 'This resource already exists'});
+}
+
 class CacheFailure extends Failure {
   const CacheFailure({super.message = 'Failed to access local data'});
 }

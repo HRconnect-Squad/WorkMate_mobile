@@ -51,6 +51,7 @@ mixin SafeApiCall {
       SerializationException()    => UnknownFailure(message: exception.message),
       InvalidCredentialsException() => UnauthorizedFailure(message: exception.message),
       TooManyAttemptsException() => TooManyAttemptsFailure(message: exception.message),
+      ConflictException() => ConflictFailure(message: exception.message),
       ValidationException() => ValidationFailure(
           message: (exception.apiError?.validationErrors?.isNotEmpty ?? false)
               ? "${exception.message}\n${exception.apiError!.validationErrors!.combinedErrors}"

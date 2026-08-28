@@ -98,6 +98,11 @@ class ErrorInterceptor extends Interceptor {
         statusCode: statusCode,
         apiError: apiError,
       ),
+      409 => ConflictException(
+        message: message,
+        statusCode: statusCode,
+        apiError: apiError,
+      ),
       422 => ValidationException(
         message: message,
         statusCode: statusCode,
