@@ -36,9 +36,9 @@ class ImagePickerHelper {
         compressionQuality: _compressionQuality,
       );
 
-      if (result == null) return [];
+      if (result.isEmpty) return [];
 
-      var files = result.files
+      var files = result
           .map((e) => e.path)
           .whereType<String>()
           .map(File.new)

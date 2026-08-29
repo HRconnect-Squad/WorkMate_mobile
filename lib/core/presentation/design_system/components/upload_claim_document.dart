@@ -26,7 +26,7 @@ class _UploadClaimDocumentState extends State<UploadClaimDocument> {
       type: FileType.custom,
       allowedExtensions: ['pdf', 'jpg', 'png'],
     );
-    if (result != null) {
+    if (result.isNotEmpty) {
       if (!mounted) return;
       setState(() {
         _isCanceled = false;
@@ -43,7 +43,7 @@ class _UploadClaimDocumentState extends State<UploadClaimDocument> {
       }
       if (!mounted) return;
       setState(() {
-        pickedFile = File(result.files.single.path!);
+        pickedFile = File(result.single.path!);
         isLoading = false;
       });
       widget.onFilePicked(pickedFile);
