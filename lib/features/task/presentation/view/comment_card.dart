@@ -11,14 +11,17 @@ class CommentCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final hasImage = comment.commenterImage != null && comment.commenterImage!.isNotEmpty;
+
     return Row(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         CircleAvatar(
           radius: 20,
           child: ClipOval(
-            child: CachedNetworkImage(
-              imageUrl: comment.commenterImage,
+            child: hasImage
+                ? CachedNetworkImage(
+              imageUrl: comment.commenterImage!,
               width: 40,
               height: 40,
               fit: BoxFit.cover,
@@ -26,7 +29,8 @@ class CommentCard extends StatelessWidget {
                   Image.asset(AppAssets.placeHolderProfile, fit: BoxFit.cover),
               errorWidget: (_, __, ___) =>
                   Image.asset(AppAssets.placeHolderProfile, fit: BoxFit.cover),
-            ),
+            )
+                : Image.asset(AppAssets.placeHolderProfile, width: 40, height: 40, fit: BoxFit.cover),
           ),
         ),
         const SizedBox(width: 10),

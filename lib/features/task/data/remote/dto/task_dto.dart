@@ -1,3 +1,4 @@
+
 import 'assigned_user_dto.dart';
 
 class TaskDto {
@@ -15,6 +16,7 @@ class TaskDto {
   final int attachmentsCount;
   final String createdAt;
   final String updatedAt;
+  final List<TaskCommentAvatarDto> comments;
 
   const TaskDto({
     required this.id,
@@ -31,6 +33,7 @@ class TaskDto {
     required this.attachmentsCount,
     required this.createdAt,
     required this.updatedAt,
+    this.comments = const [],
   });
 
   factory TaskDto.fromJson(Map<String, dynamic> json) => TaskDto(
@@ -52,5 +55,26 @@ class TaskDto {
     attachmentsCount: json['attachments_count'] as int,
     createdAt: json['created_at'] as String,
     updatedAt: json['updated_at'] as String,
+    comments: (json['comments'] as List<dynamic>? ?? [])
+        .map((e) => TaskCommentAvatarDto.fromJson(e as Map<String, dynamic>))
+        .toList(),
   );
+}
+class TaskCommentAvatarDto {
+  final int userId;
+  final String name;
+  final String? profileImage;
+
+  const TaskCommentAvatarDto({
+    required this.userId,
+    required this.name,
+    this.profileImage,
+  });
+
+  factory TaskCommentAvatarDto.fromJson(Map<String, dynamic> json) =>
+      TaskCommentAvatarDto(
+        userId: json['user_id'] as int,
+        name: json['name'] as String,
+        profileImage: json['profile_image'] as String?,
+      );
 }

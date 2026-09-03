@@ -20,7 +20,8 @@ class TaskMapper {
     assigneeEmail: dto.assignedTo?.email,
     assigneeName: dto.assignedTo?.email,
     createdAt: dto.createdAt,
-    commentsCount : dto.commentsCount,
+    commentsCount: dto.commentsCount,
+    commentAvatarUrls: dto.comments.map((c) => c.profileImage).toList(),
   );
 
   static TaskDetailEntity toDomainDetail(TaskDetailDto dto) => TaskDetailEntity(
@@ -44,9 +45,11 @@ class TaskMapper {
     id: dto.id,
     comment: dto.comment,
     commenterEmail: dto.user.email,
+    commenterImage: dto.image,
     commenterRole: dto.user.role,
     createdAt: dto.createdAt,
   );
+
   static TaskPriority _mapPriority(String raw) => switch (raw.toLowerCase()) {
     'high' => TaskPriority.high,
     'medium' => TaskPriority.medium,

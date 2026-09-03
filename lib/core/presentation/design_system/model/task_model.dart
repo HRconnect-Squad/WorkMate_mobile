@@ -1,6 +1,5 @@
 import 'package:workmate/core/presentation/design_system/model/task_priority_enums.dart';
 import 'package:workmate/core/presentation/design_system/model/task_status_enums.dart';
-import 'comment_model.dart';
 import 'package:equatable/equatable.dart';
 
 class TaskModel extends Equatable {
@@ -9,7 +8,7 @@ class TaskModel extends Equatable {
   final TaskPriority priority;
   final TaskStatus status;
   final String date;
-  final List<CommentModel> comments;
+  final List<String?> commentAvatarUrls;
   final int commentsCount;
 
   const TaskModel({
@@ -18,7 +17,7 @@ class TaskModel extends Equatable {
     required this.priority,
     required this.status,
     required this.date,
-    this.comments = const [],
+    this.commentAvatarUrls = const [],
     this.commentsCount = 0,
   });
 
@@ -29,7 +28,7 @@ class TaskModel extends Equatable {
     priority,
     status,
     date,
-    comments,
+    commentAvatarUrls,
     commentsCount,
   ];
 }

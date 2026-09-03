@@ -11,7 +11,7 @@ class TaskMapper {
     priority: entity.priority,
     status: entity.status,
     date: formatDate(entity.dueDate ?? entity.createdAt),
-    comments: entity.comments.map(toUiCommentState).toList(),
+    commentAvatarUrls: entity.commentAvatarUrls,
     commentsCount: entity.commentsCount,
   );
 
@@ -19,7 +19,7 @@ class TaskMapper {
     idComment: entity.id.toString(),
     idCommenter: entity.commenterEmail,
     dateComment: formatDate(entity.createdAt),
-    commenterImage: '',
+    commenterImage: entity.commenterImage,
     commentMassage: entity.comment,
     commenterName: entity.commenterEmail,
     commenterPosition: entity.commenterRole,

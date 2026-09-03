@@ -12,7 +12,7 @@ import '../../../../core/presentation/design_system/theme/helper/theme_extention
 import '../model/task_detail_model.dart';
 import '../login/task_detail_cubit.dart';
 import '../login/task_detail_state.dart';
-import 'comment_card.dart'; // ✅ FIXED
+import 'comment_card.dart';
 
 class TaskDetailScreen extends StatefulWidget {
   final TaskModel task;
@@ -81,8 +81,6 @@ class _TaskDetailScreenState extends State<TaskDetailScreen> {
     );
   }
 }
-
-// ─────────────────────────────────────────────────────────────
 
 class _TaskDetailCard extends StatelessWidget {
   final TaskDetailModel detail;
@@ -161,7 +159,7 @@ class _TaskDetailCard extends StatelessWidget {
               physics: const NeverScrollableScrollPhysics(),
               itemCount: detail.comments.length,
               separatorBuilder: (_, __) => const SizedBox(height: 16),
-              itemBuilder: (_, i) => CommentCard(comment: detail.comments[i]), // ✅ FIXED
+              itemBuilder: (_, i) => CommentCard(comment: detail.comments[i]),
             ),
 
           const SizedBox(height: 16),
@@ -186,8 +184,6 @@ class _TaskDetailCard extends StatelessWidget {
     );
   }
 }
-
-// ── Title + Status chip ──────────────────────────────────────
 
 class _TitleStatusRow extends StatelessWidget {
   final TaskModel task;
@@ -223,7 +219,6 @@ class _TitleStatusRow extends StatelessWidget {
   }
 }
 
-// ── Date ─────────────────────────────────────────────────────
 
 class _DateText extends StatelessWidget {
   final String date;
@@ -240,7 +235,6 @@ class _DateText extends StatelessWidget {
   }
 }
 
-// ── Image carousel ───────────────────────────────────────────
 
 class _ImageCarousel extends StatelessWidget {
   final List<String> imageUrls;
@@ -306,7 +300,6 @@ class _ImageCarousel extends StatelessWidget {
   }
 }
 
-// ── Thumbnails ───────────────────────────────────────────────
 
 class _Thumbnails extends StatelessWidget {
   final List<String> imageUrls;
@@ -339,7 +332,6 @@ class _Thumbnails extends StatelessWidget {
   }
 }
 
-// ── Description ──────────────────────────────────────────────
 
 class _DescriptionCard extends StatelessWidget {
   final String description;
@@ -378,7 +370,6 @@ class _DescriptionCard extends StatelessWidget {
   }
 }
 
-// ── Priority + Difficulty ────────────────────────────────────
 
 class _PriorityDifficultyRow extends StatelessWidget {
   final TaskModel task;
@@ -453,8 +444,6 @@ class _PriorityDifficultyRow extends StatelessWidget {
   }
 }
 
-// ── Assignee — uses CustomAppBar.profile inline ──────────────
-
 class _AssigneeSection extends StatelessWidget {
   final TaskDetailModel detail;
   const _AssigneeSection({required this.detail});
@@ -484,7 +473,6 @@ class _AssigneeSection extends StatelessWidget {
   }
 }
 
-// ── Error ────────────────────────────────────────────────────
 
 class _ErrorView extends StatelessWidget {
   final String message;

@@ -1,6 +1,5 @@
 import '../../../../core/presentation/design_system/model/task_priority_enums.dart';
 import '../../../../core/presentation/design_system/model/task_status_enums.dart';
-import 'comment_entity.dart';
 
 class TaskEntity {
   final int id;
@@ -13,7 +12,7 @@ class TaskEntity {
   final String? assigneeEmail;
   final String? assigneeName;
   final String createdAt;
-  final List<CommentEntity> comments;
+  final List<String?> commentAvatarUrls;
   final int commentsCount;
 
   const TaskEntity({
@@ -27,7 +26,7 @@ class TaskEntity {
     this.assigneeEmail,
     this.assigneeName,
     required this.createdAt,
-    this.comments = const [],
+    this.commentAvatarUrls = const [],
     this.commentsCount = 0,
   });
 }

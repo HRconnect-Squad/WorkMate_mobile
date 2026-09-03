@@ -4,7 +4,7 @@ class CommentModel extends Equatable {
   final String idComment;
   final String idCommenter;
   final String dateComment;
-  final String commenterImage;
+  final String? commenterImage;
   final String commentMassage;
   final String? commenterName;
   final String? commenterPosition;

@@ -4,7 +4,7 @@ import '../theme/helper/app_assets.dart';
 import '../theme/helper/theme_extention.dart';
 
 class HorizontalStackedAvatars extends StatelessWidget {
-  final List<String> commenterImage;
+  final List<String?> commenterImage;
 
   const HorizontalStackedAvatars({super.key, required this.commenterImage});
 
@@ -20,7 +20,7 @@ class HorizontalStackedAvatars extends StatelessWidget {
         clipBehavior: Clip.none,
         children: List.generate(
           commenterImage.length < 3 ? commenterImage.length : 3,
-          (index) {
+              (index) {
             return Positioned.directional(
               textDirection: Directionality.of(context),
               start: step * index,
@@ -38,7 +38,7 @@ class HorizontalStackedAvatars extends StatelessWidget {
 }
 
 class FunCircleAvatar extends StatelessWidget {
-  final String imageUrl;
+  final String? imageUrl;
   final double radius;
   final double borderWidth;
 
@@ -51,6 +51,8 @@ class FunCircleAvatar extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final hasImage = imageUrl != null && imageUrl!.isNotEmpty;
+
     return Container(
       width: radius * 2,
       height: radius * 2,
@@ -58,15 +60,19 @@ class FunCircleAvatar extends StatelessWidget {
         shape: BoxShape.circle,
         border: Border.all(color: context.colors.white, width: borderWidth),
       ),
-      child: CachedNetworkImage(
-        imageUrl: imageUrl,
-        fit: BoxFit.cover,
-        width: double.infinity,
-        height: double.infinity,
-        placeholder: (context, url) =>
-            Image.asset(AppAssets.placeHolderProfile, fit: BoxFit.cover),
-        errorWidget: (context, url, error) =>
-            Image.asset(AppAssets.placeHolderProfile, fit: BoxFit.cover),
+      child: ClipOval(
+        child: hasImage
+            ? CachedNetworkImage(
+          imageUrl: imageUrl!,
+          fit: BoxFit.cover,
+          width: double.infinity,
+          height: double.infinity,
+          placeholder: (context, url) =>
+              Image.asset(AppAssets.placeHolderProfile, fit: BoxFit.cover),
+          errorWidget: (context, url, error) =>
+              Image.asset(AppAssets.placeHolderProfile, fit: BoxFit.cover),
+        )
+            : Image.asset(AppAssets.placeHolderProfile, fit: BoxFit.cover),
       ),
     );
   }
