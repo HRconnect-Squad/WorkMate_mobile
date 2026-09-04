@@ -85,10 +85,10 @@ class ProfileCubit extends BaseCubit<ProfileState> {
     updateState((s) => s.copyWith(
       firstName: '',
       lastName: '',
-      phone: null,
-      dateOfBirth: null,
+      clearPhone: true,
+      clearDateOfBirth: true,
       clearSelectedGender: true,
-      address: null,
+      clearAddress: true,
       clearSelectedProfileImage: true,
       clearAllFormErrors: true,
     ));
