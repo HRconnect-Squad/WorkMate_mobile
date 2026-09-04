@@ -13,6 +13,7 @@ import '../model/task_detail_model.dart';
 import '../login/task_detail_cubit.dart';
 import '../login/task_detail_state.dart';
 import 'comment_card.dart';
+import 'custom_comment_bar.dart';
 
 class TaskDetailScreen extends StatefulWidget {
   final TaskModel task;
@@ -164,20 +165,15 @@ class _TaskDetailCard extends StatelessWidget {
 
           const SizedBox(height: 16),
 
-          if (isSubmittingComment)
-            const Center(child: CircularProgressIndicator())
-          else
-            CustomChatBarMessage(
-              messageController: commentController,
+
+            CustomCommentBar(
+              commentController: commentController,
+              avatarUrl: detail.assigneeAvatarUrl,
               hintText: 'write_a_comment'.tr(),
               onSend: (text) {
-                context.read<TaskDetailCubit>().submitComment(
-                  detail.task.id,
-                  text,
-                );
+                context.read<TaskDetailCubit>().submitComment(detail.task.id, text);
                 commentController.clear();
               },
-              onRecord: () {},
             ),
         ],
       ),

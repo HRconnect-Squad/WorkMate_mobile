@@ -39,7 +39,7 @@ class TaskScreen extends StatelessWidget {
                 mainAxisSize: MainAxisSize.min,
                 children: [
                   SizedBox(
-                    height: height * 0.34,
+                    height: height * 0.37,
                     child: Stack(
                       clipBehavior: Clip.none,
                       children: [
