@@ -30,7 +30,7 @@ class SignUpScreen extends StatelessWidget {
         },
         listener: (context, state) {
           if (state.isRegistered) {
-            VerifyOtpPopUp.show(context, email: state.email);
+            VerifyOtpPopUp.show(context, identifier: state.email);
           }
 
           if (state.apiError != null) {

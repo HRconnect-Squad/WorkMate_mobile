@@ -1,7 +1,9 @@
 import 'dart:async';
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:iconsax/iconsax.dart';
 import 'package:pinput/pinput.dart';
+import '../../../../config/app_constant.dart';
 import '../../theme/color/app_constant_colors.dart';
 import '../../theme/helper/theme_extention.dart';
 import '../custom_input_field.dart';
@@ -91,7 +93,7 @@ class CustomPopup extends StatelessWidget {
         'showDragHandle cannot be true when icon or iconWidget is provided',
         ),
         assert(
-        showFooter == false || (footerText == null && footerClickableText == null),
+        showFooter || (footerText == null && footerClickableText == null),
         'footerText and footerClickableText cannot be provided when showFooter is false',
         );
 
@@ -196,7 +198,7 @@ class CustomPopup extends StatelessWidget {
     bool enabled = true,
     bool isPrimaryButtonLoading = false,
     bool isPrimaryButtonEnabled = true,
-    bool showDragHandle = true,
+    bool showDragHandle = false,
   }) {
     return CustomPopup(
       icon: icon,
@@ -720,7 +722,7 @@ class _OtpInputContentState extends State<_OtpInputContent> {
     return Column(
       children: [
         Pinput(
-          length: 6,
+          length: AppConstant.otpLength,
           controller: _controller,
           enabled: widget.enabled,
           onChanged: widget.onChanged,
@@ -754,7 +756,7 @@ class _OtpInputContentState extends State<_OtpInputContent> {
           ),
           keyboardType: TextInputType.number,
           preFilledWidget: Text(
-            '0',
+            '•',
             style: context.textTheme.headLineMediumFont.copyWith(
               color: context.colors.gray200,
             ),
@@ -770,7 +772,7 @@ class _OtpInputContentState extends State<_OtpInputContent> {
             key: const ValueKey('resend'),
             children: [
               Text(
-                "Haven't received the verification code?",
+                'didnt_receive_code'.tr(),
                 style: context.textTheme.bodySmallFont.copyWith(
                   color: context.colors.textSecondary,
                 ),
@@ -779,7 +781,7 @@ class _OtpInputContentState extends State<_OtpInputContent> {
               GestureDetector(
                 onTap: _onResendTapped,
                 child: Text(
-                  'Resend it.',
+                  'resend_code'.tr(),
                   style: context.textTheme.labelMediumFont.copyWith(
                     color: AppConstantColors.purple500,
                     fontWeight: FontWeight.w600,
@@ -794,7 +796,7 @@ class _OtpInputContentState extends State<_OtpInputContent> {
             key: const ValueKey('countdown'),
             children: [
               Text(
-                "Haven't received the verification code?",
+                'didnt_receive_code'.tr(),
                 style: context.textTheme.bodySmallFont.copyWith(
                   color: context.colors.textSecondary,
                 ),
@@ -805,7 +807,7 @@ class _OtpInputContentState extends State<_OtpInputContent> {
                 mainAxisSize: MainAxisSize.min,
                 children: [
                   Text(
-                    'Resend it in ',
+                    '${'resend_code'.tr()} ${'in'.tr()} ',
                     style: context.textTheme.bodySmallFont.copyWith(
                       color: context.colors.textSecondary,
                     ),
@@ -816,14 +818,12 @@ class _OtpInputContentState extends State<_OtpInputContent> {
                       vertical: 2,
                     ),
                     decoration: BoxDecoration(
-                      color: AppConstantColors.purple500
-                          .withOpacity(0.1),
+                      color: AppConstantColors.purple500.withOpacity(0.1),
                       borderRadius: BorderRadius.circular(6),
                     ),
                     child: Text(
                       _formattedTime,
-                      style: context.textTheme.labelMediumFont
-                          .copyWith(
+                      style: context.textTheme.labelMediumFont.copyWith(
                         color: AppConstantColors.purple500,
                         fontWeight: FontWeight.w700,
                       ),

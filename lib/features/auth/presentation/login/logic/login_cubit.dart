@@ -2,8 +2,10 @@ import '../../../../../core/presentation/base_viewmodel/base_cubit.dart';
 import '../../../../../core/presentation/routes/config/app_state_notifier.dart';
 import '../../../../../core/presentation/util/validator.dart';
 import '../../../domain/entity/auth_type.dart';
+import '../../../domain/failures/failure.dart';
 import '../../../domain/use_cases/load_identifier_use_case.dart';
 import '../../../domain/use_cases/login_use_case.dart';
+import '../../mapper/auth_failure_ui_mapper.dart';
 import 'login_state.dart';
 
 class LoginCubit extends BaseCubit<LoginState> {
@@ -69,11 +71,20 @@ class LoginCubit extends BaseCubit<LoginState> {
         ));
       },
       onError: (failure) {
-        updateState((s) => s.copyWith(
-          isLoading: false,
-          apiError: failure.message,
-          isSuccess: false,
-        ));
+        switch (failure) {
+          case AccountNotVerifiedFailure():
+            updateState((s) => s.copyWith(
+              isLoading: false,
+              unverifiedIdentifier: identifier,
+            ));
+
+          default:
+            updateState((s) => s.copyWith(
+              isLoading: false,
+              apiError: AuthFailureUiMapper.map(failure),
+              isSuccess: false,
+            ));
+        }
       },
     );
   }
@@ -86,12 +97,15 @@ class LoginCubit extends BaseCubit<LoginState> {
     ));
   }
 
+  void onVerificationHandled() {
+    updateState((s) => s.copyWith(clearUnverifiedIdentifier: true));
+  }
+
   Future<void> _loadSavedIdentifier() async {
     final result = await _loadIdentifierUseCase();
 
     result.fold(
           (failure) {
-        // Silently fail - not critical
       },
           (identifier) {
         if (identifier != null && identifier.isNotEmpty) {

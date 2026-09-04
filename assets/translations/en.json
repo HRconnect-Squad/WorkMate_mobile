@@ -261,7 +261,26 @@
   "serial_number": "Serial Number",
   "description": "Description",
   "no_assets_assigned": "No Assets Assigned",
-  "no_assets_description": "You don't have any office assets assigned to you yet."
+  "no_assets_description": "You don't have any office assets assigned to you yet.",
+  "resend_code": "Resend it",
+  "in": "in",
 
+  "account_not_verified_error": "Your account is not verified yet. Please verify your email or phone to continue.",
+  "invalid_credentials_error": "The email/phone or password you entered is incorrect.",
+  "session_expired_error": "Your session has expired. Please sign in again.",
+  "user_not_found_error": "No account was found with this email or phone. Please register first.",
+  "invalid_otp_error": "The verification code is invalid or has expired. Please try again.",
+  "email_exists_error": "An account with this email already exists.",
+  "phone_exists_error": "An account with this phone number already exists.",
+  "account_disabled_error": "Your account has been disabled. Please contact support.",
+  "same_password_error": "Your new password must be different from your current password.",
+  "invalid_current_password_error": "The current password you entered is incorrect.",
+  "change_password_failed_error": "Failed to change your password. Please try again.",
+
+  "profile_not_completed_error": "Please complete your profile to continue.",
+  "profile_already_exists_error": "Your profile already exists. Please refresh and try updating it instead.",
+  "profile_image_upload_error": "Failed to upload your profile image. Please try again.",
+  "payroll_not_found_error": "No payroll record was found.",
+  "payroll_export_error": "Failed to export payroll as PDF. Please try again."
 
 }

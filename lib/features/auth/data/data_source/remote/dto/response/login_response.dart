@@ -17,18 +17,14 @@ class LoginResponse {
     final userData = json['user'] as Map<String, dynamic>?;
 
     if (accessToken == null || accessToken.isEmpty) {
-      throw const ServerException(
+      throw const SerializationException(
         message: 'Invalid response: missing access token',
-        code: 'PARSE_ERROR',
-        statusCode: 200,
       );
     }
 
     if (userData == null) {
-      throw const ServerException(
+      throw const SerializationException(
         message: 'Invalid response: missing user data',
-        code: 'PARSE_ERROR',
-        statusCode: 200,
       );
     }
 

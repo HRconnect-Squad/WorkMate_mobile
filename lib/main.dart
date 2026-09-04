@@ -3,10 +3,14 @@ import 'package:flutter/material.dart';
 import 'package:flutter_native_splash/flutter_native_splash.dart';
 import 'package:workmate/core/config/app_config.dart';
 import 'package:toastification/toastification.dart';
-import 'core/di/injection_container.dart';
+import 'core/di/core_di_container.dart';
 import 'core/presentation/design_system/theme/workmate_theme.dart';
 import 'core/presentation/routes/config/app_startup_service.dart';
 import 'core/presentation/routes/route_generator.dart';
+import 'features/auth/di/auth_di_container.dart';
+import 'features/auth/di/onboarding_di_container.dart';
+import 'features/expense/di/expense_di_container.dart';
+import 'features/profile/di/profile_di_container.dart';
 
 
 void main() async {
@@ -14,7 +18,11 @@ void main() async {
   FlutterNativeSplash.preserve(widgetsBinding: widgetsBinding);
   await EasyLocalization.ensureInitialized();
   await AppConfig.init();
-  await setupDependencies();
+  await initCore();
+  await initOnboarding();
+  await initAuth();
+  await initProfile();
+  await initExpenses();
   await sl<AppStartupService>().initialize();
   FlutterNativeSplash.remove();
 

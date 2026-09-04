@@ -5,7 +5,7 @@ import 'package:workmate/core/presentation/routes/route_names.dart';
 import 'package:workmate/features/auth/presentation/on_boarding/logic/on_boarding_cubit.dart';
 import 'package:workmate/features/expense/presentation/view/screen/expenses_screen.dart';
 import 'package:workmate/features/home/presentation/view/home_screen.dart';
-import 'package:workmate/core/di/injection_container.dart';
+import 'package:workmate/core/di/core_di_container.dart';
 import '../../../features/auth/presentation/login/logic/login_cubit.dart';
 import '../../../features/auth/presentation/login/view/screen/login_screen.dart';
 import '../../../features/auth/presentation/on_boarding/view/on_boarding_page.dart';
@@ -13,7 +13,6 @@ import '../../../features/auth/presentation/register/signup/logic/sign_up_cubit.
 import '../../../features/auth/presentation/register/signup/view/screen/sign_up_screen.dart';
 import '../../../features/expense/presentation/logic/expenses_cubit.dart';
 import '../../../features/expense/presentation/view/screen/submit_expense_screen.dart';
-import '../../../features/main_navigation/presentation/screens/main_wrapper_screen.dart';
 import '../../../features/profile/domain/entity/payroll.dart';
 import '../../../features/profile/presentation/office_assets/logic/office_assets_cubit.dart';
 import '../../../features/profile/presentation/office_assets/view/screen/office_assets_screen.dart';
@@ -25,6 +24,7 @@ import '../../../features/profile/presentation/personal_data/view/screen/persona
 import '../../../features/profile/presentation/profile/logic/profile_cubit.dart';
 import '../../../features/profile/presentation/profile/view/screen/profile_screen.dart';
 import 'config/app_state_notifier.dart';
+import 'main_navigation/presentation/screens/main_wrapper_screen.dart';
 
 final GoRouter router = GoRouter(
   refreshListenable: AuthStateNotifier.instance,
@@ -193,6 +193,8 @@ final GoRouter router = GoRouter(
 
 String? _handleRedirect(BuildContext context, GoRouterState state) {
   final authState = AuthStateNotifier.instance;
+  if (!authState.isInitialized) return null;
+
   final isLoggedIn = authState.isLoggedIn;
   final onboardingCompleted = authState.isOnboardingCompleted;
   final location = state.matchedLocation;

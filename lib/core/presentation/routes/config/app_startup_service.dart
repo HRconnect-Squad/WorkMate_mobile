@@ -1,7 +1,7 @@
 import '../../../data/cache/preferences_keys.dart';
 import '../../../data/cache/secure_storage_data_source.dart';
 import '../../../data/cache/shared_preferences_service.dart';
-import '../../../data/network/api_constants.dart';
+import '../../../data/network/constant/api_constant.dart';
 import 'app_state_notifier.dart';
 
 abstract class AppStartupService {
@@ -23,7 +23,7 @@ class AppStartupServiceImpl implements AppStartupService {
 
   @override
   Future<bool> isLoggedIn() async {
-    final token = await _secureStorage.read(key: ApiConstants.tokenKey);
+    final token = await _secureStorage.read(key: ApiConstants.localDataTokenKey);
     return token != null && token.isNotEmpty;
   }
 

@@ -1,118 +1,145 @@
 import 'package:fpdart/fpdart.dart';
+import '../../../../core/data/exception/app_exception.dart';
+import '../../../../core/data/network/helper/safe_api_call.dart';
 import '../../../../core/domain/failure/domain_failure.dart';
 import '../../domain/entity/auth_type.dart';
 import '../../domain/entity/register.dart';
 import '../../domain/entity/user.dart';
+import '../../domain/entity/verification_type.dart';
 import '../../domain/entity/verify_otp.dart';
 import '../../domain/repository/auth_repository.dart';
 import '../data_source/local/auth_local_data_source.dart';
 import '../data_source/remote/auth_remote_data_source.dart';
-import '../data_source/remote/dto/request/forgot_password_request.dart';
+import '../data_source/remote/dto/request/check_forgot_password_otp_request_dto.dart';
 import '../data_source/remote/dto/request/login_request.dart';
 import '../data_source/remote/dto/request/reset_password_request.dart';
+import '../data_source/remote/dto/request/send_otp_request_dto.dart';
 import '../mappers/auth_mapper.dart';
 import '../mappers/auth_failure_mapper.dart';
 
-class AuthRepositoryImp implements AuthRepository {
+class AuthRepositoryImp with SafeApiCall implements AuthRepository {
   final AuthLocalDataSource _localDataSource;
   final AuthRemoteDataSource _remoteDataSource;
 
   const AuthRepositoryImp({
     required AuthLocalDataSource localDataSource,
     required AuthRemoteDataSource remoteDataSource,
-  })
-      : _localDataSource = localDataSource,
+  })  : _localDataSource = localDataSource,
         _remoteDataSource = remoteDataSource;
 
+  // ─── Remote Operations ────────────────────────────────────────────────────
   @override
   Future<Either<Failure, User>> login({
     required String identifier,
     required String password,
     required AuthType loginType,
-  }) async {
-    try {
-      final request = LoginRequest(
-        identifier: identifier,
-        password: password,
-        loginType: loginType,
+  }) =>
+      safeApiCall(
+        call: () async {
+          final response = await _remoteDataSource.login(
+            LoginRequest(
+              identifier: identifier,
+              password: password,
+              loginType: loginType,
+            ),
+          );
+
+          final token = response.accessToken;
+          if (token == null || token.isEmpty) {
+            throw const ServerException(message: 'Access token is missing');
+          }
+
+          await _localDataSource.saveToken(token);
+          await _localDataSource.saveIdentifier(
+            response.user?.email ?? response.user?.phone ?? identifier,
+          );
+
+          return AuthMapper.toDomain(response.user);
+        },
+        onException: AuthFailureMapper.mapException,
       );
 
-      final response = await _remoteDataSource.login(request);
-
-      if (response.accessToken != null && response.accessToken!.isNotEmpty) {
-        await _localDataSource.saveToken(response.accessToken!);
-        await _localDataSource.saveIdentifier(
-            response.user?.email ?? response.user?.phone ?? identifier);
-      } else {
-        return Left(const ServerFailure('Access token is missing'));
-      }
-
-      return Right(AuthMapper.toDomain(response.user));
-    } catch (e) {
-      return Left(AuthFailureMapper.mapException(e));
-    }
-  }
+  @override
+  Future<Either<Failure, bool>> register({
+    required Register register,
+  }) =>
+      safeApiCall(
+        call: () async {
+          final request = AuthMapper.toRegisterDtoRequest(register);
+          return await _remoteDataSource.register(
+            registerDtoRequest: request,
+          );
+        },
+        onException: AuthFailureMapper.mapException,
+      );
 
   @override
-  Future<Either<Failure, String?>> getToken() async {
-    try {
-      final token = await _localDataSource.getToken();
-      return Right(token);
-    } catch (e) {
-      return Left(AuthFailureMapper.mapException(e));
-    }
-  }
+  Future<Either<Failure, User>> verifyOTP({
+    required VerifyOTP verifyOtp,
+  }) =>
+      safeApiCall(
+        call: () async {
+          final request = AuthMapper.toVerifyOtpDto(verifyOtp);
+          final response = await _remoteDataSource.verifyOTP(
+            verifyOtpDto: request,
+          );
+
+          final token = response.accessToken;
+          if (token != null && token.isNotEmpty) {
+            await _localDataSource.saveToken(token);
+            await _localDataSource.saveIdentifier(
+              response.user?.email ?? response.user?.phone ?? '',
+            );
+          }
+          else {
+            throw const ServerException(message: 'Access token is missing');
+          }
+
+          return AuthMapper.toDomain(response.user);
+        },
+        onException: AuthFailureMapper.mapException,
+      );
 
   @override
-  Future<Either<Failure, Unit>> saveToken(String token) async {
-    try {
-      await _localDataSource.saveToken(token);
-      return const Right(unit);
-    } catch (e) {
-      return Left(AuthFailureMapper.mapException(e));
-    }
-  }
-
-  @override
-  Future<Either<Failure, Unit>> clearToken() async {
-    try {
-      await _localDataSource.clearToken();
-      return const Right(unit);
-    } catch (e) {
-      return Left(AuthFailureMapper.mapException(e));
-    }
-  }
-
-  @override
-  Future<Either<Failure, bool>> hasToken() async {
-    try {
-      final hasToken = await _localDataSource.hasToken();
-      return Right(hasToken);
-    } catch (e) {
-      return Left(AuthFailureMapper.mapException(e));
-    }
-  }
-
-  @override
-  Future<Either<Failure, String>> forgotPassword({
+  Future<Either<Failure, String>> sendOtp({
     required String identifier,
     required AuthType loginType,
-  }) async {
-    try {
-      final request = ForgotPasswordRequest(
-        identifier: identifier,
-        loginType: loginType,
+    required VerificationType purpose,
+  }) =>
+      safeApiCall(
+        call: () async {
+          final response = await _remoteDataSource.sendOtp(
+            SendOtpRequestDto(
+              type: purpose.value,
+              loginType: loginType.value,
+              identifier: identifier,
+            ),
+          );
+
+          final responseIdentifier = response.identifier;
+          if (responseIdentifier == null || responseIdentifier.isEmpty) {
+            throw const ServerException(message: 'Identifier is missing in response');
+          }
+
+          return responseIdentifier;
+        },
+        onException: AuthFailureMapper.mapException,
       );
 
-      final response = await _remoteDataSource.forgotPassword(request);
-      if (response.identifier == null || response.identifier?.isEmpty == true) {
-        return Left(ServerFailure('identifier is null or empty'));
-      }
-      return Right(response.identifier ?? '');
-    } catch (e) {
-      return Left(AuthFailureMapper.mapException(e));
-    }
-  }
+  @override
+  Future<Either<Failure, Unit>> checkForgotPasswordOtp({
+    required String identifier,
+    required String code,
+  }) =>
+      safeApiCall(
+        call: () async {
+          await _remoteDataSource.checkForgotPasswordOtp(
+            CheckForgotPasswordOtpRequestDto(identifier: identifier, code: code),
+          );
+          return unit;
+        },
+        onException: AuthFailureMapper.mapException,
+      );
 
   @override
   Future<Either<Failure, User>> resetPassword({
@@ -120,110 +147,95 @@ class AuthRepositoryImp implements AuthRepository {
     required String code,
     required String password,
     required String passwordConfirmation,
-  }) async {
-    try {
-      final request = ResetPasswordRequest(
-        identifier: identifier,
-        code: code,
-        password: password,
-        passwordConfirmation: passwordConfirmation,
+  }) =>
+      safeApiCall(
+        call: () async {
+          final response = await _remoteDataSource.resetPassword(
+            ResetPasswordRequest(
+              identifier: identifier,
+              code: code,
+              password: password,
+              passwordConfirmation: passwordConfirmation,
+            ),
+          );
+
+          final token = response.accessToken;
+          if (token == null || token.isEmpty) {
+            throw const ServerException(message: 'Access token is missing');
+          }
+
+          await _localDataSource.saveToken(token);
+          await _localDataSource.saveIdentifier(
+            response.user?.email ?? response.user?.phone ?? identifier,
+          );
+
+          return AuthMapper.toDomain(response.user);
+        },
+        onException: AuthFailureMapper.mapException,
       );
 
-      final response = await _remoteDataSource.resetPassword(request);
-
-      if (response.accessToken == null ||
-          response.accessToken?.isEmpty == true) {
-        return Left(ServerFailure('Access token is missing'));
-      }
-
-      await _localDataSource.saveToken(response.accessToken ?? '');
-      await _localDataSource.saveIdentifier(
-          response.user?.email ?? response.user?.phone ?? identifier);
-
-      return Right(AuthMapper.toDomain(response.user));
-    } catch (e) {
-      return Left(AuthFailureMapper.mapException(e));
-    }
-  }
-
   @override
-  Future<Either<Failure, String?>> getIdentifier() async {
-    try {
-      final mail = await _localDataSource.getIdentifier();
-      return Right(mail);
-    } catch (e) {
-      return Left(AuthFailureMapper.mapException(e));
-    }
-  }
-
-  @override
-  Future<Either<Failure, Unit>> saveIdentifier(String mail) async {
-    try {
-      await _localDataSource.saveIdentifier(mail);
-      return Right(unit);
-    } catch (e) {
-      return Left(AuthFailureMapper.mapException(e));
-    }
-  }
-
-  @override
-  Future<Either<Failure, Unit>> clearIdentifier() async {
-    try {
-      await _localDataSource.clearIdentifier();
-      return Right(unit);
-    } catch (e) {
-      return Left(AuthFailureMapper.mapException(e));
-    }
-  }
-
-  @override
-  Future<Either<Failure, bool>> register({required Register register}) async {
-    try {
-      final registerDtoRequest = AuthMapper.toRegisterDtoRequest(register);
-      final response = await _remoteDataSource.register(
-        registerDtoRequest: registerDtoRequest,
+  Future<Either<Failure, bool>> changePassword({
+    required String currentPassword,
+    required String newPassword,
+    required String newPasswordConfirmation,
+  }) =>
+      safeApiCall(
+        call: () => _remoteDataSource.changePassword(
+          currentPassword: currentPassword,
+          newPassword: newPassword,
+          newPasswordConfirmation: newPasswordConfirmation,
+        ),
+        onException: AuthFailureMapper.mapException,
       );
-      return Right(response);
-    } catch (e) {
-      return Left(AuthFailureMapper.mapException(e));
-    }
-  }
+
+
+  // ─── Local / Cache Operations ─────────────────────────────────────────────
+  @override
+  Future<Either<Failure, String?>> getToken() =>
+      safeCacheCall(call: () => _localDataSource.getToken());
 
   @override
-  Future<Either<Failure, User>> verifyOTP({
-    required VerifyOTP verifyOtp,
-  }) async {
-    try {
-      final verifyOtpDto = AuthMapper.toVerifyOtpDto(verifyOtp);
-      final otpVerifyResponse = await _remoteDataSource.verifyOTP(
-        verifyOtpDto: verifyOtpDto,
+  Future<Either<Failure, Unit>> saveToken(String token) =>
+      safeCacheCall(
+        call: () async {
+          await _localDataSource.saveToken(token);
+          return unit;
+        },
       );
-      if (otpVerifyResponse.accessToken != null &&
-          otpVerifyResponse.accessToken!.isNotEmpty) {
-        await saveToken(otpVerifyResponse.accessToken!);
-        await _localDataSource.saveIdentifier(
-            otpVerifyResponse.user?.email ?? otpVerifyResponse.user?.phone ??
-                "");
-      }
-      final user = AuthMapper.toDomain(otpVerifyResponse.user);
-      return Right(user);
-    } catch (e) {
-      return Left(AuthFailureMapper.mapException(e));
-    }
-  }
 
   @override
-  Future<Either<Failure, bool>> changePassword({required String currentPassword,
-    required String newPassword, required String newPasswordConfirmation}) async {
-    try {
-       final response = await _remoteDataSource.changePassword(
-        currentPassword: currentPassword,
-        newPassword: newPassword,
-        newPasswordConfirmation: newPasswordConfirmation,
+  Future<Either<Failure, Unit>> clearToken() =>
+      safeCacheCall(
+        call: () async {
+          await _localDataSource.clearToken();
+          return unit;
+        },
       );
-      return Right(response);
-    } catch (e) {
-      return Left(AuthFailureMapper.mapException(e));
-    }
-  }
+
+  @override
+  Future<Either<Failure, bool>> hasToken() =>
+      safeCacheCall(call: () => _localDataSource.hasToken());
+
+  @override
+  Future<Either<Failure, String?>> getIdentifier() =>
+      safeCacheCall(call: () => _localDataSource.getIdentifier());
+
+  @override
+  Future<Either<Failure, Unit>> saveIdentifier(String identifier) =>
+      safeCacheCall(
+        call: () async {
+          await _localDataSource.saveIdentifier(identifier);
+          return unit;
+        },
+      );
+
+  @override
+  Future<Either<Failure, Unit>> clearIdentifier() =>
+      safeCacheCall(
+        call: () async {
+          await _localDataSource.clearIdentifier();
+          return unit;
+        },
+      );
 }

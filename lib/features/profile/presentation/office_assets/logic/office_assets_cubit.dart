@@ -1,5 +1,6 @@
 import '../../../../../core/presentation/base_viewmodel/base_cubit.dart';
 import '../../../domain/usecase/get_office_assets_usecase.dart';
+import '../../mapper/profile_failure_ui_mapper.dart';
 import 'office_assets_state.dart';
 
 class OfficeAssetsCubit extends BaseCubit<OfficeAssetsState> {
@@ -24,10 +25,10 @@ class OfficeAssetsCubit extends BaseCubit<OfficeAssetsState> {
           currentIndex: 0,
         ));
       },
-      onError: (error) {
+      onError: (failure) {
         updateState((s) => s.copyWith(
           isLoading: false,
-          error: error.message,
+          error: ProfileFailureUiMapper.map(failure),
         ));
       },
     );

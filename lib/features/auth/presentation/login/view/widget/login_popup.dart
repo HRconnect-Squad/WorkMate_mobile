@@ -11,6 +11,7 @@ import '../../../../../../core/presentation/design_system/theme/helper/snackbar_
 import '../../../../../../core/presentation/design_system/theme/helper/theme_extention.dart';
 import '../../../../../../core/presentation/routes/route_names.dart';
 import '../../../../domain/entity/auth_type.dart';
+import '../../../register/verify_otp_popup/view/verify_otp_popup.dart';
 import '../../../shared/model/country_filter.dart';
 import '../../logic/login_cubit.dart';
 import '../../logic/login_state.dart';
@@ -32,12 +33,21 @@ class _LoginCardState extends State<LoginCard> {
     return BlocConsumer<LoginCubit, LoginState>(
       listenWhen: (previous, current) {
         return (current.isSuccess && !previous.isSuccess) ||
-            (current.apiError != null && current.apiError != previous.apiError);
+            (current.apiError != null && current.apiError != previous.apiError) ||
+            (current.needsVerification && !previous.needsVerification);
       },
       listener: (context, state) {
         if (state.isSuccess) {
           SnackBarHelper.showSuccess(context, 'Logged in successfully!');
           context.go(RouteNames.homeScreen);
+          return;
+        }
+        if (state.needsVerification) {
+          final identifier = state.unverifiedIdentifier!;
+          context.read<LoginCubit>().onVerificationHandled();
+
+          VerifyOtpPopUp.show(context, identifier: identifier, loginType: _loginType);
+          return;
         }
 
         if (state.apiError != null) {

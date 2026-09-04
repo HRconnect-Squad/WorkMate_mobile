@@ -1,99 +1,134 @@
+import '../network/dto/response/api_error_response.dart';
+
 sealed class AppException implements Exception {
   final String message;
-  final String? code;
   final int? statusCode;
-  final bool isUnauthorized;
+  final ApiErrorResponse? apiError;
 
-  const AppException({
-    required this.message,
-    this.code,
-    this.statusCode,
-    this.isUnauthorized = false,
-  });
+  const AppException({required this.message, this.statusCode, this.apiError});
 
   @override
   String toString() =>
-      'AppException: $message (code: $code, status: $statusCode)';
+      'AppException($runtimeType): $message [code: $statusCode]';
 }
 
-class NetworkException extends AppException {
-  const NetworkException({String message = 'No internet connection'})
-    : super(message: message, code: 'NETWORK_ERROR');
-}
-
-class ConnectionTimeoutException extends AppException {
-  const ConnectionTimeoutException({
-    String message = 'Connection timed out. Please try again.',
-  }) : super(message: message, code: 'TIMEOUT');
-}
-
-class ServerException extends AppException {
-  const ServerException({required super.message, String? code, int? statusCode})
-    : super(code: code, statusCode: statusCode);
+class BadRequestException extends AppException {
+  const BadRequestException({
+    required super.message,
+    super.statusCode = 400,
+    super.apiError,
+  });
 }
 
 class UnauthorizedException extends AppException {
   const UnauthorizedException({
-    String message = 'Session expired. Please sign in again.',
-    int? statusCode,
-    String? code,
-  }) : super(
-         message: message,
-         isUnauthorized: true,
-         code: code,
-         statusCode: statusCode,
-       );
+    required super.message,
+    super.statusCode = 401,
+    super.apiError,
+  });
+}
+
+class InvalidCredentialsException extends AppException {
+  const InvalidCredentialsException({
+    super.message = 'Invalid credentials',
+    super.statusCode = 401,
+    super.apiError});
+}
+
+class ForbiddenException extends AppException {
+  const ForbiddenException({
+    required super.message,
+    super.statusCode = 403,
+    super.apiError,
+  });
+}
+
+class NotFoundException extends AppException {
+  const NotFoundException({
+    required super.message,
+    super.statusCode = 404,
+    super.apiError,
+  });
+}
+
+class TooManyAttemptsException extends AppException {
+  const TooManyAttemptsException({
+    required super.message,
+    super.statusCode = 429,
+    super.apiError,
+  });
+}
+
+class ServerException extends AppException {
+  const ServerException({
+    required super.message,
+    super.statusCode = 500,
+    super.apiError,
+  });
+}
+
+class ConflictException extends AppException {
+  const ConflictException({
+    required super.message,
+    super.statusCode = 409,
+    super.apiError,
+  });
+}
+
+class NetworkException extends AppException {
+  const NetworkException({
+    required super.message});
+}
+
+class TimeoutException extends AppException {
+  const TimeoutException({
+    required super.message});
+}
+
+class RequestCancelledException extends AppException {
+  const RequestCancelledException({
+    required super.message});
 }
 
 class CacheException extends AppException {
-  const CacheException({
-    required super.message,
-    super.code = 'CACHE_ERROR',
-    super.statusCode,
-    super.isUnauthorized = false,
-  });
+  const CacheException({required String message, int? code})
+    : super(message: message, statusCode: code ?? 0);
 
-  factory CacheException.read(String key, [Object? error]) {
-    return CacheException(
-      message: 'Failed to read $key${error != null ? ': $error' : ''}',
-      code: 'CACHE_READ_ERROR',
-    );
-  }
+  factory CacheException.read(String key, [Object? error]) => CacheException(
+    message: 'Failed to read $key${error != null ? ': $error' : ''}',
+  );
 
-  factory CacheException.write(String key, [Object? error]) {
-    return CacheException(
-      message: 'Failed to write $key${error != null ? ': $error' : ''}',
-      code: 'CACHE_WRITE_ERROR',
-    );
-  }
+  factory CacheException.write(String key, [Object? error]) => CacheException(
+    message: 'Failed to write $key${error != null ? ': $error' : ''}',
+  );
 
-  factory CacheException.delete(String key, [Object? error]) {
-    return CacheException(
-      message: 'Failed to delete $key${error != null ? ': $error' : ''}',
-      code: 'CACHE_DELETE_ERROR',
-    );
-  }
+  factory CacheException.delete(String key, [Object? error]) => CacheException(
+    message: 'Failed to delete $key${error != null ? ': $error' : ''}',
+  );
 
-  factory CacheException.invalidData(String key, String reason) {
-    return CacheException(
-      message: 'Invalid data for $key: $reason',
-      code: 'CACHE_INVALID_DATA',
-    );
-  }
+  factory CacheException.invalidData(String key, String reason) =>
+      CacheException(message: 'Invalid data for $key: $reason');
+}
+
+class SerializationException extends AppException {
+  const SerializationException({super.message = 'Failed to parse response'});
+}
+
+class FileException extends AppException {
+  const FileException({required super.message});
 }
 
 class ValidationException extends AppException {
-  final Map<String, List<String>>? errors;
-
-  const ValidationException({required super.message, this.errors})
-    : super(code: 'VALIDATION_ERROR');
-
-  String? getFieldError(String field) => errors?[field]?.firstOrNull;
-
-  String get allErrors => errors?.values.expand((e) => e).join('\n') ?? message;
+  const ValidationException({required super.message, super.statusCode, super.apiError});
 }
 
 class UnknownException extends AppException {
-  const UnknownException({String message = 'An unexpected error occurred'})
-    : super(message: message, code: 'UNKNOWN_ERROR');
+  const UnknownException({super.message = 'An unexpected error occurred'})
+    : super(
+        apiError: const ApiErrorResponse(
+          success: false,
+          message: 'An unexpected error occurred',
+          errorCode: 'UNKNOWN_ERROR',
+        ),
+      );
 }

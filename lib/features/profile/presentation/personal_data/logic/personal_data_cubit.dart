@@ -1,11 +1,13 @@
 import 'package:easy_localization/easy_localization.dart';
 import 'package:workmate/features/profile/presentation/personal_data/logic/personal_data_state.dart';
 import '../../../../../core/config/app_constant.dart';
+import '../../../../../core/domain/failure/domain_failure.dart';
 import '../../../../../core/presentation/base_viewmodel/base_cubit.dart';
-import '../../../../../core/presentation/util/image_picker_helper.dart';
+import '../../../../../core/domain/service/image_picker_helper.dart';
 import '../../../../../core/presentation/util/validator.dart';
 import '../../../domain/usecase/get_profile_usecase.dart';
 import '../../../domain/usecase/update_profile_usecase.dart';
+import '../../mapper/profile_failure_ui_mapper.dart';
 
 class PersonalDataCubit extends BaseCubit<PersonalDataState> {
   final GetProfileUseCase _getProfileUseCase;
@@ -36,10 +38,10 @@ class PersonalDataCubit extends BaseCubit<PersonalDataState> {
           clearAllErrors: true,
         ));
       },
-      onError: (error) {
+      onError: (failure) {
         updateState((s) => s.copyWith(
           isLoadingProfile: false,
-          error: error.message,
+          error: ProfileFailureUiMapper.map(failure),
         ));
       },
     );
@@ -135,12 +137,27 @@ class PersonalDataCubit extends BaseCubit<PersonalDataState> {
           clearSelectedAvatar: true,
         ));
       },
-      onError: (error) {
-        updateState((s) => s.copyWith(
-          isLoading: false,
-          isSuccess: false,
-          error: error.message,
-        ));
+      onError: (failure) {
+        switch (failure) {
+          case ValidationFailure(:final errors):
+            final hasFieldErrors = errors?.isNotEmpty ?? false;
+            updateState((s) => s.copyWith(
+              isLoading: false,
+              isSuccess: false,
+              firstNameError: errors?.firstErrorFor('first_name'),
+              lastNameError: errors?.firstErrorFor('last_name'),
+              phoneError: errors?.firstErrorFor('phone'),
+              addressError: errors?.firstErrorFor('address'),
+              error: hasFieldErrors ? null : ProfileFailureUiMapper.map(failure),
+            ));
+
+          default:
+            updateState((s) => s.copyWith(
+              isLoading: false,
+              isSuccess: false,
+              error: ProfileFailureUiMapper.map(failure),
+            ));
+        }
       },
     );
   }

@@ -246,6 +246,25 @@
   "serial_number": "Serial Number",
   "description": "Description",
   "no_assets_assigned": "No Assets Assigned",
-  "no_assets_description": "You don't have any office assets assigned to you yet."
+  "no_assets_description": "You don't have any office assets assigned to you yet.",
+  "resend_code": "Resend it",
+  "in": "in",
 
+  "account_not_verified_error": "لم يتم توثيق حسابك بعد. يرجى توثيق بريدك الإلكتروني أو رقم هاتفك للمتابعة.",
+  "invalid_credentials_error": "البريد الإلكتروني أو رقم الهاتف أو كلمة المرور التي أدخلتها غير صحيحة.",
+  "session_expired_error": "انتهت صلاحية جلستك. يرجى تسجيل الدخول مرة أخرى.",
+  "user_not_found_error": "لم يتم العثور على حساب بهذا البريد الإلكتروني أو رقم الهاتف. يرجى التسجيل أولاً.",
+  "invalid_otp_error": "رمز التحقق غير صحيح أو منتهي الصلاحية. يرجى المحاولة مرة أخرى.",
+  "email_exists_error": "يوجد حساب مسجل بهذا البريد الإلكتروني بالفعل.",
+  "phone_exists_error": "يوجد حساب مسجل بهذا الرقم بالفعل.",
+  "account_disabled_error": "تم تعطيل حسابك. يرجى التواصل مع الدعم الفني.",
+  "same_password_error": "يجب أن تكون كلمة المرور الجديدة مختلفة عن كلمة المرور الحالية.",
+  "invalid_current_password_error": "كلمة المرور الحالية التي أدخلتها غير صحيحة.",
+  "change_password_failed_error": "فشل تغيير كلمة المرور. يرجى المحاولة مرة أخرى.",
+
+  "profile_not_completed_error": "يرجى إكمال ملفك الشخصي للمتابعة.",
+  "profile_already_exists_error": "ملفك الشخصي موجود بالفعل. يرجى تحديث الصفحة ومحاولة التعديل بدلاً من ذلك.",
+  "profile_image_upload_error": "فشل رفع صورة الملف الشخصي. يرجى المحاولة مرة أخرى.",
+  "payroll_not_found_error": "لم يتم العثور على سجل رواتب.",
+  "payroll_export_error": "فشل تصدير كشف الراتب كملف PDF. يرجى المحاولة مرة أخرى."
 }

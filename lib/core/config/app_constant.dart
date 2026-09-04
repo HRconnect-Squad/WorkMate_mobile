@@ -1,7 +1,7 @@
 class AppConstant {
   AppConstant._();
 
-  static const String appName = 'Work Hub';
+  static const String appName = 'WorkMate';
   static const String appVersion = '1.0.0';
 
   // App config

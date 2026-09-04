@@ -5,8 +5,9 @@ import 'package:workmate/features/profile/data/datasource/remote/dto/response/of
 import 'package:workmate/features/profile/data/datasource/remote/dto/response/upload_image_response_dto.dart';
 import 'package:workmate/features/profile/data/datasource/remote/profile_remote_data_source.dart';
 import '../../../../../core/data/exception/app_exception.dart';
-import '../../../../../core/data/network/api_constants.dart';
 import '../../../../../core/data/network/dio_client.dart';
+import '../../../../../core/data/network/dto/response/api_response.dart';
+import '../../constant/profile_api_constant.dart';
 import 'dto/employee_profile_dto.dart';
 import 'dto/request/complete_profile_request.dart';
 import 'dto/request/update_profile_request_dto.dart';
@@ -19,22 +20,14 @@ class ProfileRemoteDataSourceImpl implements ProfileRemoteDataSource {
 
   @override
   Future<EmployeeProfileDto> getProfile() async {
-    final response = await _dioClient.get(ApiConstants.getProfile);
+    final response = await _dioClient.get(ProfileApiConstant.getProfile);
 
-    final success = response.data['success'] as bool?;
-    if (success == false) {
-      final errorCode = response.data['error_code'] as String?;
-      if (errorCode == 'PROFILE_NOT_COMPLETED') {
-        throw ServerException(
-          message: response.data['message'] as String? ?? 'Profile not completed yet.',
-          code: 'PROFILE_NOT_COMPLETED',
-          statusCode: 200,
-        );
-      }
-    }
+    final apiResponse = ApiResponse.fromJson(
+      response.data,
+          (data) => EmployeeProfileDto.fromJson(data as Map<String, dynamic>),
+    );
 
-    final data = response.data['data'] as Map<String, dynamic>;
-    return EmployeeProfileDto.fromJson(data);
+    return apiResponse.requiredData;
   }
 
   @override
@@ -42,35 +35,39 @@ class ProfileRemoteDataSourceImpl implements ProfileRemoteDataSource {
     required CompleteProfileRequestDto request,
     String? profileImagePath,
   }) async {
-    Response response;
+    final Response response;
 
     if (profileImagePath == null || profileImagePath.isEmpty) {
       response = await _dioClient.post(
-        ApiConstants.completeProfile,
+        ProfileApiConstant.completeProfile,
         data: request.toJson(),
       );
     } else {
-      final file = File(profileImagePath);
-      if (!file.existsSync()) {
-        throw const ValidationException(message: 'Profile image file does not exist');
+      if (!File(profileImagePath).existsSync()) {
+        throw FileException(
+          message: 'Profile image file not found at path: $profileImagePath',
+        );
       }
 
-      final fileName = file.path.split('/').last;
       final multipartFile = await MultipartFile.fromFile(
         profileImagePath,
-        filename: fileName,
+        filename: profileImagePath.split('/').last,
       );
 
       response = await _dioClient.uploadFiles(
-        ApiConstants.completeProfile,
+        path: ProfileApiConstant.completeProfile,
         files: {'profile_image': multipartFile},
         extraFields: request.toJson(),
         method: HttpMethod.post,
       );
     }
 
-    final data = response.data['data'] as Map<String, dynamic>;
-    return EmployeeProfileDto.fromJson(data);
+    final apiResponse = ApiResponse.fromJson(
+      response.data,
+          (data) => EmployeeProfileDto.fromJson(data as Map<String, dynamic>),
+    );
+
+    return apiResponse.requiredData;
   }
 
   @override
@@ -78,85 +75,92 @@ class ProfileRemoteDataSourceImpl implements ProfileRemoteDataSource {
     required UpdateProfileRequestDto request,
     String? avatarPath,
   }) async {
-    Response response;
+    final Response response;
 
     if (avatarPath == null || avatarPath.isEmpty) {
       response = await _dioClient.put(
-        ApiConstants.updateProfile,
+        ProfileApiConstant.updateProfile,
         data: request.toJson(),
       );
     } else {
-      final file = File(avatarPath);
-      if (!file.existsSync()) {
-        throw const ValidationException(message: 'Avatar file does not exist');
+      if (!File(avatarPath).existsSync()) {
+        throw FileException(
+          message: 'Avatar file not found at path: $avatarPath',
+        );
       }
 
-      final fileName = file.path.split('/').last;
       final multipartFile = await MultipartFile.fromFile(
         avatarPath,
-        filename: fileName,
+        filename: avatarPath.split('/').last,
       );
 
       response = await _dioClient.uploadFiles(
-        ApiConstants.updateProfile,
+        path: ProfileApiConstant.updateProfile,
         files: {'profile_image': multipartFile},
         extraFields: request.toJson(),
         method: HttpMethod.put,
       );
     }
 
-    final data = response.data['data'] as Map<String, dynamic>;
-    return EmployeeProfileDto.fromJson(data);
-  }
+    final apiResponse = ApiResponse.fromJson(
+      response.data,
+          (data) => EmployeeProfileDto.fromJson(data as Map<String, dynamic>),
+    );
 
+    return apiResponse.requiredData;
+  }
 
   @override
   Future<UploadImageResponseDto> uploadProfileImage(String filePath) async {
-    final file = File(filePath);
-
-    if (!file.existsSync()) {
-      throw const ValidationException(message: 'Avatar file does not exist');
+    if (!File(filePath).existsSync()) {
+      throw FileException(
+        message: 'Image file not found at path: $filePath',
+      );
     }
 
-    final fileName = file.path.split('/').last;
     final multipartFile = await MultipartFile.fromFile(
       filePath,
-      filename: fileName,
+      filename: filePath.split('/').last,
     );
 
     final response = await _dioClient.uploadFiles(
-      ApiConstants.uploadProfileImage,
+      path: ProfileApiConstant.uploadProfileImage,
       files: {'image': multipartFile},
     );
 
-    final data = response.data['data'] as Map<String, dynamic>;
-    return UploadImageResponseDto.fromJson(data);
-  }
+    final apiResponse = ApiResponse.fromJson(
+      response.data,
+          (data) => UploadImageResponseDto.fromJson(data as Map<String, dynamic>),
+    );
 
-  // @override
-  // Future<PayrollDto> getPayrollDetail(int id) async {
-  //   final response = await _dioClient.get('${ApiConstants.getPayrollDetail}/$id');
-  //   final data = response.data['data'] as Map<String, dynamic>;
-  //   return PayrollDto.fromJson(data);
-  // }
+    return apiResponse.requiredData;
+  }
 
   @override
   Future<List<PayrollDto>> getPayrollHistory() async {
-    final response = await _dioClient.get(ApiConstants.getPayrollHistory);
+    final response = await _dioClient.get(ProfileApiConstant.getPayrollHistory);
 
-    final data = response.data['data'] as List<dynamic>;
-    return data
-        .map((json) => PayrollDto.fromJson(json as Map<String, dynamic>))
-        .toList();
+    final apiResponse = ApiResponse.fromJson(
+      response.data,
+          (data) => (data as List<dynamic>)
+          .map((item) => PayrollDto.fromJson(item as Map<String, dynamic>))
+          .toList(),
+    );
+
+    return apiResponse.requiredData;
   }
 
   @override
   Future<List<OfficeAssetsDto>> getOfficeAssets() async {
-    final response = await _dioClient.get(ApiConstants.getOfficeAssets);
+    final response = await _dioClient.get(ProfileApiConstant.getOfficeAssets);
 
-    final data = response.data['data'] as List<dynamic>;
-    return data
-        .map((json) => OfficeAssetsDto.fromJson(json as Map<String, dynamic>))
-        .toList();
+    final apiResponse = ApiResponse.fromJson(
+      response.data,
+          (data) => (data as List<dynamic>)
+          .map((item) => OfficeAssetsDto.fromJson(item as Map<String, dynamic>))
+          .toList(),
+    );
+
+    return apiResponse.requiredData;
   }
 }

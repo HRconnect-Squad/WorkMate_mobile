@@ -1,8 +1,9 @@
 import 'dart:io';
 import 'package:dio/dio.dart';
 import '../../../../../core/data/exception/app_exception.dart';
-import '../../../../../core/data/network/api_constants.dart';
 import '../../../../../core/data/network/dio_client.dart';
+import '../../../../../core/data/network/dto/response/api_response.dart';
+import '../../constant/expense_api_constant.dart';
 import 'dto/expense_dto.dart';
 import 'dto/request/create_expense_request_dto.dart';
 import 'dto/request/update_expense_request_dto.dart';
@@ -20,34 +21,38 @@ class ExpensesRemoteDataSourceImpl implements ExpensesRemoteDataSource {
     String? status,
     String? category,
   }) async {
-    final queryParameters = <String, dynamic>{};
-
-    if (status != null && status.isNotEmpty) {
-      queryParameters['status'] = status;
-    }
-    if (category != null && category.isNotEmpty) {
-      queryParameters['category'] = category;
-    }
+    final queryParameters = <String, dynamic>{
+      if (status != null && status.isNotEmpty) 'status': status,
+      if (category != null && category.isNotEmpty) 'category': category,
+    };
 
     final response = await _dioClient.get(
-      ApiConstants.expenses,
+      ExpenseApiConstant.expenses,
       queryParameters: queryParameters.isNotEmpty ? queryParameters : null,
     );
 
-    final data = response.data['data'] as List<dynamic>;
-    return data
-        .map((json) => ExpenseDto.fromJson(json as Map<String, dynamic>))
-        .toList();
+    final apiResponse = ApiResponse.fromJson(
+      response.data,
+          (data) => (data as List<dynamic>)
+          .map((item) => ExpenseDto.fromJson(item as Map<String, dynamic>))
+          .toList(),
+    );
+
+    return apiResponse.requiredData;
   }
 
   @override
   Future<ExpenseDto> getExpenseDetail(int id) async {
     final response = await _dioClient.get(
-      '${ApiConstants.expenses}/$id',
+      '${ExpenseApiConstant.expenses}/$id',
     );
 
-    final data = response.data['data'] as Map<String, dynamic>;
-    return ExpenseDto.fromJson(data);
+    final apiResponse = ApiResponse.fromJson(
+      response.data,
+          (data) => ExpenseDto.fromJson(data as Map<String, dynamic>),
+    );
+
+    return apiResponse.requiredData;
   }
 
   @override
@@ -55,12 +60,16 @@ class ExpensesRemoteDataSourceImpl implements ExpensesRemoteDataSource {
     required CreateExpenseRequestDto request,
   }) async {
     final response = await _dioClient.post(
-      ApiConstants.expenses,
+      ExpenseApiConstant.expenses,
       data: request.toJson(),
     );
 
-    final data = response.data['data'] as Map<String, dynamic>;
-    return ExpenseDto.fromJson(data);
+    final apiResponse = ApiResponse.fromJson(
+      response.data,
+          (data) => ExpenseDto.fromJson(data as Map<String, dynamic>),
+    );
+
+    return apiResponse.requiredData;
   }
 
   @override
@@ -69,17 +78,21 @@ class ExpensesRemoteDataSourceImpl implements ExpensesRemoteDataSource {
     required UpdateExpenseRequestDto request,
   }) async {
     final response = await _dioClient.put(
-      '${ApiConstants.expenses}/$id',
+      '${ExpenseApiConstant.expenses}/$id',
       data: request.toJson(),
     );
 
-    final data = response.data['data'] as Map<String, dynamic>;
-    return ExpenseDto.fromJson(data);
+    final apiResponse = ApiResponse.fromJson(
+      response.data,
+          (data) => ExpenseDto.fromJson(data as Map<String, dynamic>),
+    );
+
+    return apiResponse.requiredData;
   }
 
   @override
   Future<void> deleteExpense(int id) async {
-    await _dioClient.delete('${ApiConstants.expenses}/$id');
+    await _dioClient.delete('${ExpenseApiConstant.expenses}/$id');
   }
 
   @override
@@ -87,21 +100,26 @@ class ExpensesRemoteDataSourceImpl implements ExpensesRemoteDataSource {
     final file = File(filePath);
 
     if (!file.existsSync()) {
-      throw const ValidationException(message: 'Receipt file does not exist');
+      throw FileException(
+        message: 'File not found at path: $filePath',
+      );
     }
 
-    final fileName = file.path.split('/').last;
     final multipartFile = await MultipartFile.fromFile(
       filePath,
-      filename: fileName,
+      filename: filePath.split('/').last,
     );
 
     final response = await _dioClient.uploadFiles(
-      ApiConstants.uploadReceipt,
+      path: ExpenseApiConstant.uploadReceipt,
       files: {'receipt': multipartFile},
     );
 
-    final data = response.data['data'] as Map<String, dynamic>;
-    return ReceiptUploadResponseDto.fromJson(data);
+    final apiResponse = ApiResponse.fromJson(
+      response.data,
+          (data) => ReceiptUploadResponseDto.fromJson(data as Map<String, dynamic>),
+    );
+
+    return apiResponse.requiredData;
   }
 }

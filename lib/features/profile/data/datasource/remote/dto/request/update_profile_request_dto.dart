@@ -39,12 +39,4 @@ class UpdateProfileRequestDto {
 
     return data;
   }
-
-  bool get hasData =>
-      (firstName?.isNotEmpty ?? false) ||
-          (lastName?.isNotEmpty ?? false) ||
-          (phone?.isNotEmpty ?? false) ||
-          (dateOfBirth?.isNotEmpty ?? false) ||
-          (gender?.isNotEmpty ?? false) ||
-          (address?.isNotEmpty ?? false);
 }

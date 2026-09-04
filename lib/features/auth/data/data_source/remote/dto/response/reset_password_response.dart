@@ -1,5 +1,4 @@
 import 'package:workmate/features/auth/data/data_source/remote/dto/user_dto.dart';
-
 import '../../../../../../../core/data/exception/app_exception.dart';
 
 class ResetPasswordResponse {
@@ -18,18 +17,14 @@ class ResetPasswordResponse {
     final userData = json['user'] as Map<String, dynamic>?;
 
     if (accessToken == null || accessToken.isEmpty) {
-      throw const ServerException(
+      throw const SerializationException(
         message: 'Invalid response: missing access token',
-        code: 'PARSE_ERROR',
-        statusCode: 200,
       );
     }
 
     if (userData == null) {
-      throw const ServerException(
+      throw const SerializationException(
         message: 'Invalid response: missing user data',
-        code: 'PARSE_ERROR',
-        statusCode: 200,
       );
     }
     return ResetPasswordResponse(

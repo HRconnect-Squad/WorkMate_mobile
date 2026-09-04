@@ -7,7 +7,8 @@ plugins {
 
 android {
     namespace = "com.hrconnect.workmate"
-    compileSdk = flutter.compileSdkVersion
+    compileSdk = 37
+    //compileSdk = flutter.compileSdkVersion
     ndkVersion = flutter.ndkVersion
 
     compileOptions {

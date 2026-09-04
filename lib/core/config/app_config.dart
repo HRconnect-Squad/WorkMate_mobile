@@ -1,6 +1,6 @@
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 
-enum AppEnvironment { development, staging, production }
+enum AppEnvironment { development, production }
 
 class AppConfig {
   AppConfig._();
@@ -12,15 +12,6 @@ class AppConfig {
 
     await dotenv.load(fileName: '.env');
     _isInitialized = true;
-  }
-
-  static void _ensureInitialized() {
-    if (!_isInitialized) {
-      throw StateError(
-        'AppConfig is not initialized. '
-        'Call AppConfig.init() before accessing configuration values.',
-      );
-    }
   }
 
   static AppEnvironment get environment {
@@ -35,29 +26,57 @@ class AppConfig {
   }
 
   static bool get isProduction => environment == AppEnvironment.production;
-
   static bool get isDevelopment => environment == AppEnvironment.development;
 
-  static bool get isStaging => environment == AppEnvironment.staging;
 
   static String get apiBaseUrl {
     _ensureInitialized();
-    return dotenv.get('API_BASE_URL', fallback: 'https://localhost:8080');
+    return _getString('API_BASE_URL', 'https://api.mohammedzom.online');
   }
 
   static String get xApiKey {
     _ensureInitialized();
-    return dotenv.get('X_API_KEY', fallback: '');
+    return _getString('X_API_KEY', 'WorkMate');
   }
 
   static String get appName {
     _ensureInitialized();
-    return dotenv.get('APP_NAME', fallback: 'HR App');
+    return _getString('APP_NAME', 'WorkMate');
   }
 
-  static int get timeout {
+  static Duration get connectTimeout {
     _ensureInitialized();
-    final value = dotenv.get('TIMEOUT_SECONDS', fallback: '10');
-    return int.tryParse(value) ?? 10;
+    return Duration(milliseconds: _getInt('CONNECT_TIMEOUT', 30000));
+  }
+
+  static Duration get receiveTimeout {
+    _ensureInitialized();
+    return Duration(milliseconds: _getInt('RECEIVE_TIMEOUT', 30000));
+  }
+
+  static Duration get sendTimeout {
+    _ensureInitialized();
+    return Duration(milliseconds: _getInt('SEND_TIMEOUT', 30000));
+  }
+
+  static int _getInt(String key, int fallback) {
+    final value = dotenv.maybeGet(key);
+    if (value == null) return fallback;
+    return int.tryParse(value) ?? fallback;
+  }
+
+  static String _getString(String key, String fallback) {
+    final value = dotenv.maybeGet(key);
+    if (value == null) return fallback;
+    return value;
+  }
+
+  static void _ensureInitialized() {
+    if (!_isInitialized) {
+      throw StateError(
+        'AppConfig is not initialized. '
+            'Call AppConfig.init() before accessing configuration values.',
+      );
+    }
   }
 }

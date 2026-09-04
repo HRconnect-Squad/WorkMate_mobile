@@ -2,9 +2,7 @@ import 'package:workmate/core/data/cache/preferences_keys.dart';
 import 'package:workmate/core/data/cache/secure_storage_data_source.dart';
 import 'package:workmate/core/data/cache/shared_preferences_service.dart';
 
-abstract class CacheManager {
-  Future<void> clearAllCache();
-}
+import '../../domain/service/cache_manager.dart';
 
 class CacheManagerImpl implements CacheManager {
   final PreferencesService _preferencesService;
