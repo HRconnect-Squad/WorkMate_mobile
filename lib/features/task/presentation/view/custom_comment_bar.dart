@@ -76,7 +76,9 @@ class CustomCommentBar extends StatelessWidget {
       contentPaddingHorizontal: 0,
       contentPaddingVertical: 12,
       focusAndErrorColor: Colors.transparent,
+      enabledColor: Colors.transparent,
       evaluation: false,
+        borderColor: Colors.transparent,
     );
   }
 
