@@ -14,7 +14,7 @@ class LeaveSummaryCard extends StatelessWidget {
 
     return SummaryCard(
       title: 'total_leave'.tr(),
-      subtitle: 'period_full_year'.tr(args: [now.year.toString()]),
+      subtitle: 'period_full_year'.tr(args: [now.year.toString(), now.year.toString()]),
       cardMargin: const EdgeInsets.symmetric(horizontal: 12),
       borderRadius: const BorderRadius.all(Radius.circular(20)),
       elevation: 4,

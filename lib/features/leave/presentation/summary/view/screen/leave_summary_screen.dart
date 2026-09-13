@@ -33,10 +33,12 @@ class LeaveSummaryScreen extends StatelessWidget {
         builder: (context, state) {
           return SafeArea(
             bottom: false,
-            child: Stack(
+            child: Column(
               children: [
-                _buildBody(context, state),
-                Positioned(bottom: 0, left: 0, right: 0, child: _buildFloatingButton(context)),
+                Expanded(
+                child: _buildBody(context, state),
+                ),
+                _buildFloatingButton(context),
               ],
             ),
           );
@@ -64,7 +66,7 @@ class LeaveSummaryScreen extends StatelessWidget {
           ),
         ),
         ..._buildListSection(context, state, cubit),
-        const SliverToBoxAdapter(child: SizedBox(height: 100)),
+        //const SliverToBoxAdapter(child: SizedBox(height: 100)),
       ],
     );
   }
