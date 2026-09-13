@@ -1,6 +1,8 @@
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import '../../../../../../core/presentation/design_system/components/app_tab_filter/app_tab_filter.dart';
+import '../../../../../../core/presentation/design_system/components/app_tab_filter/app_tab_item.dart';
 import '../../../../../../core/presentation/design_system/components/custom_primary_button.dart';
 import '../../../../../../core/presentation/design_system/theme/helper/snackbar_helper.dart';
 import '../../../../../../core/presentation/design_system/theme/helper/theme_extention.dart';
@@ -12,7 +14,6 @@ import '../../logic/leave_summary_state.dart';
 import '../widget/leave_empty_state.dart';
 import '../widget/leave_header.dart';
 import '../widget/leave_request_card.dart';
-import '../widget/leave_tab_filter.dart';
 import 'package:go_router/go_router.dart';
 
 class LeaveSummaryScreen extends StatelessWidget {
@@ -23,7 +24,8 @@ class LeaveSummaryScreen extends StatelessWidget {
     return Scaffold(
       extendBodyBehindAppBar: true,
       body: BlocConsumer<LeaveSummaryCubit, LeaveSummaryState>(
-        listenWhen: (previous, current) => current.error != null && current.error != previous.error,
+        listenWhen: (previous, current) =>
+            current.error != null && current.error != previous.error,
         listener: (context, state) {
           if (state.error != null) {
             SnackBarHelper.showError(context, state.error!);
@@ -35,9 +37,7 @@ class LeaveSummaryScreen extends StatelessWidget {
             bottom: false,
             child: Column(
               children: [
-                Expanded(
-                child: _buildBody(context, state),
-                ),
+                Expanded(child: _buildBody(context, state)),
                 _buildFloatingButton(context),
               ],
             ),
@@ -57,11 +57,24 @@ class LeaveSummaryScreen extends StatelessWidget {
         SliverToBoxAdapter(
           child: Padding(
             padding: const EdgeInsets.only(bottom: 16),
-            child: LeaveTabFilter(
-              selectedStatus: state.selectedStatus,
-              pendingCount: (state.requestsByStatus[LeaveStatus.pending] ?? []).length,
-              rejectedCount: (state.requestsByStatus[LeaveStatus.rejected] ?? []).length,
-              onTabChanged: cubit.onTabChanged,
+            child: AppTabFilter<LeaveStatus>(
+              selectedValue: state.selectedStatus,
+              onChanged: cubit.onTabChanged,
+              items: [
+                AppTabItem(
+                  value: LeaveStatus.pending,
+                  label: 'pending'.tr(),
+                  count: (state.requestsByStatus[LeaveStatus.pending] ?? [])
+                      .length,
+                ),
+                AppTabItem(value: LeaveStatus.approved, label: 'approved'.tr()),
+                AppTabItem(
+                  value: LeaveStatus.rejected,
+                  label: 'rejected'.tr(),
+                  count: (state.requestsByStatus[LeaveStatus.rejected] ?? [])
+                      .length,
+                ),
+              ],
             ),
           ),
         ),
@@ -71,13 +84,26 @@ class LeaveSummaryScreen extends StatelessWidget {
     );
   }
 
-  List<Widget> _buildListSection(BuildContext context, LeaveSummaryState state, LeaveSummaryCubit cubit) {
+  List<Widget> _buildListSection(
+    BuildContext context,
+    LeaveSummaryState state,
+    LeaveSummaryCubit cubit,
+  ) {
     if (state.isLoadingRequests && !state.hasLoadedCurrentTab) {
-      return [const SliverFillRemaining(child: Center(child: CircularProgressIndicator()))];
+      return [
+        const SliverFillRemaining(
+          child: Center(child: CircularProgressIndicator()),
+        ),
+      ];
     }
 
     if (state.currentRequests.isEmpty) {
-      return [SliverFillRemaining(hasScrollBody: false, child: LeaveEmptyState(status: state.selectedStatus))];
+      return [
+        SliverFillRemaining(
+          hasScrollBody: false,
+          child: LeaveEmptyState(status: state.selectedStatus),
+        ),
+      ];
     }
 
     return [
@@ -87,7 +113,9 @@ class LeaveSummaryScreen extends StatelessWidget {
           final request = state.currentRequests[index];
           return LeaveRequestCard(
             request: request,
-            onCancel: request.isCancellable ? () => _onCancelTap(context, request) : null,
+            onCancel: request.isCancellable
+                ? () => _onCancelTap(context, request)
+                : null,
           );
         },
       ),
@@ -99,7 +127,13 @@ class LeaveSummaryScreen extends StatelessWidget {
       padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 12),
       decoration: BoxDecoration(
         color: context.colors.white,
-        boxShadow: [BoxShadow(color: Colors.black.withOpacity(0.08), blurRadius: 16, offset: const Offset(0, -4))],
+        boxShadow: [
+          BoxShadow(
+            color: Colors.black.withOpacity(0.08),
+            blurRadius: 16,
+            offset: const Offset(0, -4),
+          ),
+        ],
       ),
       child: SafeArea(
         top: false,
@@ -128,13 +162,19 @@ class LeaveSummaryScreen extends StatelessWidget {
         title: Text('cancel_leave_request'.tr()),
         content: Text('cancel_leave_confirmation'.tr()),
         actions: [
-          TextButton(onPressed: () => Navigator.pop(dialogContext), child: Text('no'.tr())),
+          TextButton(
+            onPressed: () => Navigator.pop(dialogContext),
+            child: Text('no'.tr()),
+          ),
           TextButton(
             onPressed: () {
               Navigator.pop(dialogContext);
               context.read<LeaveSummaryCubit>().cancelRequest(request.id);
             },
-            child: Text('yes_cancel'.tr(), style: TextStyle(color: context.colors.error)),
+            child: Text(
+              'yes_cancel'.tr(),
+              style: TextStyle(color: context.colors.error),
+            ),
           ),
         ],
       ),
