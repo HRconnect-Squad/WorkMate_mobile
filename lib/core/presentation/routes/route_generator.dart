@@ -146,10 +146,7 @@ final GoRouter router = GoRouter(
             GoRoute(
               path: RouteNames.homeScreen,
               name: 'home',
-              builder: (context, state) => BlocProvider(
-              create: (_) => sl<TaskCubit>()..loadTasks(),
-              child: const TaskScreen(),
-              ),
+              builder: (context, state) => const HomeScreen(),
             ),
           ],
         ),
@@ -169,13 +166,18 @@ final GoRouter router = GoRouter(
             GoRoute(
               path: RouteNames.taskScreen,
               name: 'task',
-              builder: (context, state) => const TaskScreen(),
+              builder: (context, state) => BlocProvider(
+                create: (_) => sl<TaskCubit>()..loadTasks(),
+                child: const TaskScreen(),
+              ),
             ),
+
             GoRoute(
               path: RouteNames.taskDetailScreen,
               name: RouteNames.taskDetail,
               builder: (context, state) {
                 final task = state.extra as TaskModel;
+
                 return BlocProvider(
                   create: (_) => sl<TaskDetailCubit>(param1: task.id),
                   child: TaskDetailScreen(task: task),
