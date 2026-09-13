@@ -15,6 +15,7 @@ class RouteNames {
   static const String expenseScreen = '/expense';
   static const String submitExpense = '/expense/submit';
   static const String leaveScreen = '/leave';
+  static const String submitLeave = '/leave/submit';
 
   // Profile
   static const String profile = '/profile';
