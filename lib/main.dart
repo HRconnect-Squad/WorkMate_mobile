@@ -8,6 +8,7 @@ import 'core/di/core_di_container.dart';
 import 'core/presentation/design_system/theme/workmate_theme.dart';
 import 'core/presentation/routes/config/app_startup_service.dart';
 import 'core/presentation/routes/route_generator.dart';
+import 'features/attendance/di/attendance_container.dart';
 import 'features/auth/di/auth_di_container.dart';
 import 'features/auth/di/onboarding_di_container.dart';
 import 'features/expense/di/expense_di_container.dart';
@@ -24,8 +25,10 @@ void main() async {
   await initAuth();
   await initProfile();
   await initExpenses();
+  await initAttendance();
   await initLeave();
   await sl<AppStartupService>().initialize();
+
   FlutterNativeSplash.remove();
 
   runApp(

@@ -54,6 +54,9 @@ mixin SafeApiCall {
           message: exception.message,
           errors: exception.apiError?.validationErrors),
       FileException() => FileFailure(message: exception.message),
+      LocationServiceDisabledException() => LocationServiceDisabledFailure(message: exception.message),
+      LocationPermissionDeniedException() => LocationPermissionDeniedFailure(message: exception.message),
+      LocationPermissionDeniedForeverException() => LocationPermissionDeniedForeverFailure(message: exception.message)
       UnknownException() => UnknownFailure(message: exception.message),
     };
   }

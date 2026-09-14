@@ -78,3 +78,18 @@ class ValidationFailure extends Failure {
   final ValidationErrors? errors;
   const ValidationFailure({super.message = 'Please check your input', this.errors});
 }
+
+class LocationServiceDisabledFailure extends Failure {
+  const LocationServiceDisabledFailure(
+      {super.message = 'Location service is disabled'});
+}
+
+class LocationPermissionDeniedFailure extends Failure {
+  const LocationPermissionDeniedFailure(
+      {super.message = 'Location permission denied'});
+}
+
+class LocationPermissionDeniedForeverFailure extends Failure {
+  const LocationPermissionDeniedForeverFailure(
+      {super.message = 'Location permission permanently denied'});
+}

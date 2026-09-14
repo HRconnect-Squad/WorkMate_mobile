@@ -24,6 +24,12 @@ class RouteNames {
   static const String payrollDetails = '/profile/payroll/details';
   static const String officeAssets = '/profile/office-assets';
 
+  //attendance
+  static const String clockInMap = '/clock-in-map';
+  static const String selfieCamera = '/selfie-camera';
+  static const String confirmationScreen = '/confirmation';
+  static const String attendanceDetails = '/attendance-details/:id';
+  static const String attendanceDetailsName = 'attendanceDetails';
   // Error
   static const String notFound = '/404';
 

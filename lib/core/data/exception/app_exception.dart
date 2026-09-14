@@ -92,7 +92,7 @@ class RequestCancelledException extends AppException {
 
 class CacheException extends AppException {
   const CacheException({required String message, int? code})
-    : super(message: message, statusCode: code ?? 0);
+      : super(message: message, statusCode: code ?? 0);
 
   factory CacheException.read(String key, [Object? error]) => CacheException(
     message: 'Failed to read $key${error != null ? ': $error' : ''}',
@@ -122,13 +122,31 @@ class ValidationException extends AppException {
   const ValidationException({required super.message, super.statusCode, super.apiError});
 }
 
+class LocationServiceDisabledException extends AppException {
+  const LocationServiceDisabledException({
+    super.message = 'Location service is disabled',
+  });
+}
+
+class LocationPermissionDeniedException extends AppException {
+  const LocationPermissionDeniedException({
+    super.message = 'Location permission denied',
+  });
+}
+
+class LocationPermissionDeniedForeverException extends AppException {
+  const LocationPermissionDeniedForeverException({
+    super.message = 'Location permission permanently denied',
+  });
+}
+
 class UnknownException extends AppException {
   const UnknownException({super.message = 'An unexpected error occurred'})
-    : super(
-        apiError: const ApiErrorResponse(
-          success: false,
-          message: 'An unexpected error occurred',
-          errorCode: 'UNKNOWN_ERROR',
-        ),
-      );
+      : super(
+    apiError: const ApiErrorResponse(
+      success: false,
+      message: 'An unexpected error occurred',
+      errorCode: 'UNKNOWN_ERROR',
+    ),
+  );
 }

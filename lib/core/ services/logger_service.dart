@@ -24,7 +24,7 @@ class LoggerService {
 
   void w(dynamic message) => _logger.w(message);
 
-  void e(dynamic message, [dynamic error, StackTrace? stackTrace]) {
+  void e(dynamic message, {dynamic error, StackTrace? stackTrace}) {
     _logger.e(message, error: error, stackTrace: stackTrace);
   }
 
