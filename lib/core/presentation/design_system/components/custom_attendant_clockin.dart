@@ -6,11 +6,11 @@ import 'package:iconsax/iconsax.dart';
 import '../theme/helper/app_assets.dart';
 import '../theme/helper/theme_extention.dart';
 
-class CustomAttendantClockin extends StatelessWidget {
+class CustomAttendantClockIn extends StatelessWidget {
   final String imageUrl;
   final String? title, dateTitle, locationTitle;
 
-  const CustomAttendantClockin({
+  const CustomAttendantClockIn({
     super.key,
     required this.imageUrl,
     this.title,
@@ -30,13 +30,16 @@ class CustomAttendantClockin extends StatelessWidget {
           ),
           child: ListTile(
             contentPadding: EdgeInsets.zero,
-            leading: CachedNetworkImage(
-              imageUrl: imageUrl,
-              fit: BoxFit.cover,
-              height: 64,
-              width: 64,
-              errorWidget: (context, url, error) =>
-                  Image.asset(AppAssets.kDefaultImageProfile),
+            leading: ClipRRect(
+              borderRadius: BorderRadius.circular(12),
+              child: CachedNetworkImage(
+                imageUrl: imageUrl,
+                fit: BoxFit.cover,
+                height: 64,
+                width: 64,
+                errorWidget: (context, url, error) =>
+                    Image.asset(AppAssets.kDefaultImageProfile),
+              ),
             ),
             title: Column(
               crossAxisAlignment: CrossAxisAlignment.start,

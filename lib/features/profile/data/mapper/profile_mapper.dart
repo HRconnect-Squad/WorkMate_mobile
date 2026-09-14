@@ -28,8 +28,8 @@ class ProfileMapper {
       department: dto.department != null ? _mapDepartment(dto.department!) : null,
       manager: dto.manager != null ? _mapManager(dto.manager!) : null,
       hireDate: DataFormat.parseDate(dto.hireDate),
-      baseSalary: _parseDouble(dto.baseSalary),
-      hourlyRate: _parseDouble(dto.hourlyRate),
+      baseSalary: dto.baseSalary,
+      hourlyRate: dto.hourlyRate,
       employmentType: dto.employmentType ?? 'full_time',
       status: dto.status ?? 'pending',
       terminationDate: DataFormat.parseDate(dto.terminationDate),
@@ -45,8 +45,10 @@ class ProfileMapper {
       managerId: dto.managerId,
       description: dto.description,
       isActive: dto.isActive ?? true,
-      latitude: _parseDouble(dto.latitude),
-      longitude: _parseDouble(dto.longitude),
+      // latitude: _parseDouble(dto.latitude),
+      // longitude: _parseDouble(dto.longitude),
+      latitude: dto.latitude,
+      longitude: dto.longitude,
       radiusMeters: dto.radiusMeters,
     );
   }
@@ -59,10 +61,10 @@ class ProfileMapper {
     );
   }
 
-  static double? _parseDouble(String? value) {
-    if (value == null || value.isEmpty) return null;
-    return double.tryParse(value);
-  }
+  // static double? _parseDouble(String? value) {
+  //   if (value == null || value.isEmpty) return null;
+  //   return double.tryParse(value);
+  // }
 
   static CompleteProfileRequestDto toCompleteProfileRequestDto({
     required String firstName,

@@ -29,6 +29,9 @@ class FailureUiMapper {
       TooManyAttemptsFailure() =>
       'Too many attempts. Please try again later.',
 
+      ConflictFailure() =>
+      failure.message,
+
       ValidationFailure(:final errors) =>
       errors?.isNotEmpty == true ? errors!.combinedErrors : failure.message,
 
@@ -36,7 +39,7 @@ class FailureUiMapper {
       failure.message,
 
       UnknownFailure() =>
-      'An unexpected error occurred. Please try again.',
+      failure.message.isEmpty ? 'An unexpected error occurred. Please try again.' : failure.message,
 
       _ => failure.message,
     };

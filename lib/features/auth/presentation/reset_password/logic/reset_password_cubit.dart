@@ -1,10 +1,10 @@
 import '../../../../../core/domain/failure/domain_failure.dart';
 import '../../../../../core/presentation/base_viewmodel/base_cubit.dart';
-import '../../../../../core/presentation/mapper/failure_ui_mapper.dart';
 import '../../../../../core/presentation/routes/config/app_state_notifier.dart';
 import '../../../../../core/presentation/util/validator.dart';
 import '../../../domain/failures/failure.dart';
 import '../../../domain/use_cases/reset_password_use_case.dart';
+import '../../mapper/auth_failure_ui_mapper.dart';
 import 'reset_password_state.dart';
 
 class ResetPasswordCubit extends BaseCubit<ResetPasswordState> {
@@ -36,12 +36,11 @@ class ResetPasswordCubit extends BaseCubit<ResetPasswordState> {
       },
       onError: (failure) {
         switch (failure) {
-          case OtpExpiredFailure():
           case InvalidOtpFailure():
             updateState((s) => s.copyWith(
               isLoading: false,
               otp: '',
-              otpError: failure.message,
+              otpError: AuthFailureUiMapper.map(failure),
               isSuccess: false,
             ));
 
@@ -57,7 +56,7 @@ class ResetPasswordCubit extends BaseCubit<ResetPasswordState> {
           default:
             updateState((s) => s.copyWith(
               isLoading: false,
-              apiError: FailureUiMapper.map(failure),
+              apiError: AuthFailureUiMapper.map(failure),
               isSuccess: false,
             ));
         }

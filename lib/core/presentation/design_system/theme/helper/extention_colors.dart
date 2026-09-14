@@ -16,4 +16,8 @@ class ExtensionColors {
   static const Color bad = Color(0xFFF95555);
   static const Color kButtonBackgroundPrimary = Color(0xFF7A5AF8);
   static const Color kTextSecondary = Color(0xFF475467);
+  static const Color backgroundCamera =Color.fromRGBO(52, 44, 42, 70);
+  static const Color blackGradient0 = Color(0xFF5E5E5E);
+  static const Color blackGradient1 = Color(0xFF1C1C1C);
+  static const Color backgroundCircleMap = Color(0xFF6938EF);
 }

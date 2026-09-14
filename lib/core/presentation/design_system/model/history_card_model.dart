@@ -1,6 +1,7 @@
 import 'package:flutter/cupertino.dart';
 
 class HistoryCardModel  {
+  final String id;
   final DateTime date;
   final IconData headerIcon;
   final Color? headerIconColor;
@@ -12,16 +13,22 @@ class HistoryCardModel  {
   final StatusCard? statusCard;
   final String? statusAddedByName;
   final String? statusImage;
+  final String? additionalNote;
+  final List<HistoryCardAction> actions;
+
   const HistoryCardModel({
+    required this.id,
     required this.date,
     required this.headerIcon,
     this.headerIconColor,
+    this.backgroundColor,
     required this.infoItems,
     this.statusCard,
+    this.dateAddedStatus,
     this.statusAddedByName,
     this.statusImage,
-    this.backgroundColor,
-    this.dateAddedStatus,
+    this.additionalNote,
+    this.actions = const [],
   });
 }
 class InfoItem {

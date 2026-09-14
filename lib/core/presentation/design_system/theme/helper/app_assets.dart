@@ -34,5 +34,8 @@ class AppAssets {
   static const kTaskScreenBanner = 'assets/images/task_screen_banner.png';
 
 
+  static const clockIn = 'assets/images/clock_in.png';
+  static const emptyLeaveState = 'assets/images/empty_leave_state.png';
+  static const leaveIllustration = 'assets/images/leave_illustration.png';
 
 }

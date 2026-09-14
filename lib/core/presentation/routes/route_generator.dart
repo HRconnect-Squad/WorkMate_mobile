@@ -6,6 +6,14 @@ import 'package:workmate/features/auth/presentation/on_boarding/logic/on_boardin
 import 'package:workmate/features/expense/presentation/view/screen/expenses_screen.dart';
 import 'package:workmate/features/home/presentation/view/home_screen.dart';
 import 'package:workmate/core/di/core_di_container.dart';
+import '../../../features/attendance/presentation/attendance/logic/attendance_screen_cubit.dart';
+import '../../../features/attendance/presentation/attendance/view/screen/attendance_screen.dart';
+import '../../../features/attendance/presentation/clock_in/logic/ClockInFlowCubit.dart';
+import '../../../features/attendance/presentation/clock_in/view/screen/LocationScreen.dart';
+import '../../../features/attendance/presentation/clock_in/view/screen/camera_preview_screen.dart';
+import '../../../features/attendance/presentation/clock_in/view/screen/conformation_camera_screen.dart';
+import '../../../features/attendance/presentation/details_history_card/logic/details_history_card_cubit.dart';
+import '../../../features/attendance/presentation/details_history_card/view/details_history_card.dart';
 import '../../../features/auth/presentation/login/logic/login_cubit.dart';
 import '../../../features/auth/presentation/login/view/screen/login_screen.dart';
 import '../../../features/auth/presentation/on_boarding/view/on_boarding_page.dart';
@@ -13,6 +21,10 @@ import '../../../features/auth/presentation/register/signup/logic/sign_up_cubit.
 import '../../../features/auth/presentation/register/signup/view/screen/sign_up_screen.dart';
 import '../../../features/expense/presentation/logic/expenses_cubit.dart';
 import '../../../features/expense/presentation/view/screen/submit_expense_screen.dart';
+import '../../../features/leave/presentation/submit/logic/submit_leave_cubit.dart';
+import '../../../features/leave/presentation/submit/view/screen/submit_leave_screen.dart';
+import '../../../features/leave/presentation/summary/logic/leave_summary_cubit.dart';
+import '../../../features/leave/presentation/summary/view/screen/leave_summary_screen.dart';
 import '../../../features/profile/domain/entity/payroll.dart';
 import '../../../features/profile/presentation/office_assets/logic/office_assets_cubit.dart';
 import '../../../features/profile/presentation/office_assets/view/screen/office_assets_screen.dart';
@@ -73,6 +85,9 @@ final GoRouter router = GoRouter(
       ),
     ),
 
+    // ═══════════════════════════════════════════
+    // PROFILE ROUTES
+    // ═══════════════════════════════════════════
     GoRoute(
       path: RouteNames.profile,
       name: 'profile',
@@ -121,12 +136,65 @@ final GoRouter router = GoRouter(
       ),
     ),
 
+    // ═══════════════════════════════════════════
+    // EXPENSE ROUTES
+    // ═══════════════════════════════════════════
     GoRoute(
       path: RouteNames.submitExpense,
       name: 'submit_expense',
       builder: (context, state) => BlocProvider.value(
         value: state.extra as ExpensesCubit,
         child: const SubmitExpenseScreen(),
+      ),
+    ),
+
+    ShellRoute(
+      builder: (context, state, child) {
+        return BlocProvider<ClockInFlowCubit>(
+          create: (context) => sl<ClockInFlowCubit>(),
+          child: child,
+        );
+      },
+      routes: [
+        GoRoute(
+          path: RouteNames.clockInMap,
+          name: 'clockInMap',
+          builder: (context, state) => const ClockInLocationScreen(),
+        ),
+
+        GoRoute(
+          path: RouteNames.selfieCamera,
+          name: 'selfieCamera',
+          builder: (context, state) => const CameraPreviewScreen(),
+        ),
+
+        GoRoute(
+          path: RouteNames.confirmationScreen,
+          name: 'confirmationScreen',
+          builder: (context, state) => const ConfirmationScreen(),
+        ),
+      ],
+    ),
+    GoRoute(
+      name: RouteNames.attendanceDetailsName,
+      path: RouteNames.attendanceDetails,
+      builder: (context, state) {
+        final id = state.pathParameters['id']!;
+        return BlocProvider(
+          create: (_) => sl<DetailsHistoryCardCubit>()..loadDetailsById(id),
+          child: DetailsHistoryCard(attendanceId: id),
+        );
+      },
+    ),
+    // ═══════════════════════════════════════════
+    // LEAVE ROUTES
+    // ═══════════════════════════════════════════
+    GoRoute(
+      path: RouteNames.submitLeave,
+      name: 'submit_leave',
+      builder: (context, state) => BlocProvider(
+        create: (_) => sl<SubmitLeaveCubit>()..loadLeaveTypes(),
+        child: const SubmitLeaveScreen(),
       ),
     ),
 
@@ -156,7 +224,10 @@ final GoRouter router = GoRouter(
             GoRoute(
               path: RouteNames.attendantScreen,
               name: 'attendant',
-              builder: (context, state) => const HomeScreen(),
+              builder: (context, state) => BlocProvider(
+                create: (_) => sl<AttendanceScreenCubit>(),
+                child: const AttendanceScreen(),
+              ),
             ),
           ],
         ),
@@ -193,8 +264,9 @@ final GoRouter router = GoRouter(
               path: RouteNames.expenseScreen,
               name: 'expense',
               builder: (context, state) => BlocProvider(
-                  create: (_) => sl<ExpensesCubit>()..loadExpenses(),
-                  child: const ExpensesScreen()),
+                create: (_) => sl<ExpensesCubit>()..loadExpenses(),
+                child: const ExpensesScreen(),
+              ),
             ),
           ],
         ),
@@ -204,7 +276,10 @@ final GoRouter router = GoRouter(
             GoRoute(
               path: RouteNames.leaveScreen,
               name: 'leave',
-              builder: (context, state) => const HomeScreen(),
+              builder: (context, state) => BlocProvider(
+                create: (_) => sl<LeaveSummaryCubit>()..loadSummary(),
+                child: const LeaveSummaryScreen(),
+              ),
             ),
           ],
         ),

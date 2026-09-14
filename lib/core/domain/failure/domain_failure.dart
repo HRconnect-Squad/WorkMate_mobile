@@ -6,8 +6,9 @@ abstract interface class RequiresReauthentication {}
 abstract class Failure {
   final String message;
   final int? statusCode;
+  final String? errorCode;
 
-  const Failure({required this.message, this.statusCode});
+  const Failure({required this.message, this.statusCode, this.errorCode});
 
   // @override
   // bool operator ==(Object other) =>
@@ -32,6 +33,10 @@ class TimeoutFailure extends Failure {
       {super.message = 'Connection timed out. Please try again'});
 }
 
+class ConflictFailure extends Failure {
+  const ConflictFailure({super.message = 'This resource already exists', super.statusCode, super.errorCode});
+}
+
 class CacheFailure extends Failure {
   const CacheFailure({super.message = 'Failed to access local data'});
 }
@@ -41,28 +46,28 @@ class UnknownFailure extends Failure {
 }
 
 class ServerFailure extends Failure {
-  const ServerFailure({required super.message, super.statusCode});
+  const ServerFailure({required super.message, super.statusCode, super.errorCode});
 }
 
 class BadRequestFailure extends Failure {
-  const BadRequestFailure({super.message = 'Bad request'});
+  const BadRequestFailure({super.message = 'Bad request', super.statusCode, super.errorCode});
 }
 
 class UnauthorizedFailure extends Failure implements RequiresReauthentication {
-  const UnauthorizedFailure({super.message = 'Unauthorized'});
+  const UnauthorizedFailure({super.message = 'Unauthorized', super.statusCode, super.errorCode});
 }
 
 class ForbiddenFailure extends Failure {
-  const ForbiddenFailure({super.message = 'Forbidden'});
+  const ForbiddenFailure({super.message = 'Forbidden', super.statusCode, super.errorCode});
 }
 
 class TooManyAttemptsFailure extends Failure {
-  const TooManyAttemptsFailure({super.message = 'Too many attempts'});
+  const TooManyAttemptsFailure({super.message = 'Too many attempts', super.statusCode, super.errorCode});
 }
 
 
 class NotFoundFailure extends Failure {
-  const NotFoundFailure({super.message = 'Resource not found'});
+  const NotFoundFailure({super.message = 'Resource not found', super.statusCode, super.errorCode});
 }
 
 class FileFailure extends Failure {
@@ -72,4 +77,19 @@ class FileFailure extends Failure {
 class ValidationFailure extends Failure {
   final ValidationErrors? errors;
   const ValidationFailure({super.message = 'Please check your input', this.errors});
+}
+
+class LocationServiceDisabledFailure extends Failure {
+  const LocationServiceDisabledFailure(
+      {super.message = 'Location service is disabled'});
+}
+
+class LocationPermissionDeniedFailure extends Failure {
+  const LocationPermissionDeniedFailure(
+      {super.message = 'Location permission denied'});
+}
+
+class LocationPermissionDeniedForeverFailure extends Failure {
+  const LocationPermissionDeniedForeverFailure(
+      {super.message = 'Location permission permanently denied'});
 }

@@ -12,13 +12,16 @@ import '../../logic/payroll_state.dart';
 import '../widget/payroll_details_card.dart';
 import '../widget/working_hours_card.dart';
 
-class PayrollDetailsScreen extends StatelessWidget {
+class PayrollDetailsScreen extends StatefulWidget {
   final Payroll payroll;
+  const PayrollDetailsScreen({super.key, required this.payroll});
 
-  const PayrollDetailsScreen({
-    super.key,
-    required this.payroll,
-  });
+  @override
+  State<PayrollDetailsScreen> createState() => _PayrollDetailsScreenState();
+}
+
+class _PayrollDetailsScreenState extends State<PayrollDetailsScreen> {
+  final GlobalKey _captureKey = GlobalKey();
 
   @override
   Widget build(BuildContext context) {
@@ -40,7 +43,6 @@ class PayrollDetailsScreen extends StatelessWidget {
             SnackBarHelper.showError(context, state.error!);
             context.read<PayrollCubit>().clearError();
           }
-
           if (state.exportSuccess != null) {
             SnackBarHelper.showSuccess(context, state.exportSuccess!);
             context.read<PayrollCubit>().clearExportSuccess();
@@ -50,7 +52,6 @@ class PayrollDetailsScreen extends StatelessWidget {
           if (state.selectedPayroll == null) {
             return _buildErrorState(context);
           }
-
           final payroll = state.selectedPayroll!;
 
           return Column(
@@ -58,17 +59,21 @@ class PayrollDetailsScreen extends StatelessWidget {
               Expanded(
                 child: SingleChildScrollView(
                   padding: const EdgeInsets.all(16),
-                  child: Column(
-                    children: [
-                      WorkingHoursCard(payroll: payroll),
-                      const SizedBox(height: 16),
-                      PayrollDetailsCard(payroll: payroll),
-                    ],
+                  child: RepaintBoundary(
+                    key: _captureKey,
+                    child: Container(
+                      color: context.colors.surface, // opaque bg for the captured PDF page
+                      child: Column(
+                        children: [
+                          WorkingHoursCard(payroll: payroll),
+                          const SizedBox(height: 16),
+                          PayrollDetailsCard(payroll: payroll),
+                        ],
+                      ),
+                    ),
                   ),
                 ),
               ),
-
-              // Save as PDF Button
               _buildSaveAsPdfButton(context, state),
             ],
           );
@@ -99,7 +104,7 @@ class PayrollDetailsScreen extends StatelessWidget {
             ),
             const SizedBox(height: 24),
             TextButton.icon(
-              onPressed: () => context.read<PayrollCubit>().selectPayroll(payroll),
+              onPressed: () => context.read<PayrollCubit>().selectPayroll(widget.payroll),
               icon: const Icon(Icons.refresh),
               label: Text('retry'.tr()),
             ),

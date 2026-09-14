@@ -118,7 +118,7 @@ class _UploadTaskState extends State<UploadTask> {
     );
 
     if (!mounted) return;
-    if (result != null) {
+    if (result.isNotEmpty) {
       setState(() {
         currentCard[index] = true;
         uploadProgress[index] = 0.0;
@@ -131,7 +131,7 @@ class _UploadTaskState extends State<UploadTask> {
         });
       }
       setState(() {
-        pickedFile[index] = File(result.files.single.path!);
+        pickedFile[index] = File(result.single.path!);
         currentCard[index] = false;
       });
     }

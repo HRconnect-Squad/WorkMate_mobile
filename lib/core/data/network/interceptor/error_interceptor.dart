@@ -26,7 +26,7 @@ class ErrorInterceptor extends Interceptor {
           DioExceptionType.receiveTimeout:
         {
           logger.e(err.message);
-          return const TimeoutException(message: 'Connection timed out');
+          return const RequestTimeoutException(message: 'Connection timed out');
         }
       case DioExceptionType.badCertificate:
         {
@@ -98,6 +98,11 @@ class ErrorInterceptor extends Interceptor {
         statusCode: statusCode,
         apiError: apiError,
       ),
+      409 => ConflictException(
+        message: message,
+        statusCode: statusCode,
+        apiError: apiError,
+      ),
       422 => ValidationException(
         message: message,
         statusCode: statusCode,
@@ -130,7 +135,7 @@ class ErrorInterceptor extends Interceptor {
     try {
       return ApiErrorResponse.fromJson(data);
     } catch (e, stackTrace) {
-      logger.e(e, stackTrace);
+      logger.e('Failed to parse API error response', error: e, stackTrace: stackTrace);
       return null;
     }
   }

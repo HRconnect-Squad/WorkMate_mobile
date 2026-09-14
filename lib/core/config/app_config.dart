@@ -7,6 +7,8 @@ class AppConfig {
 
   static bool _isInitialized = false;
 
+  static String get maptilerApiKey => dotenv.env['MAPTILER_API_KEY'] ?? '';
+
   static Future<void> init() async {
     if (_isInitialized) return;
 
