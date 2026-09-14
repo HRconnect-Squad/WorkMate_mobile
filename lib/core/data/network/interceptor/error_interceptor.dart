@@ -26,7 +26,7 @@ class ErrorInterceptor extends Interceptor {
           DioExceptionType.receiveTimeout:
         {
           logger.e(err.message);
-          return const TimeoutException(message: 'Connection timed out');
+          return const RequestTimeoutException(message: 'Connection timed out');
         }
       case DioExceptionType.badCertificate:
         {

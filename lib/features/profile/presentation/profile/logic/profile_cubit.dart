@@ -7,7 +7,7 @@ import '../../../../../core/presentation/routes/config/app_state_notifier.dart';
 import '../../../../auth/domain/use_cases/load_identifier_use_case.dart';
 import '../../../../auth/domain/use_cases/logout_use_case.dart';
 import '../../../domain/entity/gender.dart';
-import '../../../domain/failure/failure.dart';
+import '../../../domain/failure/profile_failure.dart';
 import '../../../domain/usecase/complete_profile_usecase.dart';
 import '../../../domain/usecase/get_profile_usecase.dart';
 import '../../../domain/usecase/upload_profile_image_usecase.dart';
@@ -15,7 +15,6 @@ import '../../mapper/profile_failure_ui_mapper.dart';
 
 class ProfileCubit extends BaseCubit<ProfileState> {
   final GetProfileUseCase _getProfileUseCase;
-  //final UploadProfileImageUseCase _uploadProfileImageUseCase;
   final CompleteProfileUseCase _completeProfileUseCase;
   final LoadIdentifierUseCase _loadIdentifierUseCase;
   final LogoutUseCase _logoutUseCase;
@@ -27,7 +26,6 @@ class ProfileCubit extends BaseCubit<ProfileState> {
     required CompleteProfileUseCase completeProfileUseCase,
     required LogoutUseCase logoutUseCase,
   }) : _getProfileUseCase = getProfileUseCase,
-        //_uploadProfileImageUseCase = uploadProfileImageUseCase,
         _loadIdentifierUseCase = loadIdentifierUseCase,
         _completeProfileUseCase = completeProfileUseCase,
         _logoutUseCase = logoutUseCase,
@@ -85,10 +83,10 @@ class ProfileCubit extends BaseCubit<ProfileState> {
     updateState((s) => s.copyWith(
       firstName: '',
       lastName: '',
-      phone: null,
-      dateOfBirth: null,
+      clearPhone: true,
+      clearDateOfBirth: true,
       clearSelectedGender: true,
-      address: null,
+      clearAddress: true,
       clearSelectedProfileImage: true,
       clearAllFormErrors: true,
     ));
@@ -146,7 +144,6 @@ class ProfileCubit extends BaseCubit<ProfileState> {
         dateOfBirth: state.dateOfBirth,
         gender: state.selectedGender,
         address: state.address?.trim(),
-        //profileImagePath: state.selectedProfileImagePath,
       ),
       onSuccess: (profile) {
         updateState((s) => s.copyWith(
@@ -186,47 +183,6 @@ class ProfileCubit extends BaseCubit<ProfileState> {
       },
     );
   }
-
-
-  // Future<void> uploadProfileImage(String filePath) async {
-  //   final file = File(filePath);
-  //
-  //   if (!file.existsSync()) {
-  //     updateState((s) => s.copyWith(uploadImageError: 'file_not_found'.tr()));
-  //     return;
-  //   }
-  //
-  //   final fileSizeInMB = file.lengthSync() / (1024 * 1024);
-  //   if (fileSizeInMB > AppConstant.maxImageSizeMB) {
-  //     updateState((s) => s.copyWith(uploadImageError: 'file_too_large'.tr()));
-  //     return;
-  //   }
-  //
-  //   await execute(
-  //     onLoading: () => updateState(
-  //           (s) => s.copyWith(isUploadingImage: true, clearUploadImageError: true),
-  //     ),
-  //     call: () => _uploadProfileImageUseCase(filePath),
-  //     onSuccess: (imageUrl) {
-  //       if (state.profile != null) {
-  //         final updatedProfile = state.profile!.copyWith(profileImage: imageUrl);
-  //         updateState(
-  //               (s) => s.copyWith(isUploadingImage: false, profile: updatedProfile),
-  //         );
-  //       } else {
-  //         updateState((s) => s.copyWith(isUploadingImage: false));
-  //       }
-  //     },
-  //     onError: (failure) {
-  //       updateState(
-  //             (s) => s.copyWith(
-  //           isUploadingImage: false,
-  //           uploadImageError: ProfileFailureUiMapper.map(failure),
-  //         ),
-  //       );
-  //     },
-  //   );
-  // }
 
   Future<void> refreshProfile() async {
     await getProfile();

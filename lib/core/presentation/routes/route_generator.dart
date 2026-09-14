@@ -21,6 +21,10 @@ import '../../../features/auth/presentation/register/signup/logic/sign_up_cubit.
 import '../../../features/auth/presentation/register/signup/view/screen/sign_up_screen.dart';
 import '../../../features/expense/presentation/logic/expenses_cubit.dart';
 import '../../../features/expense/presentation/view/screen/submit_expense_screen.dart';
+import '../../../features/leave/presentation/submit/logic/submit_leave_cubit.dart';
+import '../../../features/leave/presentation/submit/view/screen/submit_leave_screen.dart';
+import '../../../features/leave/presentation/summary/logic/leave_summary_cubit.dart';
+import '../../../features/leave/presentation/summary/view/screen/leave_summary_screen.dart';
 import '../../../features/profile/domain/entity/payroll.dart';
 import '../../../features/profile/presentation/office_assets/logic/office_assets_cubit.dart';
 import '../../../features/profile/presentation/office_assets/view/screen/office_assets_screen.dart';
@@ -76,6 +80,9 @@ final GoRouter router = GoRouter(
       ),
     ),
 
+    // ═══════════════════════════════════════════
+    // PROFILE ROUTES
+    // ═══════════════════════════════════════════
     GoRoute(
       path: RouteNames.profile,
       name: 'profile',
@@ -84,7 +91,6 @@ final GoRouter router = GoRouter(
         child: const ProfileScreen(),
       ),
     ),
-
     GoRoute(
       path: RouteNames.personalData,
       name: 'personal_data',
@@ -93,7 +99,6 @@ final GoRouter router = GoRouter(
         child: const PersonalDataScreen(),
       ),
     ),
-
     GoRoute(
       path: RouteNames.payrollHistory,
       name: 'payroll_history',
@@ -102,7 +107,6 @@ final GoRouter router = GoRouter(
         child: const PayrollHistoryScreen(),
       ),
     ),
-
     GoRoute(
       path: RouteNames.payrollDetails,
       name: 'payroll_details',
@@ -114,7 +118,6 @@ final GoRouter router = GoRouter(
         );
       },
     ),
-
     GoRoute(
       path: RouteNames.officeAssets,
       name: 'office_assets',
@@ -124,6 +127,9 @@ final GoRouter router = GoRouter(
       ),
     ),
 
+    // ═══════════════════════════════════════════
+    // EXPENSE ROUTES
+    // ═══════════════════════════════════════════
     GoRoute(
       path: RouteNames.submitExpense,
       name: 'submit_expense',
@@ -171,6 +177,19 @@ final GoRouter router = GoRouter(
         );
       },
     ),
+    // ═══════════════════════════════════════════
+    // LEAVE ROUTES
+    // ═══════════════════════════════════════════
+    GoRoute(
+      path: RouteNames.submitLeave,
+      name: 'submit_leave',
+      builder: (context, state) => BlocProvider(
+        create: (_) => sl<SubmitLeaveCubit>()..loadLeaveTypes(),
+        child: const SubmitLeaveScreen(),
+      ),
+    ),
+
+
     // ═══════════════════════════════════════════
     // MAIN APP ROUTES
     // ═══════════════════════════════════════════
@@ -230,7 +249,10 @@ final GoRouter router = GoRouter(
             GoRoute(
               path: RouteNames.leaveScreen,
               name: 'leave',
-              builder: (context, state) => const HomeScreen(),
+              builder: (context, state) => BlocProvider(
+                create: (_) => sl<LeaveSummaryCubit>()..loadSummary(),
+                child: const LeaveSummaryScreen(),
+              ),
             ),
           ],
         ),

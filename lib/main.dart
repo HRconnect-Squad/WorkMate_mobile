@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_native_splash/flutter_native_splash.dart';
 import 'package:workmate/core/config/app_config.dart';
 import 'package:toastification/toastification.dart';
+import 'package:workmate/features/leave/di/leave_di_container.dart';
 import 'core/di/core_di_container.dart';
 import 'core/presentation/design_system/theme/workmate_theme.dart';
 import 'core/presentation/routes/config/app_startup_service.dart';
@@ -25,6 +26,7 @@ void main() async {
   await initProfile();
   await initExpenses();
   await initAttendance();
+  await initLeave();
   await sl<AppStartupService>().initialize();
 
   FlutterNativeSplash.remove();

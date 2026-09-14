@@ -36,11 +36,6 @@ class ProfileScreen extends StatelessWidget {
               (current.error != null &&
                   current.error != previous.error &&
                   !current.isProfileNotCompleted) ||
-              // (current.uploadImageError != null &&
-              //     current.uploadImageError != previous.uploadImageError) ||
-              // (previous.isUploadingImage &&
-              //     !current.isUploadingImage &&
-              //     current.uploadImageError == null &&
               (current.profile?.profileImage != previous.profile?.profileImage);
         },
         listener: (context, state) {
@@ -51,17 +46,6 @@ class ProfileScreen extends StatelessWidget {
           if (state.error != null && !state.isProfileNotCompleted) {
             SnackBarHelper.showError(context, state.error!);
           }
-
-          // if (state.uploadImageError != null) {
-          //   SnackBarHelper.showError(context, state.uploadImageError!);
-          //   context.read<ProfileCubit>().clearUploadImageError();
-          // }
-
-          // if (!state.isUploadingImage &&
-          //     state.uploadImageError == null &&
-          //     state.profile?.profileImage != null) {
-          //    SnackBarHelper.showSuccess(context, 'profile_image_updated'.tr());
-          // }
         },
         builder: (context, state) {
           if (state.isLoading) {
@@ -86,7 +70,6 @@ class ProfileScreen extends StatelessWidget {
                 iconWidget: _buildAvatarWidget(
                   context,
                   profile.profileImage,
-                  //state.isUploadingImage,
                 ),
                 iconWidgetHeight: 120,
                 customHeader: ProfileHeaderWidget(profile: profile),
@@ -106,7 +89,6 @@ class ProfileScreen extends StatelessWidget {
   Widget _buildAvatarWidget(
     BuildContext context,
     String? profileImage,
-    //bool isUploadingImage,
   ) {
     return Container(
           width: 120,
@@ -172,44 +154,4 @@ class ProfileScreen extends StatelessWidget {
       ),
     );
   }
-
-  // void _showImagePickerOptions(BuildContext context) {
-  //   ImagePickerOptionsPopup.show(
-  //     context,
-  //     onGalleryTap: () => _pickImageFromGallery(context),
-  //     onCameraTap: () => SnackBarHelper.showInfo(context, 'Camera image coming soon'),
-  //   );
-  // }
-
-  // Future<void> _pickImageFromGallery(BuildContext context) async {
-  //   final file = await ImagePickerHelper.pickImageFromGallery();
-  //
-  //   if (file == null) {
-  //     return;
-  //   }
-  //
-  //   if (!ImagePickerHelper.isFileSizeValid(file)){
-  //     if (context.mounted) {
-  //       SnackBarHelper.showError(
-  //         context,
-  //         'file_too_large'.tr(),
-  //       );
-  //     }
-  //     return;
-  //   }
-  //
-  //   if (!ImagePickerHelper.isValidImageExtension(file)) {
-  //     if (context.mounted) {
-  //       SnackBarHelper.showError(
-  //         context,
-  //         'invalid_image_format'.tr(),
-  //       );
-  //     }
-  //     return;
-  //   }
-  //
-  //   if (context.mounted) {
-  //     context.read<ProfileCubit>().uploadProfileImage(file.path);
-  //   }
-  // }
 }

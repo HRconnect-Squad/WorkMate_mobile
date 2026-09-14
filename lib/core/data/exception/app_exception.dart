@@ -80,8 +80,8 @@ class NetworkException extends AppException {
     required super.message});
 }
 
-class TimeoutException extends AppException {
-  const TimeoutException({
+class RequestTimeoutException extends AppException {
+  const RequestTimeoutException({
     required super.message});
 }
 

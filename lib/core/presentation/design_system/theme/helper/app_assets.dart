@@ -29,4 +29,7 @@ class AppAssets {
   static const wallet = 'assets/svgs/card-pos.svg';
   static const submitExpenseIllustration = 'assets/images/submit_expense_illustration.png';
   static const clockIn = 'assets/images/clock_in.png';
+  static const emptyLeaveState = 'assets/images/empty_leave_state.png';
+  static const leaveIllustration = 'assets/images/leave_illustration.png';
+
 }

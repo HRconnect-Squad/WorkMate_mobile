@@ -70,8 +70,10 @@ class EmployeeProfileDto extends Equatable {
           ? ManagerDto.fromJson(json['manager'] as Map<String, dynamic>)
           : null,
       hireDate: json['hire_date'] as String?,
-      baseSalary: _parseToDouble(json['base_salary']),
-      hourlyRate: _parseToDouble(json['hourly_rate']),
+      // baseSalary: _parseToDouble(json['base_salary']),
+      // hourlyRate: _parseToDouble(json['hourly_rate']),
+      baseSalary: (json['base_salary'] as num?)?.toDouble(),
+      hourlyRate: (json['hourly_rate'] as num?)?.toDouble(),
       employmentType: json['employment_type'] as String?,
       status: json['status'] as String?,
       terminationDate: json['termination_date'] as String?,
@@ -80,10 +82,10 @@ class EmployeeProfileDto extends Equatable {
     );
   }
 
-  static double? _parseToDouble(dynamic value) {
-    if (value == null) return null;
-    return double.tryParse(value);
-  }
+  // static double? _parseToDouble(dynamic value) {
+  //   if (value == null) return null;
+  //   return double.tryParse(value);
+  // }
 
   Map<String, dynamic> toJson() {
     return {
