@@ -31,16 +31,12 @@ class ApiErrorResponse {
 
     json.forEach((key, value) {
       if (value is List) {
-        final stringValues = value
-            .where((e) => e != null)
-            .map((e) => e.toString())
-            .toList();
-
-        if (stringValues.isNotEmpty) {
-          fields[key] = stringValues;
-        }
-      } else if (value != null) {
-        fields[key] = [value.toString()];
+        if (value.every((item) => item is String))
+          fields[key] = List<String>.from(value);
+        else
+          fields[key] = value.map((item) => item.toString()).toList();
+      } else if (value is String) {
+        fields[key] = [value];
       }
     });
 
