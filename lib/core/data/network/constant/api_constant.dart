@@ -13,6 +13,13 @@ class ApiConstants {
   static const String acceptLanguage = 'Accept-Language';
   static const String localDataTokenKey = 'token';
 
+  static const String tasks = '/api/tasks';
+  static String taskById(int taskId) => '/api/tasks/$taskId';
+  static String taskComments(int taskId) =>
+      '/api/tasks/$taskId/comments';
+  static String taskAttachments(int taskId) =>
+      '/api/tasks/$taskId/attachments';
+
 
   static const String attendanceHistory = '/api/attendance/history';
   static const String attendanceCheckIn = '/api/attendance/check-in';

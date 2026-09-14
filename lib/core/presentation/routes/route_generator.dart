@@ -35,6 +35,11 @@ import '../../../features/profile/presentation/personal_data/logic/personal_data
 import '../../../features/profile/presentation/personal_data/view/screen/personal_data_screen.dart';
 import '../../../features/profile/presentation/profile/logic/profile_cubit.dart';
 import '../../../features/profile/presentation/profile/view/screen/profile_screen.dart';
+import '../../../features/task/presentation/login/task_cubit.dart';
+import '../../../features/task/presentation/login/task_detail_cubit.dart';
+import '../../../features/task/presentation/view/task_detail_screen.dart';
+import '../../../features/task/presentation/view/task_screen.dart';
+import '../design_system/model/task_model.dart';
 import 'config/app_state_notifier.dart';
 import 'main_navigation/presentation/screens/main_wrapper_screen.dart';
 
@@ -91,6 +96,7 @@ final GoRouter router = GoRouter(
         child: const ProfileScreen(),
       ),
     ),
+
     GoRoute(
       path: RouteNames.personalData,
       name: 'personal_data',
@@ -99,6 +105,7 @@ final GoRouter router = GoRouter(
         child: const PersonalDataScreen(),
       ),
     ),
+
     GoRoute(
       path: RouteNames.payrollHistory,
       name: 'payroll_history',
@@ -107,6 +114,7 @@ final GoRouter router = GoRouter(
         child: const PayrollHistoryScreen(),
       ),
     ),
+
     GoRoute(
       path: RouteNames.payrollDetails,
       name: 'payroll_details',
@@ -118,6 +126,7 @@ final GoRouter router = GoRouter(
         );
       },
     ),
+
     GoRoute(
       path: RouteNames.officeAssets,
       name: 'office_assets',
@@ -195,7 +204,9 @@ final GoRouter router = GoRouter(
     // ═══════════════════════════════════════════
     StatefulShellRoute.indexedStack(
       builder: (context, state, navigationShell) {
-        return MainWrapperScreen(navigationShell: navigationShell);
+        return MainWrapperScreen(
+          navigationShell: navigationShell,
+        );
       },
       branches: [
         StatefulShellBranch(
@@ -226,7 +237,23 @@ final GoRouter router = GoRouter(
             GoRoute(
               path: RouteNames.taskScreen,
               name: 'task',
-              builder: (context, state) => const HomeScreen(),
+              builder: (context, state) => BlocProvider(
+                create: (_) => sl<TaskCubit>()..loadTasks(),
+                child: const TaskScreen(),
+              ),
+            ),
+
+            GoRoute(
+              path: RouteNames.taskDetailScreen,
+              name: RouteNames.taskDetail,
+              builder: (context, state) {
+                final task = state.extra as TaskModel;
+
+                return BlocProvider(
+                  create: (_) => sl<TaskDetailCubit>(param1: task.id),
+                  child: TaskDetailScreen(task: task),
+                );
+              },
             ),
           ],
         ),
