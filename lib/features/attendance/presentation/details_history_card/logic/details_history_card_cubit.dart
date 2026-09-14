@@ -44,7 +44,7 @@ class DetailsHistoryCardCubit extends BaseCubit<DetailsHistoryCardState> {
       fileName: 'attendance_${state.details!.date}',
     );
 
-    if (result.isSuccess) {
+    if (result.isRight()) {
       _onExportSuccess(result);
     } else {
       _onExportError(result);

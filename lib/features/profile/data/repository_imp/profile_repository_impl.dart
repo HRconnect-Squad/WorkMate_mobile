@@ -35,7 +35,7 @@ class ProfileRepositoryImpl with SafeApiCall implements ProfileRepository {
           await _localDataSource.cacheProfile(dto).catchError((_) {});
           await _localDataSource
               .setProfileCompleted(profile.isProfileComplete)
-              .catchError((e) => logger.e('Failed to cache profile',e ));
+              .catchError((e) => logger.e('Failed to cache profile'));
 
           return profile;
         },
@@ -74,7 +74,7 @@ class ProfileRepositoryImpl with SafeApiCall implements ProfileRepository {
           final profile = ProfileMapper.toDomain(fullDto);
 
           await _localDataSource.cacheProfile(fullDto)
-              .catchError((e) => logger.e('Failed to cache profile', e));
+              .catchError((e) => logger.e('Failed to cache profile'));
           await _localDataSource.setProfileCompleted(true).catchError((_) {});
 
           return profile;
@@ -114,7 +114,7 @@ class ProfileRepositoryImpl with SafeApiCall implements ProfileRepository {
           final profile = ProfileMapper.toDomain(fullDto);
 
           await _localDataSource.cacheProfile(fullDto)
-              .catchError((e) => logger.e('Failed to cache profile', e));
+              .catchError((e) => logger.e('Failed to cache profile'));
 
           return profile;
         },
