@@ -1,6 +1,6 @@
 import '../../../../core/data/exception/app_exception.dart';
 import '../../../../core/domain/failure/domain_failure.dart';
-import '../../domain/failure/failure.dart';
+import '../../domain/failure/profile_failure.dart';
 
 abstract final class ProfileFailureMapper {
   const ProfileFailureMapper._();

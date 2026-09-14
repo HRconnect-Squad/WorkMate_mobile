@@ -34,7 +34,7 @@ class TimeoutFailure extends Failure {
 }
 
 class ConflictFailure extends Failure {
-  const ConflictFailure({super.message = 'This resource already exists'});
+  const ConflictFailure({super.message = 'This resource already exists', super.statusCode, super.errorCode});
 }
 
 class CacheFailure extends Failure {
@@ -50,24 +50,24 @@ class ServerFailure extends Failure {
 }
 
 class BadRequestFailure extends Failure {
-  const BadRequestFailure({super.message = 'Bad request'});
+  const BadRequestFailure({super.message = 'Bad request', super.statusCode, super.errorCode});
 }
 
 class UnauthorizedFailure extends Failure implements RequiresReauthentication {
-  const UnauthorizedFailure({super.message = 'Unauthorized'});
+  const UnauthorizedFailure({super.message = 'Unauthorized', super.statusCode, super.errorCode});
 }
 
 class ForbiddenFailure extends Failure {
-  const ForbiddenFailure({super.message = 'Forbidden'});
+  const ForbiddenFailure({super.message = 'Forbidden', super.statusCode, super.errorCode});
 }
 
 class TooManyAttemptsFailure extends Failure {
-  const TooManyAttemptsFailure({super.message = 'Too many attempts'});
+  const TooManyAttemptsFailure({super.message = 'Too many attempts', super.statusCode, super.errorCode});
 }
 
 
 class NotFoundFailure extends Failure {
-  const NotFoundFailure({super.message = 'Resource not found'});
+  const NotFoundFailure({super.message = 'Resource not found', super.statusCode, super.errorCode});
 }
 
 class FileFailure extends Failure {

@@ -6,8 +6,10 @@ class DepartmentDto extends Equatable {
   final int? managerId;
   final String? description;
   final bool? isActive;
-  final String? latitude;
-  final String? longitude;
+  // final String? latitude;
+  // final String? longitude;
+  final double? latitude;
+  final double? longitude;
   final int? radiusMeters;
   final String? createdAt;
   final String? updatedAt;
@@ -32,8 +34,10 @@ class DepartmentDto extends Equatable {
       managerId: json['manager_id'] as int?,
       description: json['description'] as String?,
       isActive: json['is_active'] as bool?,
-      latitude: json['latitude'] as String?,
-      longitude: json['longitude'] as String?,
+      // latitude: json['latitude'] as String?,
+      // longitude: json['longitude'] as String?,
+      latitude: (json['latitude'] as num?)?.toDouble(),
+      longitude: (json['longitude'] as num?)?.toDouble(),
       radiusMeters: json['radius_meters'] as int?,
       createdAt: json['created_at'] as String?,
       updatedAt: json['updated_at'] as String?,

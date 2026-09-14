@@ -2,7 +2,7 @@ import 'package:easy_localization/easy_localization.dart';
 
 import '../../../../core/domain/failure/domain_failure.dart';
 import '../../../../core/presentation/mapper/failure_ui_mapper.dart';
-import '../../domain/failure/failure.dart';
+import '../../domain/failure/profile_failure.dart';
 import '../../domain/failure/payroll_failure.dart';
 
 class ProfileFailureUiMapper {

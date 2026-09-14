@@ -35,30 +35,26 @@ mixin SafeApiCall {
 
   Failure _mapAppException(AppException exception) {
     final code = exception.apiError?.errorCode?.toUpperCase();
+    final status = exception.statusCode;
     return switch (exception) {
-      ServerException()           => ServerFailure(
-          message: exception.message,
-          statusCode: exception.statusCode,
-          errorCode: code),
-      BadRequestException()       => BadRequestFailure(message: exception.message),
-      UnauthorizedException()     => UnauthorizedFailure(message: exception.message),
-      ForbiddenException()        => ForbiddenFailure(message: exception.message),
-      NotFoundException()         => NotFoundFailure(message: exception.message),
-      NetworkException()          => NetworkFailure(message: exception.message),
-      TimeoutException()          => TimeoutFailure(message: exception.message),
+      ServerException()  => ServerFailure(message: exception.message, statusCode: status, errorCode: code),
+      BadRequestException() => BadRequestFailure(message: exception.message, statusCode: status, errorCode: code),
+      UnauthorizedException() => UnauthorizedFailure(message: exception.message, statusCode: status, errorCode: code),
+      ForbiddenException() => ForbiddenFailure(message: exception.message, statusCode: status, errorCode: code),
+      NotFoundException() => NotFoundFailure(message: exception.message, statusCode: status, errorCode: code),
+      NetworkException() => NetworkFailure(message: exception.message),
+      RequestTimeoutException() => TimeoutFailure(message: exception.message),
       RequestCancelledException() => UnknownFailure(message: exception.message),
-      CacheException()            => CacheFailure(message: exception.message),
-      SerializationException()    => UnknownFailure(message: exception.message),
-      InvalidCredentialsException() => UnauthorizedFailure(message: exception.message),
-      TooManyAttemptsException() => TooManyAttemptsFailure(message: exception.message),
-      ConflictException() => ConflictFailure(message: exception.message),
+      CacheException() => CacheFailure(message: exception.message),
+      SerializationException() => UnknownFailure(message: exception.message),
+      InvalidCredentialsException() => UnauthorizedFailure(message: exception.message, statusCode: status, errorCode: code),
+      TooManyAttemptsException() => TooManyAttemptsFailure(message: exception.message, statusCode: status, errorCode: code),
+      ConflictException() => ConflictFailure(message: exception.message, statusCode: status, errorCode: code),
       ValidationException() => ValidationFailure(
-          message: (exception.apiError?.validationErrors?.isNotEmpty ?? false)
-              ? "${exception.message}\n${exception.apiError!.validationErrors!.combinedErrors}"
-              : exception.message,
+          message: exception.message,
           errors: exception.apiError?.validationErrors),
-      FileException()             => FileFailure(message: exception.message),
-      UnknownException()            => UnknownFailure(message: exception.message),
+      FileException() => FileFailure(message: exception.message),
+      UnknownException() => UnknownFailure(message: exception.message),
     };
   }
 }
