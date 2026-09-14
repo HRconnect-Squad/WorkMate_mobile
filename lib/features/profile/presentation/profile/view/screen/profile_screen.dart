@@ -9,11 +9,9 @@ import '../../../../../../core/presentation/design_system/theme/helper/app_asset
 import '../../../../../../core/presentation/design_system/theme/helper/extention_colors.dart';
 import '../../../../../../core/presentation/design_system/theme/helper/snackbar_helper.dart';
 import '../../../../../../core/presentation/design_system/theme/helper/theme_extention.dart';
-import '../../../../../../core/presentation/util/image_picker_helper.dart';
 import '../../logic/profile_cubit.dart';
 import '../../logic/profile_state.dart';
 import '../widget/popup/complete_profile_popup.dart';
-import '../widget/popup/image_picker_options_popup.dart';
 import '../widget/profile_content.dart';
 import '../widget/profile_header.dart';
 
@@ -38,12 +36,12 @@ class ProfileScreen extends StatelessWidget {
               (current.error != null &&
                   current.error != previous.error &&
                   !current.isProfileNotCompleted) ||
-              (current.uploadImageError != null &&
-                  current.uploadImageError != previous.uploadImageError) ||
-              (previous.isUploadingImage &&
-                  !current.isUploadingImage &&
-                  current.uploadImageError == null &&
-                  current.profile?.profileImage != previous.profile?.profileImage);
+              // (current.uploadImageError != null &&
+              //     current.uploadImageError != previous.uploadImageError) ||
+              // (previous.isUploadingImage &&
+              //     !current.isUploadingImage &&
+              //     current.uploadImageError == null &&
+              (current.profile?.profileImage != previous.profile?.profileImage);
         },
         listener: (context, state) {
           if (state.isProfileNotCompleted) {
@@ -54,16 +52,16 @@ class ProfileScreen extends StatelessWidget {
             SnackBarHelper.showError(context, state.error!);
           }
 
-          if (state.uploadImageError != null) {
-            SnackBarHelper.showError(context, state.uploadImageError!);
-            context.read<ProfileCubit>().clearUploadImageError();
-          }
+          // if (state.uploadImageError != null) {
+          //   SnackBarHelper.showError(context, state.uploadImageError!);
+          //   context.read<ProfileCubit>().clearUploadImageError();
+          // }
 
-          if (!state.isUploadingImage &&
-              state.uploadImageError == null &&
-              state.profile?.profileImage != null) {
-             SnackBarHelper.showSuccess(context, 'profile_image_updated'.tr());
-          }
+          // if (!state.isUploadingImage &&
+          //     state.uploadImageError == null &&
+          //     state.profile?.profileImage != null) {
+          //    SnackBarHelper.showSuccess(context, 'profile_image_updated'.tr());
+          // }
         },
         builder: (context, state) {
           if (state.isLoading) {
@@ -88,7 +86,7 @@ class ProfileScreen extends StatelessWidget {
                 iconWidget: _buildAvatarWidget(
                   context,
                   profile.profileImage,
-                  state.isUploadingImage,
+                  //state.isUploadingImage,
                 ),
                 iconWidgetHeight: 120,
                 customHeader: ProfileHeaderWidget(profile: profile),
@@ -108,71 +106,36 @@ class ProfileScreen extends StatelessWidget {
   Widget _buildAvatarWidget(
     BuildContext context,
     String? profileImage,
-    bool isUploadingImage,
+    //bool isUploadingImage,
   ) {
-    return GestureDetector(
-      onTap: isUploadingImage
-          ? null
-          : () => _showImagePickerOptions(context),
-      child: Stack(
-        clipBehavior: Clip.none,
-        children: [
-          Container(
-            width: 120,
-            height: 120,
-            decoration: BoxDecoration(
-              borderRadius: BorderRadius.circular(12),
-              border: Border.all(color: context.colors.white, width: 2),
-              boxShadow: [
-                BoxShadow(
-                  color: context.colors.purple500.withOpacity(0.4),
-                  blurRadius: 16,
-                  offset: const Offset(0, 8),
-                ),
-              ],
-            ),
-            child: ClipRRect(
-              borderRadius: BorderRadius.circular(10),
-              child: isUploadingImage
-                  ? const Center(
-                      child: CircularProgressIndicator(color: Colors.white),
-                    )
-                  : CachedNetworkImage(
-                      imageUrl: profileImage ?? '',
-                      fit: BoxFit.cover,
-                      placeholder: (context, url) => const Center(
-                        child: CircularProgressIndicator(color: Colors.white),
-                      ),
-                      errorWidget: (context, url, error) => Image.asset(
-                        AppAssets.avatarPlaceholder,
-                        fit: BoxFit.cover,
-                      ),
-                    ),
-            ),
-          ),
-
-          if (!isUploadingImage)
-            Positioned(
-              right: 0,
-              bottom: 0,
-              child: Container(
-                width: 32,
-                height: 32,
-                margin: const EdgeInsets.all(4),
-                decoration: BoxDecoration(
-                  color: context.colors.white,
-                  shape: BoxShape.circle,
-                  border: Border.all(color: context.colors.purple500, width: 1),
-                ),
-                child: Icon(
-                  Icons.camera_alt,
-                  color: context.colors.purple500,
-                  size: 16,
-                ),
+    return Container(
+          width: 120,
+          height: 120,
+          decoration: BoxDecoration(
+            borderRadius: BorderRadius.circular(12),
+            border: Border.all(color: context.colors.white, width: 2),
+            boxShadow: [
+              BoxShadow(
+                color: context.colors.purple500.withOpacity(0.4),
+                blurRadius: 16,
+                offset: const Offset(0, 8),
               ),
-            ),
-        ],
-      ),
+            ],
+          ),
+          child: ClipRRect(
+            borderRadius: BorderRadius.circular(10),
+            child: CachedNetworkImage(
+                    imageUrl: profileImage ?? '',
+                    fit: BoxFit.cover,
+                    placeholder: (context, url) => const Center(
+                      child: CircularProgressIndicator(color: Colors.white),
+                    ),
+                    errorWidget: (context, url, error) => Image.asset(
+                      AppAssets.avatarPlaceholder,
+                      fit: BoxFit.cover,
+                    ),
+                  ),
+          ),
     );
   }
 
@@ -210,43 +173,43 @@ class ProfileScreen extends StatelessWidget {
     );
   }
 
-  void _showImagePickerOptions(BuildContext context) {
-    ImagePickerOptionsPopup.show(
-      context,
-      onGalleryTap: () => _pickImageFromGallery(context),
-      onCameraTap: () => SnackBarHelper.showInfo(context, 'Camera image coming soon'),
-    );
-  }
+  // void _showImagePickerOptions(BuildContext context) {
+  //   ImagePickerOptionsPopup.show(
+  //     context,
+  //     onGalleryTap: () => _pickImageFromGallery(context),
+  //     onCameraTap: () => SnackBarHelper.showInfo(context, 'Camera image coming soon'),
+  //   );
+  // }
 
-  Future<void> _pickImageFromGallery(BuildContext context) async {
-    final file = await ImagePickerHelper.pickImageFromGallery();
-
-    if (file == null) {
-      return;
-    }
-
-    if (!ImagePickerHelper.isFileSizeValid(file)){
-      if (context.mounted) {
-        SnackBarHelper.showError(
-          context,
-          'file_too_large'.tr(),
-        );
-      }
-      return;
-    }
-
-    if (!ImagePickerHelper.isValidImageExtension(file)) {
-      if (context.mounted) {
-        SnackBarHelper.showError(
-          context,
-          'invalid_image_format'.tr(),
-        );
-      }
-      return;
-    }
-
-    if (context.mounted) {
-      context.read<ProfileCubit>().uploadProfileImage(file.path);
-    }
-  }
+  // Future<void> _pickImageFromGallery(BuildContext context) async {
+  //   final file = await ImagePickerHelper.pickImageFromGallery();
+  //
+  //   if (file == null) {
+  //     return;
+  //   }
+  //
+  //   if (!ImagePickerHelper.isFileSizeValid(file)){
+  //     if (context.mounted) {
+  //       SnackBarHelper.showError(
+  //         context,
+  //         'file_too_large'.tr(),
+  //       );
+  //     }
+  //     return;
+  //   }
+  //
+  //   if (!ImagePickerHelper.isValidImageExtension(file)) {
+  //     if (context.mounted) {
+  //       SnackBarHelper.showError(
+  //         context,
+  //         'invalid_image_format'.tr(),
+  //       );
+  //     }
+  //     return;
+  //   }
+  //
+  //   if (context.mounted) {
+  //     context.read<ProfileCubit>().uploadProfileImage(file.path);
+  //   }
+  // }
 }

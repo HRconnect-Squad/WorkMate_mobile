@@ -198,7 +198,7 @@ class CustomPopup extends StatelessWidget {
     bool enabled = true,
     bool isPrimaryButtonLoading = false,
     bool isPrimaryButtonEnabled = true,
-    bool showDragHandle = true,
+    bool showDragHandle = false,
   }) {
     return CustomPopup(
       icon: icon,

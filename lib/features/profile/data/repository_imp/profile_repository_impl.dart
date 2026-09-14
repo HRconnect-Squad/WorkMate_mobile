@@ -1,6 +1,7 @@
 import 'package:fpdart/fpdart.dart';
 import 'package:workmate/features/profile/domain/entity/office_asset.dart';
 import 'package:workmate/features/profile/domain/entity/payroll.dart';
+import '../../../../core/ services/logger_service.dart';
 import '../../../../core/data/network/helper/safe_api_call.dart';
 import '../../../../core/domain/failure/domain_failure.dart';
 import '../../domain/entity/employee_profile.dart';
@@ -34,7 +35,7 @@ class ProfileRepositoryImpl with SafeApiCall implements ProfileRepository {
           await _localDataSource.cacheProfile(dto).catchError((_) {});
           await _localDataSource
               .setProfileCompleted(profile.isProfileComplete)
-              .catchError((_) {});
+              .catchError((e) => logger.e('Failed to cache profile',e ));
 
           return profile;
         },
@@ -58,18 +59,22 @@ class ProfileRepositoryImpl with SafeApiCall implements ProfileRepository {
             lastName: lastName,
             phone: phone,
             dateOfBirth: dateOfBirth,
-            gender: gender?.name,
+            gender: gender?.name == 'unspecified' ? null : gender?.name,
             address: address,
           );
 
-          final dto = await _remoteDataSource.completeProfile(
+          await _remoteDataSource.completeProfile(
             request: request,
             profileImagePath: profileImagePath,
           );
 
-          final profile = ProfileMapper.toDomain(dto);
+          //final profile = ProfileMapper.toDomain(dto);
 
-          await _localDataSource.cacheProfile(dto).catchError((_) {});
+          final fullDto = await _remoteDataSource.getProfile();
+          final profile = ProfileMapper.toDomain(fullDto);
+
+          await _localDataSource.cacheProfile(fullDto)
+              .catchError((e) => logger.e('Failed to cache profile', e));
           await _localDataSource.setProfileCompleted(true).catchError((_) {});
 
           return profile;
@@ -98,14 +103,18 @@ class ProfileRepositoryImpl with SafeApiCall implements ProfileRepository {
             address: address,
           );
 
-          final dto = await _remoteDataSource.updateProfile(
+          await _remoteDataSource.updateProfile(
             request: request,
             avatarPath: avatarPath,
           );
 
-          final profile = ProfileMapper.toDomain(dto);
+         // final profile = ProfileMapper.toDomain(dto);
 
-          await _localDataSource.cacheProfile(dto).catchError((_) {});
+          final fullDto = await _remoteDataSource.getProfile();
+          final profile = ProfileMapper.toDomain(fullDto);
+
+          await _localDataSource.cacheProfile(fullDto)
+              .catchError((e) => logger.e('Failed to cache profile', e));
 
           return profile;
         },

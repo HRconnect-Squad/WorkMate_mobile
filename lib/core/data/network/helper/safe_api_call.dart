@@ -34,10 +34,12 @@ mixin SafeApiCall {
   }
 
   Failure _mapAppException(AppException exception) {
+    final code = exception.apiError?.errorCode?.toUpperCase();
     return switch (exception) {
       ServerException()           => ServerFailure(
           message: exception.message,
-          statusCode: exception.statusCode),
+          statusCode: exception.statusCode,
+          errorCode: code),
       BadRequestException()       => BadRequestFailure(message: exception.message),
       UnauthorizedException()     => UnauthorizedFailure(message: exception.message),
       ForbiddenException()        => ForbiddenFailure(message: exception.message),
@@ -49,6 +51,7 @@ mixin SafeApiCall {
       SerializationException()    => UnknownFailure(message: exception.message),
       InvalidCredentialsException() => UnauthorizedFailure(message: exception.message),
       TooManyAttemptsException() => TooManyAttemptsFailure(message: exception.message),
+      ConflictException() => ConflictFailure(message: exception.message),
       ValidationException() => ValidationFailure(
           message: (exception.apiError?.validationErrors?.isNotEmpty ?? false)
               ? "${exception.message}\n${exception.apiError!.validationErrors!.combinedErrors}"

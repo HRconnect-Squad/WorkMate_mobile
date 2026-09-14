@@ -13,7 +13,7 @@ class Register extends Equatable {
         required this.password,
         required this.passwordConfirmation,
         required this.phone,
-        required this.authType,
+        this.authType = AuthType.email,
         required this.email,
     });
 

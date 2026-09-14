@@ -56,9 +56,9 @@ class EmployeeProfile extends Equatable {
 
   bool get isPending => status.toLowerCase() == 'pending';
 
-  bool get isEmailType => emailAddress != null;
+  //bool get isEmailType => emailAddress != null;
 
-  bool get isPhoneType => phone != null;
+  //bool get isPhoneType => phone != null;
 
 
   String get formattedSalary {
@@ -66,13 +66,13 @@ class EmployeeProfile extends Equatable {
     return '${baseSalary!.toStringAsFixed(2)}';
   }
 
-  String get formattedGender {
-    return gender.name[0].toUpperCase() + gender.name.substring(1);
-  }
+  // String get formattedGender {
+  //   return gender.name[0].toUpperCase() + gender.name.substring(1);
+  // }
 
   String get formattedDateOfBirth {
     if (dateOfBirth == null) return 'Not specified';
-    return '${hireDate!.day}/${hireDate!.month}/${hireDate!.year}';
+    return '${dateOfBirth!.day}/${dateOfBirth!.month}/${dateOfBirth!.year}';
   }
 
   String get formattedHireDate {

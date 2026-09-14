@@ -51,12 +51,13 @@ class ErrorInterceptor extends Interceptor {
       default:
         {
           logger.e(err.message);
-          return err.error != null &&
-                  err.error.toString().contains('SocketException')
-              ? const NetworkException(
-                  message: 'No internet connection or server is down',
-                )
-              : const UnknownException(message: 'An unexpected error occurred');
+          if (err.error != null) {
+            if(err.error.toString().contains('SocketException'))
+              return const NetworkException(message: 'No internet connection or server is down');
+            return UnknownException(message: err.message ??
+                err.response?.statusMessage ?? err.error.toString());
+          }
+          return const UnknownException(message: 'An unexpected error occurred');
         }
     }
   }
@@ -93,6 +94,11 @@ class ErrorInterceptor extends Interceptor {
         apiError: apiError,
       ),
       404 => NotFoundException(
+        message: message,
+        statusCode: statusCode,
+        apiError: apiError,
+      ),
+      409 => ConflictException(
         message: message,
         statusCode: statusCode,
         apiError: apiError,

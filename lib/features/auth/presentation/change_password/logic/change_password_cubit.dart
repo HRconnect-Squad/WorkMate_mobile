@@ -2,12 +2,12 @@ import 'package:easy_localization/easy_localization.dart';
 import '../../../../../core/config/app_constant.dart';
 import '../../../../../core/domain/failure/domain_failure.dart';
 import '../../../../../core/presentation/base_viewmodel/base_cubit.dart';
-import '../../../../../core/presentation/mapper/failure_ui_mapper.dart';
 import '../../../../../core/presentation/routes/config/app_state_notifier.dart';
 import '../../../../../core/presentation/util/validator.dart';
 import '../../../domain/failures/failure.dart';
 import '../../../domain/use_cases/change_password_use_case.dart';
 import '../../../domain/use_cases/logout_use_case.dart';
+import '../../mapper/auth_failure_ui_mapper.dart';
 import 'change_password_state.dart';
 
 class ChangePasswordCubit extends BaseCubit<ChangePasswordState> {
@@ -89,13 +89,13 @@ class ChangePasswordCubit extends BaseCubit<ChangePasswordState> {
           case InvalidCurrentPasswordFailure():
             updateState((s) => s.copyWith(
               isLoading: false,
-              currentPasswordError: failure.message,
+              currentPasswordError: AuthFailureUiMapper.map(failure),
             ));
 
           case SamePasswordFailure():
             updateState((s) => s.copyWith(
               isLoading: false,
-              newPasswordError: failure.message,
+              newPasswordError: AuthFailureUiMapper.map(failure),
             ));
 
           case ValidationFailure(:final errors):
@@ -107,14 +107,14 @@ class ChangePasswordCubit extends BaseCubit<ChangePasswordState> {
               error: (errors?.firstErrorFor('current_password') == null &&
                   errors?.firstErrorFor('new_password') == null &&
                   errors?.firstErrorFor('new_password_confirmation') == null)
-                  ? FailureUiMapper.map(failure)
+                  ? AuthFailureUiMapper.map(failure)
                   : null,
             ));
 
           default:
             updateState((s) => s.copyWith(
               isLoading: false,
-              error: FailureUiMapper.map(failure),
+              error: AuthFailureUiMapper.map(failure),
             ));
         }
       },
