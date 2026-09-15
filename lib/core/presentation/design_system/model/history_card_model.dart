@@ -1,5 +1,20 @@
 import 'package:flutter/cupertino.dart';
 
+
+class HistoryCardAction {
+  final String label;
+  final IconData icon;
+  final Color? color;
+  final VoidCallback onTap;
+
+  const HistoryCardAction({
+    required this.label,
+    required this.icon,
+    this.color,
+    required this.onTap,
+  });
+}
+
 class HistoryCardModel  {
   final String id;
   final DateTime date;
