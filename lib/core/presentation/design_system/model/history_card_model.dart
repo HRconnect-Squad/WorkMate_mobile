@@ -46,19 +46,7 @@ class HistoryCardModel  {
     this.actions = const [],
   });
 }
-class HistoryCardAction {
-  final String label;
-  final IconData icon;
-  final Color? color;
-  final VoidCallback onTap;
 
-  const HistoryCardAction({
-    required this.label,
-    required this.icon,
-    this.color,
-    required this.onTap,
-  });
-}
 class InfoItem {
   final String label;
   final String value;
@@ -68,4 +56,5 @@ class InfoItem {
     required this.value,
   });
 }
+
 enum StatusCard { approved, rejected }
