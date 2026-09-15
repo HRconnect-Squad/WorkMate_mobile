@@ -48,7 +48,7 @@ class ProfileScreen extends StatelessWidget {
           }
         },
         builder: (context, state) {
-          if (state.isLoading) {
+          if (state.isLoading || !state.hasLoaded) {
             return _buildLoadingState(context);
           }
 
