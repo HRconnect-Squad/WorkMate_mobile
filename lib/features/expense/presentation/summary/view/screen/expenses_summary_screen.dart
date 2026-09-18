@@ -87,7 +87,7 @@ class ExpensesSummaryScreen extends StatelessWidget {
           ),
         ),
         ..._buildListSection(context, state),
-        const SliverToBoxAdapter(child: SizedBox(height: 100)),
+        //const SliverToBoxAdapter(child: SizedBox(height: 100)),
       ],
     );
   }
