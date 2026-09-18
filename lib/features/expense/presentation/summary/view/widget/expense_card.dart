@@ -25,7 +25,8 @@ class ExpenseCard extends StatelessWidget {
       ),
       child: HistoryCard(
         onTap: onTap,
-        model: HistoryCardModel(
+        historyCardModel: HistoryCardModel(
+          id: expense.id.toString(),
           date: expense.expenseDate,
           headerIcon: Iconsax.receipt_2,
           headerIconColor: context.colors.purple500,

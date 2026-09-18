@@ -42,8 +42,8 @@ Upcoming modules:
 - [x] Payroll
 - [x] Employee Profile
 - [x] Office Assets
-- [ ] Attendance
-- [ ] Leave Requests
+- [x] Attendance
+- [x] Leave Requests
 - [ ] Push Notifications
 - [ ] Dark Theme
 - [ ] Unit Testing

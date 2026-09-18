@@ -24,7 +24,8 @@ class LeaveHistoryCard extends StatelessWidget {
         boxShadow: [BoxShadow(color: Colors.black.withOpacity(0.05), blurRadius: 8, offset: const Offset(0, 2))],
       ),
       child: HistoryCard(
-        model: HistoryCardModel(
+        historyCardModel: HistoryCardModel(
+          id: request.id.toString(),
           date: request.startDate,
           headerIcon: Iconsax.calendar_1,
           headerIconColor: context.colors.purple500,
