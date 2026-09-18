@@ -3,7 +3,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
 import 'package:iconsax/iconsax.dart';
-
 import '../../../../../../core/presentation/design_system/components/app_bar.dart';
 import '../../../../../../core/presentation/design_system/components/custom_input_field.dart';
 import '../../../../../../core/presentation/design_system/components/custom_primary_button.dart';

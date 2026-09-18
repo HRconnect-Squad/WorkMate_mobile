@@ -1,6 +1,9 @@
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
-import '../../../../../../../core/presentation/design_system/components/expense_history_card.dart';
+import 'package:iconsax/iconsax.dart';
 import '../../../../../../../core/presentation/design_system/theme/helper/theme_extention.dart';
+import '../../../../../../core/presentation/design_system/components/history_card.dart';
+import '../../../../../../core/presentation/design_system/model/history_card_model.dart';
 import '../../../../domain/entity/expense.dart';
 import '../../../../domain/entity/expense_category.dart';
 
@@ -9,20 +12,7 @@ class ExpenseCard extends StatelessWidget {
   final VoidCallback? onTap;
   final VoidCallback? onDelete;
 
-  const ExpenseCard({
-    super.key,
-    required this.expense,
-    this.onTap,
-    this.onDelete,
-  });
-
-  ExpenseCardStatus get _cardStatus {
-    return switch (expense.status) {
-      ExpenseStatus.pending => ExpenseCardStatus.pending,
-      ExpenseStatus.approved => ExpenseCardStatus.approved,
-      ExpenseStatus.rejected => ExpenseCardStatus.rejected,
-    };
-  }
+  const ExpenseCard({super.key, required this.expense, this.onTap, this.onDelete});
 
   @override
   Widget build(BuildContext context) {
@@ -31,23 +21,30 @@ class ExpenseCard extends StatelessWidget {
       decoration: BoxDecoration(
         color: context.colors.white,
         borderRadius: BorderRadius.circular(16),
-        boxShadow: [
-          BoxShadow(
-            color: Colors.black.withOpacity(0.05),
-            blurRadius: 8,
-            offset: const Offset(0, 2),
-          ),
-        ],
+        boxShadow: [BoxShadow(color: Colors.black.withOpacity(0.05), blurRadius: 8, offset: const Offset(0, 2))],
       ),
-      child: ExpenseHistoryCard(
-        status: _cardStatus,
-        type: expense.category.displayName,
-        totalExpense: expense.amount,
-        date: expense.expenseDate,
-        approvedByName: null, // TODO: when API returns approver info
-        approvedByImage: null,
+      child: HistoryCard(
         onTap: onTap,
-        onDelete: expense.isPending ? onDelete : null,
+        model: HistoryCardModel(
+          date: expense.expenseDate,
+          headerIcon: Iconsax.receipt_2,
+          headerIconColor: context.colors.purple500,
+          infoItems: [
+            InfoItem(label: 'type'.tr(), value: expense.category.displayName),
+            InfoItem(label: 'total_expense'.tr(), value: '\$${expense.amount}'),
+          ],
+          statusCard: switch (expense.status) {
+            ExpenseStatus.approved => StatusCard.approved,
+            ExpenseStatus.rejected => StatusCard.rejected,
+            ExpenseStatus.pending => null,
+          },
+          // TODO: populate once the API returns approver info
+          dateAddedStatus: null,
+          statusAddedByName: null,
+          actions: expense.isPending && onDelete != null
+              ? [HistoryCardAction(label: 'delete'.tr(), icon: Iconsax.trash, color: context.colors.error, onTap: onDelete!)]
+              : const [],
+        ),
       ),
     );
   }
