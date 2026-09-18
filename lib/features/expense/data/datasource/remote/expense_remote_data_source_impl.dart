@@ -91,8 +91,13 @@ class ExpensesRemoteDataSourceImpl implements ExpensesRemoteDataSource {
   }
 
   @override
-  Future<void> deleteExpense(int id) async {
-    await _dioClient.delete('${ExpenseApiConstant.expenses}/$id');
+  Future<bool> deleteExpense(int id) async {
+    final response = await _dioClient.delete(ExpenseApiConstant.deleteExpense(id));
+    final apiResponse = ApiResponse.fromJson(
+        response.data,
+        null
+    );
+    return apiResponse.success;
   }
 
   @override

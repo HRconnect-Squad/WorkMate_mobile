@@ -31,7 +31,7 @@ abstract class ExpensesRepository {
     String? receiptPath,
   });
 
-  Future<Either<Failure, Unit>> deleteExpense(int id);
+  Future<Either<Failure, bool>> deleteExpense(int id);
 
   Future<Either<Failure, ({String path, String url})>> uploadReceipt(
       String filePath,

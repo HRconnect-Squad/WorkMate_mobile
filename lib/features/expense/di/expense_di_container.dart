@@ -10,7 +10,8 @@ import '../domain/usecase/get_expense_detail_usecase.dart';
 import '../domain/usecase/get_expenses_usecase.dart';
 import '../domain/usecase/update_expense_usecase.dart';
 import '../domain/usecase/upload_receipt_usecase.dart';
-import '../presentation/logic/expenses_cubit.dart';
+import '../presentation/submit/logic/submit_expense_cubit.dart';
+import '../presentation/summary/logic/expenses_summary_cubit.dart';
 
 
 Future<void> initExpenses() async {
@@ -31,10 +32,14 @@ Future<void> initExpenses() async {
   sl.registerLazySingleton(() => UploadReceiptUseCase(sl<ExpensesRepository>()));
 
   // presentation
-  sl.registerFactory<ExpensesCubit>(
-        () => ExpensesCubit(
+  sl.registerFactory<ExpensesSummaryCubit>(
+        () => ExpensesSummaryCubit(
       getExpensesUseCase: sl<GetExpensesUseCase>(),
       deleteExpenseUseCase: sl<DeleteExpenseUseCase>(),
+    ),
+  );
+  sl.registerFactory<SubmitExpenseCubit>(
+        () => SubmitExpenseCubit(
       createExpenseUseCase: sl<CreateExpenseUseCase>(),
       uploadReceiptUseCase: sl<UploadReceiptUseCase>(),
     ),

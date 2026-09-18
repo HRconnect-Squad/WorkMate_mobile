@@ -98,11 +98,10 @@ class ExpensesRepositoryImpl with SafeApiCall implements ExpensesRepository {
       );
 
   @override
-  Future<Either<Failure, Unit>> deleteExpense(int id) =>
+  Future<Either<Failure, bool>> deleteExpense(int id) =>
       safeApiCall(
         call: () async {
-          await _remoteDataSource.deleteExpense(id);
-          return unit;
+          return await _remoteDataSource.deleteExpense(id);
         },
         onException: ExpenseFailureMapper.mapException,
       );
