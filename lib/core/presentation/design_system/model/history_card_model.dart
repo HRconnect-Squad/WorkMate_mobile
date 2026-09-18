@@ -1,12 +1,5 @@
-import 'package:flutter/material.dart';
+import 'package:flutter/cupertino.dart';
 
-enum StatusCard { approved, rejected }
-
-class InfoItem {
-  final String label;
-  final String value;
-  const InfoItem({required this.label, required this.value});
-}
 
 class HistoryCardAction {
   final String label;
@@ -22,20 +15,24 @@ class HistoryCardAction {
   });
 }
 
-class HistoryCardModel {
+class HistoryCardModel  {
+  final String id;
   final DateTime date;
   final IconData headerIcon;
   final Color? headerIconColor;
   final Color? backgroundColor;
-  final List<InfoItem> infoItems;
-  final StatusCard? statusCard;
   final DateTime? dateAddedStatus;
+
+  final List<InfoItem> infoItems;
+
+  final StatusCard? statusCard;
   final String? statusAddedByName;
   final String? statusImage;
   final String? additionalNote;
   final List<HistoryCardAction> actions;
 
   const HistoryCardModel({
+    required this.id,
     required this.date,
     required this.headerIcon,
     this.headerIconColor,
@@ -49,3 +46,15 @@ class HistoryCardModel {
     this.actions = const [],
   });
 }
+
+class InfoItem {
+  final String label;
+  final String value;
+
+  InfoItem({
+    required this.label,
+    required this.value,
+  });
+}
+
+enum StatusCard { approved, rejected }

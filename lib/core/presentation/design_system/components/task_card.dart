@@ -92,7 +92,6 @@ Widget _buildContentTaskCard(BuildContext context, TaskModel taskState) {
               child: const Icon(Icons.flash_on, color: Colors.white, size: 12),
             ),
             const SizedBox(width: 6),
-
             Text(
               taskState.title,
               maxLines: 1,
@@ -139,13 +138,11 @@ Widget _buildContentTaskCard(BuildContext context, TaskModel taskState) {
               spacing: 4,
               children: [
                 HorizontalStackedAvatars(
-                  commenterImage: taskState.comments
-                      .map((commenterImage) => commenterImage.commenterImage)
-                      .toList(),
+                  commenterImage: taskState.commentAvatarUrls,
                 ),
                 Text(
-                  taskState.comments.length > 3
-                      ? "+${taskState.comments.length - 3}"
+                  taskState.commentsCount > 3
+                      ? "+${taskState.commentsCount - 3}"
                       : '',
                   style: context.textTheme.bodySmallFont.copyWith(
                     color: context.colors.black,
@@ -170,7 +167,7 @@ Widget _buildContentTaskCard(BuildContext context, TaskModel taskState) {
                 ),
                 const SizedBox(width: 6),
                 CustomChips(
-                  title: taskState.comments.length.toString(),
+                  title: taskState.commentsCount.toString(),
                   color: context.colors.white,
                   style: context.textTheme.labelSmallFont.copyWith(
                     color: context.colors.textPrimary,

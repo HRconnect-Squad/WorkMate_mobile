@@ -40,7 +40,7 @@ class CompleteProfilePopup extends StatelessWidget {
             context,
             'profile_completed_successfully'.tr(),
           );
-          context.read<ProfileCubit>().refreshProfile();
+          //context.read<ProfileCubit>().refreshProfile();
         }
 
         if (state.error != null) {
