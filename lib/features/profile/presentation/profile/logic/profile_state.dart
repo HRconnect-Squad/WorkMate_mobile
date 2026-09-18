@@ -6,19 +6,16 @@ class ProfileState extends Equatable {
   final EmployeeProfile? profile;
   final String? userIdentifier;
   final bool isLoading;
+  final bool hasLoaded;
   final bool isProfileNotCompleted;
   final String? error;
-
-  final bool isUploadingImage;
-  final String? uploadImageError;
 
   final String firstName;
   final String lastName;
   final String? phone;
   final DateTime? dateOfBirth;
-  final Gender selectedGender;
+  final Gender? selectedGender;
   final String? address;
-  final String? selectedProfileImagePath;
 
   final String? firstNameError;
   final String? lastNameError;
@@ -30,17 +27,15 @@ class ProfileState extends Equatable {
     this.profile,
     this.userIdentifier,
     this.isLoading = false,
+    this.hasLoaded = false,
     this.isProfileNotCompleted = false,
     this.error,
-    this.isUploadingImage = false,
-    this.uploadImageError,
     this.firstName = '',
     this.lastName = '',
     this.phone,
     this.dateOfBirth,
-    this.selectedGender = Gender.male,
+    this.selectedGender,
     this.address,
-    this.selectedProfileImagePath,
     this.firstNameError,
     this.lastNameError,
     this.phoneError,
@@ -55,6 +50,7 @@ class ProfileState extends Equatable {
     EmployeeProfile? profile,
     String? userIdentifier,
     bool? isLoading,
+    bool? hasLoaded,
     bool? isProfileNotCompleted,
     String? error,
     bool? isUploadingImage,
@@ -80,24 +76,24 @@ class ProfileState extends Equatable {
     bool clearAddressError = false,
     bool clearAllFormErrors = false,
     bool clearSelectedProfileImage = false,
+    bool clearSelectedGender = false,
+    bool clearPhone = false,
+    bool clearDateOfBirth = false,
+    bool clearAddress = false,
   }) {
     return ProfileState(
       profile: profile ?? this.profile,
       userIdentifier: userIdentifier ?? this.userIdentifier,
       isLoading: isLoading ?? this.isLoading,
+      hasLoaded: hasLoaded ?? this.hasLoaded,
       isProfileNotCompleted: isProfileNotCompleted ?? this.isProfileNotCompleted,
       error: clearError ? null : (error ?? this.error),
-      isUploadingImage: isUploadingImage ?? this.isUploadingImage,
-      uploadImageError: clearUploadImageError ? null : (uploadImageError ?? this.uploadImageError),
       firstName: firstName ?? this.firstName,
       lastName: lastName ?? this.lastName,
-      phone: phone ?? this.phone,
-      dateOfBirth: dateOfBirth ?? this.dateOfBirth,
-      selectedGender: selectedGender ?? this.selectedGender,
-      address: address ?? this.address,
-      selectedProfileImagePath: clearSelectedProfileImage
-          ? null
-          : (selectedProfileImagePath ?? this.selectedProfileImagePath),
+      phone: clearPhone ? null : (phone ?? this.phone),
+      dateOfBirth: clearDateOfBirth ? null : (dateOfBirth ?? this.dateOfBirth),
+      selectedGender: clearSelectedGender ? null : (selectedGender ?? this.selectedGender),
+      address: clearAddress ? null : (address ?? this.address),
       firstNameError: (clearFirstNameError || clearAllFormErrors)
           ? null
           : (firstNameError ?? this.firstNameError),
@@ -123,15 +119,12 @@ class ProfileState extends Equatable {
     isLoading,
     isProfileNotCompleted,
     error,
-    isUploadingImage,
-    uploadImageError,
     firstName,
     lastName,
     phone,
     dateOfBirth,
     selectedGender,
     address,
-    selectedProfileImagePath,
     firstNameError,
     lastNameError,
     phoneError,

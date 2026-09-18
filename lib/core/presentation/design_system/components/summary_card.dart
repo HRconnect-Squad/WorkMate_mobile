@@ -8,12 +8,14 @@ class StateItemModel {
   final String value;
   final Widget? icon;
   final Color? indicatorColor;
+  final Widget? valueWidget;
 
   const StateItemModel({
     required this.label,
-    required this.value,
+    this.value = '',
     this.icon,
     this.indicatorColor,
+    this.valueWidget,
   });
 }
 
@@ -244,14 +246,15 @@ class SummaryCard extends StatelessWidget {
             ],
           ),
           const SizedBox(height: 6),
-          Text(
-            item.value,
-            style:
-                itemValueTextStyle ??
-                context.textTheme.titleLargeFont.copyWith(
-                  color: context.colors.textPrimary,
-                ),
-          ),
+          item.valueWidget ??
+              Text(
+                item.value,
+                style:
+                    itemValueTextStyle ??
+                    context.textTheme.titleLargeFont.copyWith(
+                      color: context.colors.textPrimary,
+                    ),
+              ),
         ],
       ),
     );

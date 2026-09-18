@@ -9,9 +9,11 @@ class AuthStateNotifier extends ChangeNotifier {
 
   bool _isLoggedIn = false;
   bool _isOnboardingCompleted = false;
+  bool _isInitialized = false;
 
   bool get isLoggedIn => _isLoggedIn;
   bool get isOnboardingCompleted => _isOnboardingCompleted;
+  bool get isInitialized => _isInitialized;
 
 
   Future<void> initialize({
@@ -20,6 +22,8 @@ class AuthStateNotifier extends ChangeNotifier {
   }) async {
     _isLoggedIn = await checkIsLoggedIn();
     _isOnboardingCompleted = checkOnboardingCompleted();
+    _isInitialized = true;
+    notifyListeners();
   }
 
   void setLoggedIn() {

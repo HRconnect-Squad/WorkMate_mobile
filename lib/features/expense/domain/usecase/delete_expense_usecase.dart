@@ -9,12 +9,10 @@ class DeleteExpenseUseCase {
 
   const DeleteExpenseUseCase(this._repository);
 
-  Future<Either<Failure, void>> call(Expense expense) {
+  Future<Either<Failure, bool>> call(Expense expense) {
     if (expense.status.isProcessed) {
       return Future.value(
-        const Left(
-          ExpenseAlreadyProcessedFailure(),
-        ),
+        const Left(ExpenseAlreadyProcessedFailure()),
       );
     }
 

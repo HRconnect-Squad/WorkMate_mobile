@@ -1,9 +1,9 @@
 import 'package:fpdart/fpdart.dart';
 import '../../../../../core/presentation/base_viewmodel/base_cubit.dart';
+import '../../../../../core/presentation/mapper/failure_ui_mapper.dart';
 import '../../../../../core/presentation/routes/config/app_state_notifier.dart';
 import '../../../domain/use_cases/complete_onboarding_use_case.dart';
 import 'on_boarding_state.dart';
-
 
 class OnboardingCubit extends BaseCubit<OnboardingState> {
   final CompleteOnboardingUseCase _completeOnboardingUseCase;
@@ -51,9 +51,9 @@ class OnboardingCubit extends BaseCubit<OnboardingState> {
         ));
         AuthStateNotifier.instance.setOnboardingCompleted();
       },
-      onError: (error) => updateState((s) => s.copyWith(
+      onError: (failure) => updateState((s) => s.copyWith(
         status: OnboardingStatus.error,
-        errorMessage: error.message,
+        errorMessage: FailureUiMapper.map(failure),
       )),
     );
   }

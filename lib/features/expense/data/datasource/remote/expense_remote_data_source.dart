@@ -20,7 +20,7 @@ abstract class ExpensesRemoteDataSource {
     required UpdateExpenseRequestDto request,
   });
 
-  Future<void> deleteExpense(int id);
+  Future<bool> deleteExpense(int id);
 
   Future<ReceiptUploadResponseDto> uploadReceipt(String filePath);
 }

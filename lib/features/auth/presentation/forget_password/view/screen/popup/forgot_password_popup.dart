@@ -1,16 +1,15 @@
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:workmate/core/di/injection_container.dart';
+import 'package:workmate/core/di/core_di_container.dart';
 import 'package:workmate/features/auth/presentation/forget_password/logic/forgot_password_cubit.dart';
 import 'package:workmate/features/auth/presentation/forget_password/logic/forgot_password_state.dart';
-import 'package:workmate/features/auth/presentation/reset_password/view/screen/popup/verify_otp_popup.dart';
+import 'package:workmate/features/auth/presentation/forget_password/view/screen/popup/verify_forget_password_otp_popup.dart';
 import 'package:iconsax/iconsax.dart';
 import '../../../../../../../core/presentation/design_system/components/popups/custom_popup.dart';
 import '../../../../../../../core/presentation/design_system/theme/helper/popup_helper.dart';
 import '../../../../../../../core/presentation/design_system/theme/helper/snackbar_helper.dart';
 import '../../../../../../../core/presentation/design_system/theme/helper/theme_extention.dart';
-import '../../../../../domain/entity/auth_type.dart';
 
 
 class ForgotPasswordPopup extends StatelessWidget {
@@ -37,10 +36,9 @@ class ForgotPasswordPopup extends StatelessWidget {
       listener: (context, state) {
         if (state.isSuccess && state.successIdentifier != null) {
           Navigator.of(context).pop();
-          VerifyOtpPopup.show(
+          VerifyForgotPasswordOtpPopup.show(
             context,
             identifier: state.successIdentifier!,
-            loginType: AuthType.email,
           );
         }
 

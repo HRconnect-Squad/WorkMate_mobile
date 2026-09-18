@@ -13,6 +13,7 @@ class LoginState extends Equatable {
   final String? apiError;
   final bool rememberMe;
   final String? savedIdentifier;
+  final String? unverifiedIdentifier;
 
   const LoginState({
     this.identifier = '',
@@ -26,12 +27,15 @@ class LoginState extends Equatable {
     this.apiError,
     this.rememberMe = false,
     this.savedIdentifier,
+    this.unverifiedIdentifier,
   });
 
   bool get isFormValid =>
       identifier.trim().isNotEmpty && password.isNotEmpty;
 
   String get fullPhoneNumber => '+$countryCode$identifier';
+
+  bool get needsVerification => unverifiedIdentifier != null;
 
   LoginState copyWith({
     String? identifier,
@@ -45,9 +49,11 @@ class LoginState extends Equatable {
     String? apiError,
     bool? rememberMe,
     String? savedIdentifier,
+    String? unverifiedIdentifier,
     bool clearIdentifierError = false,
     bool clearPasswordError = false,
     bool clearApiError = false,
+    bool clearUnverifiedIdentifier = false,
   }) {
     return LoginState(
       identifier: identifier ?? this.identifier,
@@ -65,6 +71,9 @@ class LoginState extends Equatable {
       apiError: clearApiError ? null : (apiError ?? this.apiError),
       rememberMe: rememberMe ?? this.rememberMe,
       savedIdentifier: savedIdentifier ?? this.savedIdentifier,
+      unverifiedIdentifier: clearUnverifiedIdentifier
+          ? null
+          : (unverifiedIdentifier ?? this.unverifiedIdentifier),
     );
   }
 
@@ -81,5 +90,6 @@ class LoginState extends Equatable {
     apiError,
     rememberMe,
     savedIdentifier,
+    unverifiedIdentifier,
   ];
 }
