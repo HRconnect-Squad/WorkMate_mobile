@@ -3,7 +3,6 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
 import 'package:workmate/core/presentation/routes/route_names.dart';
 import 'package:workmate/features/auth/presentation/on_boarding/logic/on_boarding_cubit.dart';
-import 'package:workmate/features/expense/presentation/view/screen/expenses_screen.dart';
 import 'package:workmate/features/home/presentation/view/home_screen.dart';
 import 'package:workmate/core/di/core_di_container.dart';
 import '../../../features/auth/presentation/login/logic/login_cubit.dart';
@@ -11,8 +10,10 @@ import '../../../features/auth/presentation/login/view/screen/login_screen.dart'
 import '../../../features/auth/presentation/on_boarding/view/on_boarding_page.dart';
 import '../../../features/auth/presentation/register/signup/logic/sign_up_cubit.dart';
 import '../../../features/auth/presentation/register/signup/view/screen/sign_up_screen.dart';
-import '../../../features/expense/presentation/logic/expenses_cubit.dart';
-import '../../../features/expense/presentation/view/screen/submit_expense_screen.dart';
+import '../../../features/expense/presentation/submit/logic/submit_expense_cubit.dart';
+import '../../../features/expense/presentation/submit/view/screen/submit_expense_screen.dart';
+import '../../../features/expense/presentation/summary/logic/expenses_summary_cubit.dart';
+import '../../../features/expense/presentation/summary/view/screen/expenses_summary_screen.dart';
 import '../../../features/leave/presentation/submit/logic/submit_leave_cubit.dart';
 import '../../../features/leave/presentation/submit/view/screen/submit_leave_screen.dart';
 import '../../../features/leave/presentation/summary/logic/leave_summary_cubit.dart';
@@ -125,8 +126,8 @@ final GoRouter router = GoRouter(
     GoRoute(
       path: RouteNames.submitExpense,
       name: 'submit_expense',
-      builder: (context, state) => BlocProvider.value(
-        value: state.extra as ExpensesCubit,
+      builder: (context, state) => BlocProvider(
+        create: (_) => sl<SubmitExpenseCubit>(),
         child: const SubmitExpenseScreen(),
       ),
     ),
@@ -190,8 +191,9 @@ final GoRouter router = GoRouter(
               path: RouteNames.expenseScreen,
               name: 'expense',
               builder: (context, state) => BlocProvider(
-                  create: (_) => sl<ExpensesCubit>()..loadExpenses(),
-                  child: const ExpensesScreen()),
+                create: (_) => sl<ExpensesSummaryCubit>()..loadExpenses(),
+                child: const ExpensesSummaryScreen(),
+              ),
             ),
           ],
         ),

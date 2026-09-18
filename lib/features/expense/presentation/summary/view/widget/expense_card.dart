@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
-import '../../../../../../core/presentation/design_system/components/expense_history_card.dart';
-import '../../../../../../core/presentation/design_system/theme/helper/theme_extention.dart';
-import '../../../domain/entity/expense.dart';
-import '../../../domain/entity/expense_category.dart';
+import '../../../../../../../core/presentation/design_system/components/expense_history_card.dart';
+import '../../../../../../../core/presentation/design_system/theme/helper/theme_extention.dart';
+import '../../../../domain/entity/expense.dart';
+import '../../../../domain/entity/expense_category.dart';
 
 class ExpenseCard extends StatelessWidget {
   final Expense expense;

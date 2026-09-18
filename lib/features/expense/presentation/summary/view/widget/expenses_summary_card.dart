@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
-import '../../../../../../core/presentation/design_system/components/summary_card.dart';
-import '../../../../../../core/presentation/design_system/theme/helper/theme_extention.dart';
-import '../../../../../core/presentation/design_system/theme/helper/app_assets.dart';
+import '../../../../../../../core/presentation/design_system/components/summary_card.dart';
+import '../../../../../../../core/presentation/design_system/theme/helper/theme_extention.dart';
+import '../../../../../../core/presentation/design_system/theme/helper/app_assets.dart';
 
 class ExpensesSummaryCard extends StatelessWidget {
   const ExpensesSummaryCard({super.key});
