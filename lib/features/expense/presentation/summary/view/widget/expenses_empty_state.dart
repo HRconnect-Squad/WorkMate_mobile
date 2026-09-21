@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
-import '../../../../../../core/presentation/design_system/components/empty_state_card.dart';
-import '../../../../../../core/presentation/design_system/theme/helper/app_assets.dart';
-import '../../../domain/entity/expense_category.dart';
+import '../../../../../../../core/presentation/design_system/components/empty_state_card.dart';
+import '../../../../../../../core/presentation/design_system/theme/helper/app_assets.dart';
+import '../../../../domain/entity/expense_category.dart';
 
 class ExpensesEmptyState extends StatelessWidget {
   final ExpenseStatus? status;

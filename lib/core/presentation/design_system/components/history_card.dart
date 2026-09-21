@@ -1,15 +1,16 @@
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:iconsax/iconsax.dart';
+
 import '../model/history_card_model.dart';
 import '../theme/helper/app_assets.dart';
 import '../theme/helper/theme_extention.dart';
 
 class HistoryCard extends StatelessWidget {
-  final HistoryCardModel model;
+  final HistoryCardModel historyCardModel;
   final VoidCallback? onTap;
 
-  const HistoryCard({super.key, required this.model, this.onTap});
+  const HistoryCard({super.key, required this.historyCardModel, this.onTap});
 
   @override
   Widget build(BuildContext context) {
@@ -21,7 +22,7 @@ class HistoryCard extends StatelessWidget {
       child: Container(
         padding: const EdgeInsets.symmetric(vertical: 16, horizontal: 12),
         decoration: BoxDecoration(
-          color: model.backgroundColor ?? colors.white,
+          color: historyCardModel.backgroundColor ?? colors.white,
           borderRadius: BorderRadius.circular(10),
         ),
         child: Column(
@@ -29,28 +30,28 @@ class HistoryCard extends StatelessWidget {
           children: [
             Row(
               children: [
-                Icon(model.headerIcon, color: model.headerIconColor ?? colors.purple500, size: 20),
+                Icon(historyCardModel.headerIcon, color: historyCardModel.headerIconColor ?? colors.purple500, size: 20),
                 const SizedBox(width: 8),
                 Text(
-                  DateFormat('d MMMM y', context.locale.languageCode).format(model.date),
+                  DateFormat('d MMMM y', context.locale.languageCode).format(historyCardModel.date),
                   style: textTheme.titleSmallFont,
                 ),
                 const Spacer(),
-                if (model.actions.isNotEmpty) _KebabMenu(actions: model.actions),
+                if (historyCardModel.actions.isNotEmpty) _KebabMenu(actions: historyCardModel.actions),
               ],
             ),
             const SizedBox(height: 12),
             _infoRow(context),
-            if (model.statusCard != null &&
-                model.dateAddedStatus != null &&
-                model.statusAddedByName != null) ...[
+            if (historyCardModel.statusCard != null &&
+                historyCardModel.dateAddedStatus != null &&
+                historyCardModel.statusAddedByName != null) ...[
               const SizedBox(height: 12),
               _statusRow(context),
             ],
-            if (model.additionalNote != null && model.additionalNote!.isNotEmpty) ...[
+            if (historyCardModel.additionalNote != null && historyCardModel.additionalNote!.isNotEmpty) ...[
               const SizedBox(height: 8),
               Text(
-                model.additionalNote!,
+                historyCardModel.additionalNote!,
                 style: textTheme.labelMediumFont.copyWith(color: colors.error),
               ),
             ],
@@ -73,9 +74,9 @@ class HistoryCard extends StatelessWidget {
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
-          Expanded(child: _InfoColumn(item: model.infoItems[0])),
+          Expanded(child: _InfoColumn(item: historyCardModel.infoItems[0])),
           const Spacer(),
-          Expanded(child: _InfoColumn(item: model.infoItems[1])),
+          Expanded(child: _InfoColumn(item: historyCardModel.infoItems[1])),
         ],
       ),
     );
@@ -84,8 +85,8 @@ class HistoryCard extends StatelessWidget {
   Widget _statusRow(BuildContext context) {
     final textTheme = context.textTheme;
     final colors = context.colors;
-    final isApproved = model.statusCard == StatusCard.approved;
-    final formattedDate = DateFormat('d MMM y', context.locale.languageCode).format(model.dateAddedStatus!);
+    final isApproved = historyCardModel.statusCard == StatusCard.approved;
+    final formattedDate = DateFormat('d MMM y', context.locale.languageCode).format(historyCardModel.dateAddedStatus!);
 
     return Row(
       children: [
@@ -99,11 +100,11 @@ class HistoryCard extends StatelessWidget {
         Text('by'.tr(), style: textTheme.labelMediumFont.copyWith(color: colors.textPrimary)),
         const SizedBox(width: 6),
         CircleAvatar(
-          backgroundImage: AssetImage(model.statusImage ?? AppAssets.profilePlaceholder),
+          backgroundImage: AssetImage(historyCardModel.statusImage ?? AppAssets.profilePlaceholder),
           radius: 12,
         ),
         const SizedBox(width: 4),
-        Text(model.statusAddedByName!, style: textTheme.labelMediumFont.copyWith(color: colors.textPrimary)),
+        Text(historyCardModel.statusAddedByName!, style: textTheme.labelMediumFont.copyWith(color: colors.textPrimary)),
       ],
     );
   }

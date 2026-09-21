@@ -111,7 +111,7 @@ class LeaveSummaryScreen extends StatelessWidget {
         itemCount: state.currentRequests.length,
         itemBuilder: (context, index) {
           final request = state.currentRequests[index];
-          return LeaveRequestCard(
+          return LeaveHistoryCard(
             request: request,
             onCancel: request.isCancellable
                 ? () => _onCancelTap(context, request)

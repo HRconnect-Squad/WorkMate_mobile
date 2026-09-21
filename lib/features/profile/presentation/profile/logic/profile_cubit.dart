@@ -109,6 +109,7 @@ class ProfileCubit extends BaseCubit<ProfileState> {
         updateState(
               (s) => s.copyWith(
             isLoading: false,
+            hasLoaded: true,
             profile: profile,
             isProfileNotCompleted: false,
             userIdentifier: profile.phone ?? profile.emailAddress ?? cachedIdentifier,
@@ -121,6 +122,7 @@ class ProfileCubit extends BaseCubit<ProfileState> {
         updateState(
               (s) => s.copyWith(
             isLoading: false,
+            hasLoaded: true,
             error: isNotCompleted ? null : ProfileFailureUiMapper.map(failure),
             isProfileNotCompleted: isNotCompleted,
           ),

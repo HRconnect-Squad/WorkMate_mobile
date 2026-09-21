@@ -1,8 +1,8 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:iconsax/iconsax.dart';
-import '../../../../../../core/presentation/design_system/theme/helper/dashed_border_painter.dart';
-import '../../../../../../core/presentation/design_system/theme/helper/theme_extention.dart';
+import '../../../../../../../core/presentation/design_system/theme/helper/dashed_border_painter.dart';
+import '../../../../../../../core/presentation/design_system/theme/helper/theme_extention.dart';
 
 class ReceiptUploadWidget extends StatelessWidget {
   final String? receiptUrl;

@@ -6,6 +6,7 @@ class ProfileState extends Equatable {
   final EmployeeProfile? profile;
   final String? userIdentifier;
   final bool isLoading;
+  final bool hasLoaded;
   final bool isProfileNotCompleted;
   final String? error;
 
@@ -26,6 +27,7 @@ class ProfileState extends Equatable {
     this.profile,
     this.userIdentifier,
     this.isLoading = false,
+    this.hasLoaded = false,
     this.isProfileNotCompleted = false,
     this.error,
     this.firstName = '',
@@ -48,6 +50,7 @@ class ProfileState extends Equatable {
     EmployeeProfile? profile,
     String? userIdentifier,
     bool? isLoading,
+    bool? hasLoaded,
     bool? isProfileNotCompleted,
     String? error,
     bool? isUploadingImage,
@@ -82,6 +85,7 @@ class ProfileState extends Equatable {
       profile: profile ?? this.profile,
       userIdentifier: userIdentifier ?? this.userIdentifier,
       isLoading: isLoading ?? this.isLoading,
+      hasLoaded: hasLoaded ?? this.hasLoaded,
       isProfileNotCompleted: isProfileNotCompleted ?? this.isProfileNotCompleted,
       error: clearError ? null : (error ?? this.error),
       firstName: firstName ?? this.firstName,
