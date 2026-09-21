@@ -22,6 +22,10 @@ class PdfExportService {
       final pdfBytes = await _buildPdf(imageBytes);
       final filePath = await _saveToDevice(pdfBytes, fileName);
       return Right(filePath);
+    } on StoragePermissionDeniedForeverException catch (e) {
+      return Left(StoragePermissionDeniedForeverFailure(message: e.message));
+    } on StoragePermissionDeniedException catch (e) {
+      return Left(StoragePermissionDeniedFailure(message: e.message));
     } on FileException catch (e) {
       return Left(FileFailure(message: e.message));
     } catch (e) {
@@ -72,14 +76,16 @@ class PdfExportService {
   }
 
   static Future<String> _saveToDevice(Uint8List bytes, String fileName) async {
-    final status = await Permission.storage.request();
+    PermissionStatus status = await Permission.manageExternalStorage.status;
+    if (status.isDenied) {
+      status = await Permission.manageExternalStorage.request();
+    }
+
     if (status.isPermanentlyDenied) {
-      throw const FileException(
-        message: 'Storage permission permanently denied. Enable it from app settings.',
-      );
+      throw const StoragePermissionDeniedForeverException();
     }
     if (status.isDenied) {
-      throw const FileException(message: 'Storage permission is required to save the PDF.');
+      throw const StoragePermissionDeniedException();
     }
 
     Directory? dir;

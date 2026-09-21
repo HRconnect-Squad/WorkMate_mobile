@@ -39,30 +39,28 @@ class DetailsHistoryCardCubit extends BaseCubit<DetailsHistoryCardState> {
       ),
     );
 
-    final result = await PdfExportService.exportFromWidget(
-      captureKey: captureKey,
-      fileName: 'attendance_${state.details!.date}',
+    await execute(
+      call: () => PdfExportService.exportFromWidget(
+        captureKey: captureKey,
+        fileName: 'attendance_${state.details!.date}',
+      ),
+      onSuccess: (filePath) => _onExportSuccess(filePath),
+      onError: (failure) => _onExportError(failure.message),
     );
-
-    if (result.isRight()) {
-      _onExportSuccess(result);
-    } else {
-      _onExportError(result);
-    }
   }
 
-  void _onExportSuccess(dynamic result) {
+  void _onExportSuccess(String filePath) {
     updateState((s) => s.copyWith(
       isExportingPdf: false,
       pdfExportSuccess: true,
-      pdfFilePath: result.filePath,
+      pdfFilePath: filePath,
     ));
   }
 
-  void _onExportError(dynamic result) {
+  void _onExportError(String errorMessage) {
     updateState((s) => s.copyWith(
       isExportingPdf: false,
-      pdfError: result.errorMessage,
+      pdfError: errorMessage,
     ));
   }
 }

@@ -140,6 +140,19 @@ class LocationPermissionDeniedForeverException extends AppException {
   });
 }
 
+class StoragePermissionDeniedException extends AppException {
+  const StoragePermissionDeniedException({
+    super.message = 'Storage permission is required to save the PDF.',
+  });
+}
+
+class StoragePermissionDeniedForeverException extends AppException {
+  const StoragePermissionDeniedForeverException({
+    super.message =
+        'Storage permission permanently denied. Enable it from app settings.',
+  });
+}
+
 class UnknownException extends AppException {
   const UnknownException({super.message = 'An unexpected error occurred'})
       : super(

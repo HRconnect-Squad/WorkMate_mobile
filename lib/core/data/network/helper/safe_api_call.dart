@@ -57,6 +57,8 @@ mixin SafeApiCall {
       LocationServiceDisabledException() => LocationServiceDisabledFailure(message: exception.message),
       LocationPermissionDeniedException() => LocationPermissionDeniedFailure(message: exception.message),
       LocationPermissionDeniedForeverException() => LocationPermissionDeniedForeverFailure(message: exception.message),
+      StoragePermissionDeniedException() => StoragePermissionDeniedFailure(message: exception.message),
+      StoragePermissionDeniedForeverException() => StoragePermissionDeniedForeverFailure(message: exception.message),
       UnknownException() => UnknownFailure(message: exception.message),
     };
   }

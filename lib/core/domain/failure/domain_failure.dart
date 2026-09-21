@@ -93,3 +93,14 @@ class LocationPermissionDeniedForeverFailure extends Failure {
   const LocationPermissionDeniedForeverFailure(
       {super.message = 'Location permission permanently denied'});
 }
+
+class StoragePermissionDeniedFailure extends Failure {
+  const StoragePermissionDeniedFailure(
+      {super.message = 'Storage permission is required to save the PDF.'});
+}
+
+class StoragePermissionDeniedForeverFailure extends Failure {
+  const StoragePermissionDeniedForeverFailure(
+      {super.message =
+          'Storage permission permanently denied. Enable it from app settings.'});
+}
