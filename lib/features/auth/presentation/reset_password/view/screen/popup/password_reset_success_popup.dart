@@ -1,8 +1,10 @@
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
+import 'package:go_router/go_router.dart';
 import 'package:iconsax/iconsax.dart';
-
 import '../../../../../../../core/presentation/design_system/components/popups/custom_popup.dart';
 import '../../../../../../../core/presentation/design_system/theme/helper/popup_helper.dart';
+import '../../../../../../../core/presentation/routes/route_names.dart';
 
 
 class PasswordResetSuccessPopup extends StatelessWidget {
@@ -21,11 +23,12 @@ class PasswordResetSuccessPopup extends StatelessWidget {
   Widget build(BuildContext context) {
     return CustomPopup.singleActionPopup(
       icon: Iconsax.security_safe4,
-      title: 'Password Has Been Created',
-      description: 'To log in to your account, click the Sign in button and enter your email along with your new password.',
-      primaryButtonText: 'Sign In',
+      title: 'password_reset_success_title'.tr(),
+      description: 'password_reset_success_description'.tr(),
+      primaryButtonText: 'continue'.tr(),
       primaryButtonOnPressed: () {
         Navigator.of(context).pop();
+        context.go(RouteNames.homeScreen);
       },
     );
   }

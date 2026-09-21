@@ -2,7 +2,7 @@ import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:iconsax/iconsax.dart';
-import '../../../../../../core/di/injection_container.dart';
+import '../../../../../../core/di/core_di_container.dart';
 import '../../../../../../core/presentation/design_system/components/popups/custom_popup.dart';
 import '../../../../../../core/presentation/design_system/theme/helper/popup_helper.dart';
 import '../../../../../../core/presentation/design_system/theme/helper/snackbar_helper.dart';

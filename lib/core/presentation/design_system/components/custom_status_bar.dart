@@ -124,3 +124,118 @@ class _CustomStatusBarState extends State<CustomStatusBar> {
     );
   }
 }
+
+enum TaskStatusEnum { all, inProgress, finish }
+
+class TaskStatusBarFactory extends StatelessWidget {
+  final TaskStatusEnum selected;
+  final ValueChanged<TaskStatusEnum> onChanged;
+  final num allCount, inProgressCount, finishCount;
+
+  const TaskStatusBarFactory.create({
+    super.key,
+    required this.selected,
+    required this.onChanged,
+    required this.allCount,
+    required this.inProgressCount,
+    required this.finishCount,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      padding: EdgeInsets.all(4),
+      decoration: BoxDecoration(
+        color: context.colors.white,
+        borderRadius: BorderRadius.circular(100),
+      ),
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        children: [
+          Expanded(
+            child: _statusItem(
+              context: context,
+              title: "all".tr(),
+              count: allCount,
+              type: TaskStatusEnum.all,
+            ),
+          ),
+          Expanded(
+            child: _statusItem(
+              context: context,
+              title: "in_progress".tr(),
+              count: inProgressCount,
+              type: TaskStatusEnum.inProgress,
+            ),
+          ),
+          Expanded(
+            child: _statusItem(
+              context: context,
+              title: "finish".tr(),
+              count: finishCount,
+              type: TaskStatusEnum.finish,
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+
+  Widget _statusItem({
+    required BuildContext context,
+    required String title,
+    required num count,
+    required TaskStatusEnum type,
+  }) {
+    final bool isSelected = selected == type;
+    return InkWell(
+      borderRadius: BorderRadius.circular(100),
+      onTap: () {
+        if (selected != type) onChanged(type);
+      },
+      child: Container(
+        padding: EdgeInsets.symmetric(vertical: 8, horizontal: 21),
+        decoration: BoxDecoration(
+          borderRadius: BorderRadius.circular(100),
+          color: isSelected ? context.colors.purple500 : context.colors.white,
+        ),
+        child: FittedBox(
+          fit: BoxFit.scaleDown,
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.center,
+            spacing: 8,
+            children: [
+              Text(
+                title,
+                style: context.textTheme.labelMediumFont.copyWith(
+                  color: isSelected
+                      ? context.colors.white
+                      : context.colors.textSecondary,
+                ),
+              ),
+              if (count > 0)
+                ClipOval(
+                  child: Container(
+                    padding: EdgeInsets.all(4),
+                    decoration: BoxDecoration(
+                      shape: BoxShape.circle,
+                      color: isSelected
+                          ? context.colors.error500
+                          : context.colors.gray300,
+                    ),
+                    child: Text(
+                      count.toString(),
+                      style: context.textTheme.labelSmallFont.copyWith(
+                        fontSize: 10,
+                        color: context.colors.white,
+                      ),
+                    ),
+                  ),
+                ),
+            ],
+          ),
+        ),
+      ),
+    );
+  }
+}

@@ -1,7 +1,10 @@
+import '../../../../../../core/domain/failure/domain_failure.dart';
 import '../../../../../../core/presentation/base_viewmodel/base_cubit.dart';
+import '../../../../../../core/presentation/mapper/failure_ui_mapper.dart';
 import '../../../../../../core/presentation/util/validator.dart';
 import '../../../../domain/entity/auth_type.dart';
 import '../../../../domain/entity/register.dart';
+import '../../../../domain/failures/failure.dart';
 import '../../../../domain/use_cases/register_use_case.dart';
 import 'sign_up_state.dart';
 
@@ -82,15 +85,38 @@ class SignUpCubit extends BaseCubit<SignUpState> {
           isRegistered: true,
         ));
       },
-      onError: (error) {
-        updateState((s) => s.copyWith(
-          isLoading: false,
-          apiError: error.message,
-        ));
+      onError: (failure) {
+        switch (failure) {
+          case EmailAlreadyExistsFailure():
+            updateState((s) => s.copyWith(
+              isLoading: false,
+              emailError: failure.message,
+            ));
+
+          case PhoneAlreadyExistsFailure():
+            updateState((s) => s.copyWith(
+              isLoading: false,
+              phoneError: failure.message,
+            ));
+
+          case ValidationFailure(:final errors):
+            updateState((s) => s.copyWith(
+              isLoading: false,
+              emailError: errors?.firstErrorFor('email'),
+              phoneError: errors?.firstErrorFor('phone'),
+              passwordError: errors?.firstErrorFor('password'),
+              confirmPasswordError: errors?.firstErrorFor('password_confirmation'),
+            ));
+
+          default:
+            updateState((s) => s.copyWith(
+              isLoading: false,
+              apiError: FailureUiMapper.map(failure),
+            ));
+        }
       },
     );
   }
-
 
   bool _validate() {
     bool isValid = true;
