@@ -5,8 +5,6 @@ import '../../domain/entity/task_entity.dart';
 import '../../utils/parsing.dart';
 
 class TaskMapper {
-  /// Home-card variant: avatars come from `assignees` (not comments) and the
-  /// real server progress is shown.
   static TaskModel toUiHomeTask(TaskEntity entity) => TaskModel(
     id: entity.id,
     title: entity.title,
