@@ -5,33 +5,38 @@ import '../theme/helper/theme_extention.dart';
 enum TaskStatus {
   inProgress,
   review,
-  done;
+  done,
+  cancelled;
 
   Color colorStatus(BuildContext context) {
     final colors = context.colors;
     return switch (this) {
       TaskStatus.inProgress => colors.gray200,
       TaskStatus.review => colors.yellow50,
-      TaskStatus.done => colors.success50
+      TaskStatus.done => colors.success50,
+      TaskStatus.cancelled => colors.error50
     };
   }
 
   String get name => switch (this) {
     TaskStatus.inProgress => "In Progress",
     TaskStatus.review => "Review",
-    TaskStatus.done => "Done"
+    TaskStatus.done => "Done",
+    TaskStatus.cancelled => "Cancelled"
   };
 
   String get iconStatus =>switch (this) {
     TaskStatus.inProgress => AppAssets.taskStatusInProgress,
     TaskStatus.review => AppAssets.taskStatusReview,
     TaskStatus.done => AppAssets.taskStatusDone,
+    TaskStatus.cancelled => AppAssets.taskStatusReview,
 
   };
 
   double get status => switch (this) {
     TaskStatus.inProgress => 0.35,
     TaskStatus.review => 0.60,
-    TaskStatus.done => 1.0
+    TaskStatus.done => 1.0,
+    TaskStatus.cancelled => 0.0
   };
 }

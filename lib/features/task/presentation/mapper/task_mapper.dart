@@ -5,6 +5,19 @@ import '../../domain/entity/task_entity.dart';
 import '../../utils/parsing.dart';
 
 class TaskMapper {
+  static TaskModel toUiHomeTask(TaskEntity entity) => TaskModel(
+    id: entity.id,
+    title: entity.title,
+    priority: entity.priority,
+    status: entity.status,
+    date: formatDate(entity.dueDate ?? entity.createdAt),
+    commentsCount: entity.commentsCount,
+    attachmentsCount: entity.attachmentsCount,
+    assigneeAvatarUrls: entity.assignees.map((a) => a.avatarUrl).toList(),
+    assigneesCount: entity.assigneesCount,
+    progress: entity.progressPercentage / 100,
+  );
+
   static TaskModel toUiTaskState(TaskEntity entity) => TaskModel(
     id: entity.id,
     title: entity.title,

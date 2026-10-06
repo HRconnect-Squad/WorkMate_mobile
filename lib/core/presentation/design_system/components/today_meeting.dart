@@ -12,27 +12,25 @@ import 'horizontal_stacked_avatars.dart';
 
 class TodayMeeting extends StatelessWidget {
   final List<MeetingDataModel> meetings;
-  const TodayMeeting({super.key, required this.meetings});
+  final ValueChanged<MeetingDataModel>? onJoin;
+  const TodayMeeting({super.key, required this.meetings, this.onJoin});
 
   @override
   Widget build(BuildContext context) {
-    return Padding(
-      padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 16),
-      child: Container(
-        width: double.infinity,
-        decoration: BoxDecoration(
-          borderRadius: BorderRadius.circular(8),
-          color: context.colors.baseWhite,
-        ),
-        padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
-        child: Column(
-          children: [
-            _buildHeader(context),
-            if (meetings.isNotEmpty)
-              ...meetings.map((meeting) => _buildMeetingCard(context, meeting)),
-            if (meetings.isEmpty) _buildEmptyState(context),
-          ],
-        ),
+    return Container(
+      width: double.infinity,
+      decoration: BoxDecoration(
+        borderRadius: BorderRadius.circular(8),
+        color: context.colors.white,
+      ),
+      padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
+      child: Column(
+        children: [
+          _buildHeader(context),
+          if (meetings.isNotEmpty)
+            ...meetings.map((meeting) => _buildMeetingCard(context, meeting)),
+          if (meetings.isEmpty) _buildEmptyState(context),
+        ],
       ),
     );
   }
@@ -141,7 +139,7 @@ class TodayMeeting extends StatelessWidget {
       mainAxisAlignment: MainAxisAlignment.spaceBetween,
       children: [
         _buildAvatarsRow(context, meeting),
-        _buildJoinButton(context),
+        _buildJoinButton(context, meeting),
       ],
     );
   }
@@ -150,10 +148,10 @@ class TodayMeeting extends StatelessWidget {
     return Row(
       children: [
         HorizontalStackedAvatars(commenterImage: meeting.userImages),
-        if (meeting.userImages.length > 3) ...[
+        if (meeting.remainingParticipants > 0) ...[
           const SizedBox(width: 4),
           Text(
-            "+${meeting.userImages.length - 3}",
+            "+${meeting.remainingParticipants}",
             style: context.textTheme.bodySmallFont.copyWith(
               color: context.colors.black,
               fontWeight: FontWeight.w500,
@@ -164,7 +162,7 @@ class TodayMeeting extends StatelessWidget {
     );
   }
 
-  Widget _buildJoinButton(BuildContext context) {
+  Widget _buildJoinButton(BuildContext context, MeetingDataModel meeting) {
     return CustomPrimaryButton.filled(
       width: 80,
       textStyle: context.textTheme.labelSmallFont.copyWith(
@@ -174,7 +172,7 @@ class TodayMeeting extends StatelessWidget {
       backgroundColor: context.colors.purple500,
       padding: const EdgeInsets.symmetric(vertical: 6, horizontal: 8),
       borderRadius: 100,
-      onPressed: () {},
+      onPressed: onJoin == null ? () {} : () => onJoin!(meeting),
     );
   }
 }

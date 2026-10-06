@@ -319,5 +319,8 @@
   "insufficient_leave_balance_with_remaining": "لديك {} يوم/أيام فقط من رصيد الإجازة المتبقي.",
   "leave_request_not_found_error": "تعذر العثور على طلب الإجازة هذا.",
   "leave_overlap_error": "لديك بالفعل طلب إجازة لهذه الفترة.",
-  "leave_already_processed_error": "تمت معالجة طلب الإجازة هذا بالفعل ولا يمكن تعديله."
+  "leave_already_processed_error": "تمت معالجة طلب الإجازة هذا بالفعل ولا يمكن تعديله.",
+  "my_work_summary": "ملخص عملي",
+  "work_summary_subtitle": "نشاط المهام والحضور لليوم",
+  "could_not_open_link": "تعذر فتح رابط الاجتماع"
 }

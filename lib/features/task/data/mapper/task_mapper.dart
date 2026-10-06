@@ -1,5 +1,6 @@
 import '../../../../core/presentation/design_system/model/task_priority_enums.dart';
 import '../../../../core/presentation/design_system/model/task_status_enums.dart';
+import '../../domain/entity/task_assignee_entity.dart';
 import '../../domain/entity/task_entity.dart';
 import '../../domain/entity/task_detail_entity.dart';
 import '../../domain/entity/comment_entity.dart';
@@ -22,6 +23,15 @@ class TaskMapper {
     createdAt: dto.createdAt,
     commentsCount: dto.commentsCount,
     commentAvatarUrls: dto.comments.map((c) => c.profileImage).toList(),
+    attachmentsCount: dto.attachmentsCount,
+    assignees: dto.assignees
+        .map((a) => TaskAssigneeEntity(
+              id: a.id,
+              name: a.name,
+              avatarUrl: a.avatarUrl,
+            ))
+        .toList(),
+    assigneesCount: dto.assigneesCount,
   );
 
   static TaskDetailEntity toDomainDetail(TaskDetailDto dto) => TaskDetailEntity(
@@ -61,6 +71,7 @@ class TaskMapper {
     'pending' => TaskStatus.review,
     'in_progress' => TaskStatus.inProgress,
     'completed' => TaskStatus.done,
+    'cancelled' => TaskStatus.cancelled,
     _ => TaskStatus.inProgress
   };
 }

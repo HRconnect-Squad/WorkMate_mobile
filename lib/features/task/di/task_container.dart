@@ -6,6 +6,7 @@ import '../data/repository_imp/task_repository_impl.dart';
 import '../domain/repository/task_repository.dart';
 import '../domain/use_cases/add_comment_use_case.dart';
 import '../domain/use_cases/get_task_detail_use_case.dart';
+import '../domain/use_cases/get_tasks_by_due_date_use_case.dart';
 import '../domain/use_cases/get_tasks_use_case.dart';
 import '../presentation/login/task_cubit.dart';
 import '../presentation/login/task_detail_cubit.dart';
@@ -20,6 +21,7 @@ Future<void> initTask() async {
   );
 
   sl.registerLazySingleton(() => GetTasksUseCase(sl<TaskRepository>()));
+  sl.registerLazySingleton(() => GetTasksByDueDateUseCase(sl<TaskRepository>()));
   sl.registerLazySingleton(() => GetTaskDetailUseCase(sl<TaskRepository>()));
   sl.registerLazySingleton(() => AddCommentUseCase(sl<TaskRepository>()));
 

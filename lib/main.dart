@@ -12,6 +12,7 @@ import 'features/attendance/di/attendance_container.dart';
 import 'features/auth/di/auth_di_container.dart';
 import 'features/auth/di/onboarding_di_container.dart';
 import 'features/expense/di/expense_di_container.dart';
+import 'features/home/di/home_di_container.dart';
 import 'features/profile/di/profile_di_container.dart';
 import 'features/task/di/task_container.dart';
 
@@ -29,6 +30,7 @@ void main() async {
   await initAttendance();
   await initLeave();
   await initTask();
+  await initHome();
   await sl<AppStartupService>().initialize();
 
   FlutterNativeSplash.remove();

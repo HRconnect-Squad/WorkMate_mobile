@@ -1,3 +1,5 @@
+import 'dart:math';
+
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:workmate/core/presentation/design_system/components/card_header.dart';
@@ -38,7 +40,7 @@ class ProgressBar extends StatelessWidget {
       borderRadius: BorderRadius.circular(4),
       child: LinearProgressIndicator(
         value: taskStatus.clamp(0.0, 1.0),
-        backgroundColor: context.colors.gray200,
+        backgroundColor: context.colors.purple400,
         borderRadius: BorderRadius.circular(4),
         color: statusColor,
         minHeight: 4,
@@ -69,11 +71,20 @@ Widget _buildEmptyTaskCard(BuildContext context) {
   );
 }
 
+String _remainingLabel(TaskModel task) {
+  final avatars = task.assigneeAvatarUrls;
+  final remaining = avatars == null
+      ? task.commentsCount - 3
+      : max(0, task.assigneesCount - avatars.length);
+  return remaining > 0 ? "+$remaining" : '';
+}
+
 Widget _buildContentTaskCard(BuildContext context, TaskModel taskState) {
   return Container(
     padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 12),
     decoration: BoxDecoration(
-      color: context.colors.white,
+      color: context.colors.gray100,
+      border: Border.all(color: context.colors.gray200),
       borderRadius: BorderRadius.circular(12),
     ),
     child: Column(
@@ -98,6 +109,7 @@ Widget _buildContentTaskCard(BuildContext context, TaskModel taskState) {
               overflow: TextOverflow.ellipsis,
               style: context.textTheme.titleSmallFont.copyWith(
                 color: ExtensionColors.cardTitle,
+                fontSize: 12
               ),
             ),
           ],
@@ -129,7 +141,7 @@ Widget _buildContentTaskCard(BuildContext context, TaskModel taskState) {
         ),
         ProgressBar(
           statusColor: context.colors.purple500,
-          taskStatus: taskState.status.status,
+          taskStatus: taskState.progress ?? taskState.status.status,
         ),
         Row(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -138,12 +150,11 @@ Widget _buildContentTaskCard(BuildContext context, TaskModel taskState) {
               spacing: 4,
               children: [
                 HorizontalStackedAvatars(
-                  commenterImage: taskState.commentAvatarUrls,
+                  commenterImage:
+                      taskState.assigneeAvatarUrls ?? taskState.commentAvatarUrls,
                 ),
                 Text(
-                  taskState.commentsCount > 3
-                      ? "+${taskState.commentsCount - 3}"
-                      : '',
+                  _remainingLabel(taskState),
                   style: context.textTheme.bodySmallFont.copyWith(
                     color: context.colors.black,
                   ),
@@ -179,6 +190,24 @@ Widget _buildContentTaskCard(BuildContext context, TaskModel taskState) {
                   borderRadius: BorderRadius.circular(100),
                   image: AppAssets.message,
                 ),
+                if (taskState.attachmentsCount > 0) ...[
+                  const SizedBox(width: 6),
+                  CustomChips(
+                    title: taskState.attachmentsCount.toString(),
+                    color: context.colors.white,
+                    style: context.textTheme.labelSmallFont.copyWith(
+                      color: context.colors.textPrimary,
+                    ),
+                    padding: const EdgeInsets.symmetric(
+                      horizontal: 8,
+                      vertical: 6,
+                    ),
+                    borderRadius: BorderRadius.circular(100),
+                    icon: Icons.attach_file_rounded,
+                    iconSize: 14,
+                    iconColor: context.colors.gray300,
+                  ),
+                ],
               ],
             ),
           ],

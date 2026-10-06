@@ -14,6 +14,9 @@ class ApiConstants {
   static const String localDataTokenKey = 'token';
 
   static const String tasks = '/api/tasks';
+  static const String messagesInbox = '/api/messages/inbox';
+  static const String notifications = '/api/notifications';
+  static const String meetingsToday = '/api/meetings/today';
   static String taskById(int taskId) => '/api/tasks/$taskId';
   static String taskComments(int taskId) =>
       '/api/tasks/$taskId/comments';

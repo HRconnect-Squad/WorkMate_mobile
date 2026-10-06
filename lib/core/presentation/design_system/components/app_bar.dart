@@ -32,6 +32,8 @@ class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
   final VoidCallback? onProfilePressed;
   final bool isVerified;
   final bool safeArea;
+  final int chatUnreadCount;
+  final int bellUnreadCount;
 
 
   const CustomAppBar({
@@ -64,6 +66,8 @@ class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
     this.onProfilePressed,
     this.isVerified = false,
     this.safeArea = false,
+    this.chatUnreadCount = 0,
+    this.bellUnreadCount = 0,
   });
 
   factory CustomAppBar.simple({
@@ -103,6 +107,8 @@ class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
     bool showBackButton = false,
     bool safeArea = false,
     VoidCallback? onProfilePressed,
+    int chatUnreadCount = 0,
+    int bellUnreadCount = 0,
   }) {
     return CustomAppBar(
       profileName: profileName,
@@ -119,6 +125,8 @@ class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
       isVerified: isVerified,
       safeArea: safeArea,
       onProfilePressed: onProfilePressed,
+      chatUnreadCount: chatUnreadCount,
+      bellUnreadCount: bellUnreadCount,
     );
   }
 
@@ -259,6 +267,7 @@ class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
       _buildActionButton(
         icon: Icons.message_rounded,
         onPressed: onChatPressed,
+        unreadCount: chatUnreadCount,
         backgroundColor: actionBackgroundColor ?? context.colors.purple100,
         iconColor: actionIconColor ?? context.colors.primary,
       ),
@@ -266,6 +275,7 @@ class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
       _buildActionButton(
         icon: Icons.notifications_rounded,
         onPressed: onBellPressed,
+        unreadCount: bellUnreadCount,
         backgroundColor: context.colors.purple100,
         iconColor: context.colors.primary,
       ),
@@ -277,8 +287,9 @@ class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
     VoidCallback? onPressed,
     required Color backgroundColor,
     required Color iconColor,
+    int unreadCount = 0,
   }) {
-    return Container(
+    final button = Container(
       width: 40,
       height: 40,
       decoration: BoxDecoration(
@@ -291,6 +302,12 @@ class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
         padding: EdgeInsets.zero,
         constraints: const BoxConstraints(),
       ),
+    );
+
+    if (unreadCount <= 0) return button;
+    return Badge(
+      label: Text(unreadCount > 99 ? '99+' : unreadCount.toString()),
+      child: button,
     );
   }
 

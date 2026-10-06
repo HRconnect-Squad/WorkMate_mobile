@@ -46,6 +46,7 @@ dependencies:
   build_runner: ^2.7.0
   freezed: ^3.2.0
   json_serializable: ^6.11.1
+  url_launcher: ^6.3.3
 
 dev_dependencies:
   flutter_test:
@@ -62,7 +63,7 @@ flutter:
     - assets/images/
     - assets/translations/
     - assets/svgs/
-    - .env.example
+    - .env
 
   fonts:
     - family: Inter
