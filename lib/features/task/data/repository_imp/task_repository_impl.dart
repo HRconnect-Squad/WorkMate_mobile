@@ -4,6 +4,7 @@ import '../../../../core/domain/failure/domain_failure.dart';
 import '../../domain/entity/comment_entity.dart';
 import '../../domain/entity/task_detail_entity.dart';
 import '../../domain/entity/task_entity.dart';
+import '../../domain/entity/task_list_entity.dart';
 import '../../domain/repository/task_repository.dart';
 import '../mapper/task_mapper.dart';
 import '../remote/dto/add_comment_request_dto.dart';
@@ -20,6 +21,17 @@ class TaskRepositoryImpl with SafeApiCall implements TaskRepository {
     return safeApiCall(call: () async {
       final dtos = await _remote.getTasks();
       return dtos.map(TaskMapper.toDomainTask).toList();
+    });
+  }
+
+  @override
+  Future<Either<Failure, TaskListEntity>> getTasksByDueDate(String dueDate) {
+    return safeApiCall(call: () async {
+      final dto = await _remote.getTasksByDueDate(dueDate);
+      return TaskListEntity(
+        tasks: dto.tasks.map(TaskMapper.toDomainTask).toList(),
+        taskCount: dto.taskCount,
+      );
     });
   }
 

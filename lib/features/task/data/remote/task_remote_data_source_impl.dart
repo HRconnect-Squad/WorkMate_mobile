@@ -4,6 +4,7 @@ import 'dto/add_comment_request_dto.dart';
 import 'dto/comment_dto.dart';
 import 'dto/task_detail_dto.dart';
 import 'dto/task_dto.dart';
+import 'dto/task_list_dto.dart';
 import 'task_remote_data_source.dart';
 
 class TaskRemoteDataSourceImpl implements TaskRemoteDataSource {
@@ -22,6 +23,22 @@ class TaskRemoteDataSourceImpl implements TaskRemoteDataSource {
         .toList();
   }
 
+  @override
+  Future<TaskListDto> getTasksByDueDate(String dueDate) async {
+    final response = await _dioClient.get(
+      ApiConstants.tasks,
+      queryParameters: {'due_date': dueDate},
+    );
+    final data = response.data['data'] as Map<String, dynamic>;
+    final meta = response.data['meta'] as Map<String, dynamic>?;
+    final tasks = (data['tasks'] as List<dynamic>)
+        .map((e) => TaskDto.fromJson(e as Map<String, dynamic>))
+        .toList();
+    return TaskListDto(
+      tasks: tasks,
+      taskCount: meta?['task_count'] as int? ?? tasks.length,
+    );
+  }
 
   @override
   Future<TaskDetailDto> getTaskById(int id) async {

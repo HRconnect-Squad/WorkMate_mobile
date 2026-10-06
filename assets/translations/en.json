@@ -334,6 +334,8 @@
   "insufficient_leave_balance_with_remaining": "You only have {} day(s) of leave balance remaining.",
   "leave_request_not_found_error": "This leave request could not be found.",
   "leave_overlap_error": "You already have a leave request for this period.",
-  "leave_already_processed_error": "This leave request has already been processed and cannot be modified."
-
+  "leave_already_processed_error": "This leave request has already been processed and cannot be modified.",
+  "my_work_summary": "My Work Summary",
+  "work_summary_subtitle": "Today's task & presence activity",
+  "could_not_open_link": "Could not open the meeting link"
 }

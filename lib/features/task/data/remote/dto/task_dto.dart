@@ -1,5 +1,6 @@
 
 import 'assigned_user_dto.dart';
+import 'task_assignee_dto.dart';
 
 class TaskDto {
   final int id;
@@ -17,6 +18,8 @@ class TaskDto {
   final String createdAt;
   final String updatedAt;
   final List<TaskCommentAvatarDto> comments;
+  final List<TaskAssigneeDto> assignees;
+  final int assigneesCount;
 
   const TaskDto({
     required this.id,
@@ -34,6 +37,8 @@ class TaskDto {
     required this.createdAt,
     required this.updatedAt,
     this.comments = const [],
+    this.assignees = const [],
+    this.assigneesCount = 0,
   });
 
   factory TaskDto.fromJson(Map<String, dynamic> json) => TaskDto(
@@ -58,6 +63,11 @@ class TaskDto {
     comments: (json['comments'] as List<dynamic>? ?? [])
         .map((e) => TaskCommentAvatarDto.fromJson(e as Map<String, dynamic>))
         .toList(),
+    assignees: (json['assignees'] as List<dynamic>? ?? [])
+        .map((e) => TaskAssigneeDto.fromJson(e as Map<String, dynamic>))
+        .toList(),
+    assigneesCount: json['assignees_count'] as int? ??
+        (json['assignees'] as List<dynamic>? ?? const []).length,
   );
 }
 class TaskCommentAvatarDto {

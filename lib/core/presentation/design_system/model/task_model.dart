@@ -11,6 +11,12 @@ class TaskModel extends Equatable {
   final List<String?> commentAvatarUrls;
   final int commentsCount;
 
+  final List<String?>? assigneeAvatarUrls;
+  final int assigneesCount;
+  final int attachmentsCount;
+
+  final double? progress;
+
   const TaskModel({
     required this.id,
     required this.title,
@@ -19,6 +25,10 @@ class TaskModel extends Equatable {
     required this.date,
     this.commentAvatarUrls = const [],
     this.commentsCount = 0,
+    this.assigneeAvatarUrls,
+    this.assigneesCount = 0,
+    this.attachmentsCount = 0,
+    this.progress,
   });
 
   @override
@@ -30,5 +40,9 @@ class TaskModel extends Equatable {
     date,
     commentAvatarUrls,
     commentsCount,
+    assigneeAvatarUrls,
+    assigneesCount,
+    attachmentsCount,
+    progress,
   ];
 }
