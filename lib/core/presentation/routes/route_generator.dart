@@ -3,6 +3,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
 import 'package:workmate/core/presentation/routes/route_names.dart';
 import 'package:workmate/features/auth/presentation/on_boarding/logic/on_boarding_cubit.dart';
+import 'package:workmate/features/home/presentation/logic/home_cubit.dart';
 import 'package:workmate/features/home/presentation/view/home_screen.dart';
 import 'package:workmate/core/di/core_di_container.dart';
 import '../../../features/attendance/presentation/attendance/logic/attendance_screen_cubit.dart';
@@ -215,7 +216,10 @@ final GoRouter router = GoRouter(
             GoRoute(
               path: RouteNames.homeScreen,
               name: 'home',
-              builder: (context, state) => const HomeScreen(),
+              builder: (context, state) => BlocProvider(
+                create: (_) => sl<HomeCubit>()..load(),
+                child: const HomeScreen(),
+              ),
             ),
           ],
         ),

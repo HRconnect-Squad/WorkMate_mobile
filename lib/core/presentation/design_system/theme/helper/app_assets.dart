@@ -31,6 +31,7 @@ class AppAssets {
   static const inProgress = 'assets/svgs/task_status_in_progress.svg';
   static const done = 'assets/svgs/task_status_done.svg';
   static const todo = 'assets/svgs/task_status_review.svg';
+  static const workSummary = 'assets/images/work_summary.png';
   static const kTaskScreenBanner = 'assets/images/task_screen_banner.png';
 
 
