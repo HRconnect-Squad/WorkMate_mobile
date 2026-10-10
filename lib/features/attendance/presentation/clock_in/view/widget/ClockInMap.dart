@@ -22,7 +22,7 @@ class ClockInMap extends StatelessWidget {
   Widget build(BuildContext context) {
     return FlutterMap(
       options: MapOptions(
-        center: LatLng(
+        initialCenter: LatLng(
           clockInFlowState.userLocation?.latitude ?? 0,
           clockInFlowState.userLocation?.longitude ?? 0,
         ),
