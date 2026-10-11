@@ -7,12 +7,28 @@ class AppConfig {
 
   static bool _isInitialized = false;
 
-  static String get maptilerApiKey => dotenv.env['MAPTILER_API_KEY'] ?? '';
-
   static Future<void> init() async {
     if (_isInitialized) return;
 
     await dotenv.load(fileName: '.env');
+
+    final requiredKeys = [
+      'ENV',
+      'API_BASE_URL',
+      'X_API_KEY',
+    ];
+
+    final missingKeys = requiredKeys
+        .where((key) => dotenv.maybeGet(key) == null)
+        .toList();
+
+    if (missingKeys.isNotEmpty) {
+      throw StateError(
+        'Missing required configuration: '
+            '${missingKeys.join(', ')}',
+      );
+    }
+
     _isInitialized = true;
   }
 
@@ -41,6 +57,11 @@ class AppConfig {
     return _getString('X_API_KEY', 'WorkMate');
   }
 
+  static String get maptilerApiKey {
+    _ensureInitialized();
+    return _getString('MAPTILER_API_KEY', 'WorkMate');
+  }
+
   static String get appName {
     _ensureInitialized();
     return _getString('APP_NAME', 'WorkMate');
@@ -59,6 +80,16 @@ class AppConfig {
   static Duration get sendTimeout {
     _ensureInitialized();
     return Duration(milliseconds: _getInt('SEND_TIMEOUT', 30000));
+  }
+
+  static String get reverbAppKey {
+    _ensureInitialized(); return _getString('REVERB_APP_KEY', '');
+  }
+  static String get reverbHost   {
+    _ensureInitialized(); return _getString('REVERB_HOST', 'api.mohammedzom.online');
+  }
+  static int get reverbPort      {
+    _ensureInitialized(); return _getInt('REVERB_PORT', 443);
   }
 
   static int _getInt(String key, int fallback) {

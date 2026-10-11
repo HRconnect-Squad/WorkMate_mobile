@@ -1,4 +1,5 @@
 import 'package:easy_localization/easy_localization.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_native_splash/flutter_native_splash.dart';
 import 'package:workmate/core/config/app_config.dart';
@@ -20,20 +21,37 @@ import 'features/task/di/task_container.dart';
 void main() async {
   WidgetsBinding widgetsBinding = WidgetsFlutterBinding.ensureInitialized();
   FlutterNativeSplash.preserve(widgetsBinding: widgetsBinding);
-  await EasyLocalization.ensureInitialized();
-  await AppConfig.init();
-  await initCore();
-  await initOnboarding();
-  await initAuth();
-  await initProfile();
-  await initExpenses();
-  await initAttendance();
-  await initLeave();
-  await initTask();
-  await initHome();
-  await sl<AppStartupService>().initialize();
+  Object? startupError;
 
-  FlutterNativeSplash.remove();
+  try {
+    await EasyLocalization.ensureInitialized();
+    await AppConfig.init();
+    await initCore();
+    await initOnboarding();
+    await initAuth();
+    await initProfile();
+    await initExpenses();
+    await initAttendance();
+    await initLeave();
+    await initTask();
+    await initHome();
+    await sl<AppStartupService>().initialize();
+  } catch (error, stackTrace) {
+    startupError = error;
+
+    debugPrint('App startup failed: $error');
+    debugPrintStack(stackTrace: stackTrace);
+  } finally {
+    FlutterNativeSplash.remove();
+  }
+  if (startupError != null) {
+    runApp(
+      StartupErrorApp(
+        error: startupError,
+      ),
+    );
+    return;
+  }
 
   runApp(
     ToastificationWrapper(
@@ -61,6 +79,65 @@ class MyApp extends StatelessWidget {
       darkTheme: WorkMateTheme.dark(),
       themeMode: ThemeMode.light,
       routerConfig: router,
+    );
+  }
+}
+
+
+class StartupErrorApp extends StatelessWidget {
+  final Object error;
+
+  const StartupErrorApp({
+    super.key,
+    required this.error,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    return MaterialApp(
+      debugShowCheckedModeBanner: false,
+      home: Scaffold(
+        body: SafeArea(
+          child: Center(
+            child: Padding(
+              padding: const EdgeInsets.all(24),
+              child: Column(
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  const Icon(
+                    Icons.error_outline,
+                    size: 64,
+                    color: Colors.red,
+                  ),
+                  const SizedBox(height: 16),
+                  const Text(
+                    'Unable to start WorkMate',
+                    style: TextStyle(
+                      fontSize: 22,
+                      fontWeight: FontWeight.bold,
+                    ),
+                    textAlign: TextAlign.center,
+                  ),
+                  const SizedBox(height: 8),
+                  const Text(
+                    'The application could not initialize. '
+                        'Please contact support or check the '
+                        'application configuration.',
+                    textAlign: TextAlign.center,
+                  ),
+                  if (kDebugMode) ...[
+                    const SizedBox(height: 16),
+                    SelectableText(
+                      error.toString(),
+                      textAlign: TextAlign.center,
+                    ),
+                  ],
+                ],
+              ),
+            ),
+          ),
+        ),
+      ),
     );
   }
 }
