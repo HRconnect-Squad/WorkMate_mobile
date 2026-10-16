@@ -12,4 +12,5 @@ abstract class PreferencesKeys {
 
   static const String profileKey = 'cached_profile';
   static const String profileCompletedKey = 'profile_completed';
+  static const String userId = 'user_id';
 }

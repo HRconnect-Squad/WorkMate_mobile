@@ -6,4 +6,7 @@ abstract class AuthLocalDataSource {
   Future<void> saveIdentifier(String email);
   Future<String?> getIdentifier();
   Future<void> clearIdentifier();
+  Future<void> saveUserId(int id);
+  Future<int?> getUserId();
+  Future<void> clearUserId();
 }

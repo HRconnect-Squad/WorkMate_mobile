@@ -90,4 +90,31 @@ class AuthLocalDataSourceImp implements AuthLocalDataSource {
       throw CacheException.delete(PreferencesKeys.userIdentifier, e);
     }
   }
+
+  @override
+  Future<void> saveUserId(int id) async {
+    try {
+      await _preferencesService.setInt(key: PreferencesKeys.userId, value: id);
+    } catch (e) {
+      throw CacheException.write(PreferencesKeys.userId, e);
+    }
+  }
+
+  @override
+  Future<int?> getUserId() async {
+    try {
+      return _preferencesService.getInt(key: PreferencesKeys.userId);
+    } catch (e) {
+      throw CacheException.read(PreferencesKeys.userId, e);
+    }
+  }
+
+  @override
+  Future<void> clearUserId() async {
+    try {
+      await _preferencesService.remove(key: PreferencesKeys.userId);
+    } catch (e) {
+      throw CacheException.delete(PreferencesKeys.userId, e);
+    }
+  }
 }
