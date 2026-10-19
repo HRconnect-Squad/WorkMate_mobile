@@ -11,4 +11,5 @@ class AuthApiConstant {
   static const String logoutAll = '/api/auth/logout-all';
   static const String deleteAccount = '/api/auth/delete-account';
   static const String changePassword = '/api/auth/change-password';
+  static const String getCurrentUser = '/api/user';
 }

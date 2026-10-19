@@ -48,4 +48,6 @@ abstract class AuthRepository {
   Future<Either<Failure, Unit>> saveIdentifier(String mail);
   Future<Either<Failure, String?>> getIdentifier();
   Future<Either<Failure, Unit>> clearIdentifier();
+  Future<Either<Failure, int>> getCurrentUserId();
+
 }

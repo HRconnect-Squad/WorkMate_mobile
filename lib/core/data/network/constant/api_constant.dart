@@ -32,7 +32,4 @@ class ApiConstants {
   static const String endAttendanceBreak = '/api/attendance/break/end';
   static String attendanceDetails(String id) => '/api/attendance/$id/details';
 
-  static const String broadcasts = '/api/broadcasts';
-  static const String realtimeAuthorize = '/api/broadcasting/auth';
-
 }

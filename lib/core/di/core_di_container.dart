@@ -1,10 +1,15 @@
 import 'package:get_it/get_it.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:workmate/core/di/realtime_session_binder.dart';
+import '../../features/auth/domain/use_cases/get_current_user_id_use_case.dart';
 import '../data/cache/cache_manager.dart';
 import '../data/cache/secure_storage_data_source.dart';
 import '../data/cache/shared_preferences_service.dart';
+import '../data/network/dio_client.dart';
+import '../data/network/socket_client.dart';
 import '../domain/service/cache_manager.dart';
 import '../presentation/routes/config/app_startup_service.dart';
+import '../presentation/routes/config/app_state_notifier.dart';
 
 final sl = GetIt.instance;
 
@@ -29,6 +34,20 @@ Future<void> initCore() async {
 
   sl.registerLazySingleton<AppStartupService>(
     () => AppStartupServiceImpl(sl<PreferencesService>(), sl<SecureStorageService>()),
+  );
+
+  sl.registerLazySingleton<SocketClient>(
+        () => SocketClient(sl<DioClient>()),
+    dispose: (client) => client.dispose(),
+  );
+
+  sl.registerLazySingleton<RealtimeSessionBinder>(
+        () => RealtimeSessionBinder(
+      socket: sl<SocketClient>(),
+      session: AuthStateNotifier.instance,
+      getUserId: sl<GetCurrentUserIdUseCase>().call,
+    ),
+    dispose: (binder) => binder.dispose(),
   );
 
 }

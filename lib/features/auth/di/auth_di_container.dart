@@ -11,6 +11,7 @@ import '../data/repository_imp/auth_repository_imp.dart';
 import '../domain/repository/auth_repository.dart';
 import '../domain/use_cases/change_password_use_case.dart';
 import '../domain/use_cases/check_forgot_password_otp_use_case.dart';
+import '../domain/use_cases/get_current_user_id_use_case.dart';
 import '../domain/use_cases/load_identifier_use_case.dart';
 import '../domain/use_cases/login_use_case.dart';
 import '../domain/use_cases/logout_use_case.dart';
@@ -72,6 +73,9 @@ Future<void> initAuth() async {
   );
   sl.registerLazySingleton<CheckForgotPasswordOtpUseCase>(
         () => CheckForgotPasswordOtpUseCase(sl<AuthRepository>()),
+  );
+  sl.registerLazySingleton<GetCurrentUserIdUseCase>(
+        () => GetCurrentUserIdUseCase(sl<AuthRepository>()),
   );
 
 

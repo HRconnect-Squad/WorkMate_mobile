@@ -1,3 +1,4 @@
+import '../../../../../core/data/exception/app_exception.dart';
 import '../../../../../core/data/network/dio_client.dart';
 import '../../../../../core/data/network/dto/response/api_response.dart';
 import '../../constant/auth_api_constant.dart';
@@ -118,5 +119,21 @@ class AuthRemoteDataSourceImp implements AuthRemoteDataSource {
 
     final apiResponse = ApiResponse.fromJson(response.data, null);
     return apiResponse.success;
+  }
+
+  @override
+  Future<int> getCurrentUserId() async {
+    final response = await _dioClient.get(AuthApiConstant.getCurrentUser);
+    final apiResponse = ApiResponse.fromJson(
+      response.data,
+          (data) => data as Map<String, dynamic>,
+    );
+    final id = apiResponse.requiredData['id'];
+    if (id is! int) {
+      throw const SerializationException(
+        message: 'User id missing from /api/user response',
+      );
+    }
+    return id;
   }
 }

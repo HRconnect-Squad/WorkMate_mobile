@@ -238,4 +238,17 @@ class AuthRepositoryImp with SafeApiCall implements AuthRepository {
           return unit;
         },
       );
+
+  @override
+  Future<Either<Failure, int>> getCurrentUserId() => safeApiCall(
+    call: () async {
+      final cached = await _localDataSource.getUserId();
+      if (cached != null) return cached;
+
+      final id = await _remoteDataSource.getCurrentUserId();
+      await _localDataSource.saveUserId(id);
+      return id;
+    },
+    onException: AuthFailureMapper.mapException,
+  );
 }

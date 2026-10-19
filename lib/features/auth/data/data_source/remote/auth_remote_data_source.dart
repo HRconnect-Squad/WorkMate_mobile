@@ -27,4 +27,6 @@ abstract class AuthRemoteDataSource {
     required String newPassword,
     required String newPasswordConfirmation,
   });
+
+  Future<int> getCurrentUserId();
 }
