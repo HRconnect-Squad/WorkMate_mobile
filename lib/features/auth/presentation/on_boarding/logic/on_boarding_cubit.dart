@@ -1,7 +1,7 @@
 import 'package:fpdart/fpdart.dart';
 import '../../../../../core/presentation/base_viewmodel/base_cubit.dart';
 import '../../../../../core/presentation/mapper/failure_ui_mapper.dart';
-import '../../../../../core/presentation/routes/config/app_state_notifier.dart';
+import '../../../../../core/presentation/routes/config/auth_state_notifer.dart';
 import '../../../domain/use_cases/complete_onboarding_use_case.dart';
 import 'on_boarding_state.dart';
 

@@ -2,7 +2,7 @@ import 'package:easy_localization/easy_localization.dart';
 import '../../../../../core/config/app_constant.dart';
 import '../../../../../core/domain/failure/domain_failure.dart';
 import '../../../../../core/presentation/base_viewmodel/base_cubit.dart';
-import '../../../../../core/presentation/routes/config/app_state_notifier.dart';
+import '../../../../../core/presentation/routes/config/auth_state_notifer.dart';
 import '../../../../../core/presentation/util/validator.dart';
 import '../../../domain/failures/failure.dart';
 import '../../../domain/use_cases/change_password_use_case.dart';

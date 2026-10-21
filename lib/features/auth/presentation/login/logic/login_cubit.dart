@@ -1,5 +1,5 @@
 import '../../../../../core/presentation/base_viewmodel/base_cubit.dart';
-import '../../../../../core/presentation/routes/config/app_state_notifier.dart';
+import '../../../../../core/presentation/routes/config/auth_state_notifer.dart';
 import '../../../../../core/presentation/util/validator.dart';
 import '../../../domain/entity/auth_type.dart';
 import '../../../domain/failures/failure.dart';

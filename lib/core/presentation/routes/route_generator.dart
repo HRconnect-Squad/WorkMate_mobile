@@ -42,7 +42,7 @@ import '../../../features/task/presentation/login/task_detail_cubit.dart';
 import '../../../features/task/presentation/view/task_detail_screen.dart';
 import '../../../features/task/presentation/view/task_screen.dart';
 import '../design_system/model/task_model.dart';
-import 'config/app_state_notifier.dart';
+import 'config/auth_state_notifer.dart';
 import 'main_navigation/presentation/screens/main_wrapper_screen.dart';
 
 final GoRouter router = GoRouter(

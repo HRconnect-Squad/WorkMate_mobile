@@ -3,7 +3,7 @@ import 'package:workmate/features/profile/presentation/profile/logic/profile_sta
 import '../../../../../core/domain/failure/domain_failure.dart';
 import '../../../../../core/presentation/base_viewmodel/base_cubit.dart';
 import '../../../../../core/presentation/mapper/failure_ui_mapper.dart';
-import '../../../../../core/presentation/routes/config/app_state_notifier.dart';
+import '../../../../../core/presentation/routes/config/auth_state_notifer.dart';
 import '../../../../auth/domain/use_cases/load_identifier_use_case.dart';
 import '../../../../auth/domain/use_cases/logout_use_case.dart';
 import '../../../domain/entity/gender.dart';

@@ -1,7 +1,8 @@
 import 'dart:async';
 import 'package:flutter/foundation.dart';
+import 'package:workmate/core/domain/service/session_state.dart';
 
-class AuthStateNotifier extends ChangeNotifier {
+class AuthStateNotifier extends ChangeNotifier implements SessionState {
   AuthStateNotifier._();
 
   static final AuthStateNotifier _instance = AuthStateNotifier._();
@@ -10,9 +11,10 @@ class AuthStateNotifier extends ChangeNotifier {
   bool _isLoggedIn = false;
   bool _isOnboardingCompleted = false;
   bool _isInitialized = false;
-
+  @override
   bool get isLoggedIn => _isLoggedIn;
   bool get isOnboardingCompleted => _isOnboardingCompleted;
+  @override
   bool get isInitialized => _isInitialized;
 
   Future<void> initialize({
@@ -30,6 +32,7 @@ class AuthStateNotifier extends ChangeNotifier {
     notifyListeners();
   }
 
+  @override
   void setLoggedOut() {
     _isLoggedIn = false;
     notifyListeners();

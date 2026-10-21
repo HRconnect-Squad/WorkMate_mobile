@@ -2,7 +2,7 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:fpdart/fpdart.dart';
 import 'package:workmate/core/domain/failure/domain_failure.dart';
-import '../routes/config/app_state_notifier.dart';
+import '../routes/config/auth_state_notifer.dart';
 
 abstract class BaseCubit<STATE> extends Cubit<STATE> {
   final AuthStateNotifier _authStateNotifier;

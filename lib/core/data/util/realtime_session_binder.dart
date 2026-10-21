@@ -1,11 +1,10 @@
 import 'dart:async';
 import 'package:fpdart/fpdart.dart';
-
-import '../ services/logger_service.dart';
-import '../data/exception/app_exception.dart';
-import '../data/network/socket_client.dart';
-import '../domain/failure/domain_failure.dart';
-import '../presentation/routes/config/app_state_notifier.dart';
+import '../../ services/logger_service.dart';
+import '../exception/app_exception.dart';
+import '../network/socket_client.dart';
+import '../../domain/failure/domain_failure.dart';
+import '../../domain/service/session_state.dart';
 
 
 typedef UserIdProvider = Future<Either<Failure, int>> Function();
@@ -13,7 +12,7 @@ typedef UserIdProvider = Future<Either<Failure, int>> Function();
 
 class RealtimeSessionBinder {
   final SocketClient _socket;
-  final AuthStateNotifier _session;
+  final SessionState _session;
   final UserIdProvider _getUserId;
 
   late final StreamSubscription<AppException> _errorSub;
@@ -21,7 +20,7 @@ class RealtimeSessionBinder {
 
   RealtimeSessionBinder({
     required SocketClient socket,
-    required AuthStateNotifier session,
+    required SessionState session,
     required UserIdProvider getUserId,
   })  : _socket = socket,
         _session = session,

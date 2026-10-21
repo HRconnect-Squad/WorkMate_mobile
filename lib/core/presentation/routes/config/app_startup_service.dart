@@ -2,7 +2,7 @@ import '../../../data/cache/preferences_keys.dart';
 import '../../../data/cache/secure_storage_data_source.dart';
 import '../../../data/cache/shared_preferences_service.dart';
 import '../../../data/network/constant/api_constant.dart';
-import 'app_state_notifier.dart';
+import 'auth_state_notifer.dart';
 
 abstract class AppStartupService {
   bool isOnboardingCompleted();

@@ -1,6 +1,6 @@
 import '../../../../../../../core/presentation/base_viewmodel/base_cubit.dart';
 import '../../../../../../../core/presentation/util/validator.dart';
-import '../../../../../../core/presentation/routes/config/app_state_notifier.dart';
+import '../../../../../../core/presentation/routes/config/auth_state_notifer.dart';
 import '../../../../domain/entity/auth_identifier.dart';
 import '../../../../domain/entity/verification_type.dart';
 import '../../../../domain/entity/verify_otp.dart';
