@@ -3,7 +3,6 @@ import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import '../../../../core/presentation/design_system/components/app_bar.dart';
-import '../../../../core/presentation/design_system/components/custom_chat_bar_message.dart';
 import '../../../../core/presentation/design_system/components/custom_chips.dart';
 import '../../../../core/presentation/design_system/model/task_model.dart';
 import '../../../../core/presentation/design_system/theme/helper/app_assets.dart';

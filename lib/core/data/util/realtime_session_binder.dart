@@ -66,7 +66,6 @@ class RealtimeSessionBinder {
 
   void _onSocketError(AppException error) {
     logger.w('Socket error: ${error.message}');
-    // A 401 on the auth handshake means the token is no longer valid.
     if (error is UnauthorizedException && _session.isLoggedIn) {
       _session.setLoggedOut();
     }

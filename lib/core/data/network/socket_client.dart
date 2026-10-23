@@ -13,13 +13,11 @@ import 'dto/realtime/socket_event.dart';
 class SocketClient {
   final DioClient _dioClient;
   final PusherChannelsFlutter _pusher = PusherChannelsFlutter.getInstance();
-
   final _events = StreamController<SocketEvent>.broadcast();
   final _status = StreamController<RealtimeConnectionStatus>.broadcast();
   final _errors = StreamController<AppException>.broadcast();
 
   Future<void> _tail = Future.value();
-
   RealtimeConnectionStatus _currentStatus = RealtimeConnectionStatus.disconnected;
   bool _initialized = false;
   bool _disposed = false;
@@ -29,19 +27,14 @@ class SocketClient {
 
   Stream<SocketEvent> get events => _events.stream;
   Stream<RealtimeConnectionStatus> get connectionStatus => _status.stream;
-
   Stream<AppException> get errors => _errors.stream;
-
-  /// Broadcast streams don't replay, so late listeners read the current value here.
   RealtimeConnectionStatus get currentStatus => _currentStatus;
 
-  /// Idempotent for the same user. Throws [AppException] if it cannot connect.
   Future<void> connect({required int userId}) =>
       _enqueue(() => _connect(userId));
 
   Future<void> disconnect() => _enqueue(_disconnect);
 
-  /// Permanent teardown (not for logout; the client stays reusable after [disconnect]).
   Future<void> dispose() async {
     if (_disposed) return;
     _disposed = true;
@@ -146,8 +139,6 @@ class SocketClient {
         data: Map<String, dynamic>.from(decoded as Map),
       ));
     } catch (e) {
-      // One malformed payload is not actionable by anyone: log it and drop it
-      // instead of killing the stream.
       logger.e('Dropped malformed socket event ${event.eventName}', error: e);
     }
   }
