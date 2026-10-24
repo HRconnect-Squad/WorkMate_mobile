@@ -15,6 +15,9 @@ class LogoutUseCase {
 
   Future<Either<Failure, Unit>> call() async {
     await _authRepository.clearToken();
+    await _authRepository.clearIdentifier();
+    await _authRepository.clearUserId();
+
     await Future(() => _cacheManager.clearAllCache());
     return const Right(unit);
   }

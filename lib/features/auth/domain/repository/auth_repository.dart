@@ -49,5 +49,7 @@ abstract class AuthRepository {
   Future<Either<Failure, String?>> getIdentifier();
   Future<Either<Failure, Unit>> clearIdentifier();
   Future<Either<Failure, int>> getCurrentUserId();
+  Future<Either<Failure, Unit>> saveUserId(int id);
+  Future<Either<Failure, Unit>> clearUserId();
 
 }

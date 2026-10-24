@@ -77,13 +77,7 @@ class ErrorInterceptor extends Interceptor {
         apiError: apiError,
       ),
       401 =>
-        _isInvalidCredentials(apiError?.errorCode, message)
-            ? InvalidCredentialsException(
-                message: message,
-                statusCode: statusCode,
-                apiError: apiError,
-              )
-            : UnauthorizedException(
+        UnauthorizedException(
                 message: message,
                 statusCode: statusCode,
                 apiError: apiError,
@@ -138,17 +132,5 @@ class ErrorInterceptor extends Interceptor {
       logger.e('Failed to parse API error response', error: e, stackTrace: stackTrace);
       return null;
     }
-  }
-
-  bool _isInvalidCredentials(String? errorCode, String message) {
-    final code = errorCode?.toUpperCase() ?? '';
-    final msg = message.toLowerCase();
-
-    if (code == 'INVALID_CREDENTIALS') return true;
-
-    return msg.contains('invalid') ||
-        msg.contains('incorrect') ||
-        msg.contains('wrong password') ||
-        msg.contains('credentials');
   }
 }

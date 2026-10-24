@@ -29,6 +29,9 @@ class SocketClient {
   Stream<RealtimeConnectionStatus> get connectionStatus => _status.stream;
   Stream<AppException> get errors => _errors.stream;
   RealtimeConnectionStatus get currentStatus => _currentStatus;
+  Stream<void> get onConnected => _status.stream
+      .where((s) => s == RealtimeConnectionStatus.connected)
+      .map((_) {});
 
   Future<void> connect({required int userId}) =>
       _enqueue(() => _connect(userId));

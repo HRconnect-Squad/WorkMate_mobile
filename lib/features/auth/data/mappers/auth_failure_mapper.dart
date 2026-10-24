@@ -13,15 +13,9 @@ class AuthFailureMapper {
 
     switch (exception) {
       case UnauthorizedException():
-        return SessionExpiredFailure(message: exception.message);
-
-      case InvalidCredentialsException():
-        return InvalidCredentialsFailure(message: exception.message);
-
-      // case ServerException():
-      // case BadRequestException():
-      // case ForbiddenException():
-      //   return _mapErrorCodeException(exception);
+        return _isInvalidCredentials(code, exception.message) ?
+         SessionExpiredFailure(message: exception.message) :
+        InvalidCredentialsFailure(message: exception.message);
 
       default:
         return null;
@@ -45,5 +39,17 @@ class AuthFailureMapper {
       'INVALID_CREDENTIALS'      => InvalidCredentialsFailure(message: message),
       _                          => null,
     };
+  }
+
+  static bool _isInvalidCredentials(String? errorCode, String message) {
+    final code = errorCode?.toUpperCase() ?? '';
+    final msg = message.toLowerCase();
+
+    if (code == 'INVALID_CREDENTIALS') return true;
+
+    return msg.contains('invalid') ||
+        msg.contains('incorrect') ||
+        msg.contains('wrong password') ||
+        msg.contains('credentials');
   }
 }

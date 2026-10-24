@@ -45,7 +45,7 @@ class AuthRepositoryImp with SafeApiCall implements AuthRepository {
           );
 
           final token = response.accessToken;
-          if (token == null || token.isEmpty) {
+          if (token == null || token.isEmpty || response.user?.id == null) {
             throw const ServerException(message: 'Access token is missing');
           }
 
@@ -53,6 +53,8 @@ class AuthRepositoryImp with SafeApiCall implements AuthRepository {
           await _localDataSource.saveIdentifier(
             response.user?.email ?? response.user?.phone ?? identifier,
           );
+          await _localDataSource.saveUserId(response.user?.id ?? 0);
+
 
           return AuthMapper.toDomain(response.user);
         },
@@ -240,13 +242,32 @@ class AuthRepositoryImp with SafeApiCall implements AuthRepository {
       );
 
   @override
+  Future<Either<Failure, Unit>> saveUserId(int id) =>
+      safeCacheCall(
+        call: () async {
+          await _localDataSource.saveUserId(id);
+          return unit;
+        },
+      );
+
+  @override
+  Future<Either<Failure, Unit>> clearUserId() =>
+      safeCacheCall(
+        call: () async {
+          await _localDataSource.clearUserId();
+          return unit;
+        },
+      );
+
+
+  @override
   Future<Either<Failure, int>> getCurrentUserId() => safeApiCall(
     call: () async {
       final cached = await _localDataSource.getUserId();
       if (cached != null) return cached;
 
       final id = await _remoteDataSource.getCurrentUserId();
-      await _localDataSource.saveUserId(id);
+      await saveUserId(id);
       return id;
     },
     onException: AuthFailureMapper.mapException,
