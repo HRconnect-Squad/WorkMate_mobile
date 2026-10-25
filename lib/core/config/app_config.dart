@@ -16,6 +16,7 @@ class AppConfig {
       'ENV',
       'API_BASE_URL',
       'X_API_KEY',
+      'REVERB_APP_KEY'
     ];
 
     final missingKeys = requiredKeys

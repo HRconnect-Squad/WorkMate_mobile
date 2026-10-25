@@ -13,6 +13,7 @@ class AuthFailureMapper {
 
     switch (exception) {
       case UnauthorizedException():
+      case InvalidCredentialsException():
         return _isInvalidCredentials(code, exception.message) ?
          SessionExpiredFailure(message: exception.message) :
         InvalidCredentialsFailure(message: exception.message);

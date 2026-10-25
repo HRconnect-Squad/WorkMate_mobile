@@ -7,6 +7,7 @@ import 'package:toastification/toastification.dart';
 import 'package:workmate/core/data/util/realtime_session_binder.dart';
 import 'package:workmate/features/leave/di/leave_di_container.dart';
 import 'core/di/core_di_container.dart';
+import 'core/di/realtime_di_container.dart';
 import 'core/presentation/design_system/theme/workmate_theme.dart';
 import 'core/presentation/routes/config/app_startup_service.dart';
 import 'core/presentation/routes/route_generator.dart';
@@ -36,6 +37,8 @@ void main() async {
     await initLeave();
     await initTask();
     await initHome();
+    await initRealtime();
+
     await sl<AppStartupService>().initialize();
     sl<RealtimeSessionBinder>();
   } catch (error, stackTrace) {

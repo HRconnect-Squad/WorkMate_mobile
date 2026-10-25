@@ -1,6 +1,6 @@
 import '../../../../../core/domain/failure/domain_failure.dart';
 import '../../../../../core/presentation/base_viewmodel/base_cubit.dart';
-import '../../../../../core/presentation/routes/config/auth_state_notifer.dart';
+import '../../../../../core/presentation/routes/config/auth_state_notifIer.dart';
 import '../../../../../core/presentation/util/validator.dart';
 import '../../../domain/failures/failure.dart';
 import '../../../domain/use_cases/reset_password_use_case.dart';
