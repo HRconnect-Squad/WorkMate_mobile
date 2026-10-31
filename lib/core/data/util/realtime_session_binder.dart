@@ -51,7 +51,8 @@ class RealtimeSessionBinder {
     await idResult.fold(
           (failure) async {
         logger.w('Socket not started: no user id (${failure.message})');
-        _lastLoggedIn = null; // allow a later notification to retry
+        if (_lastLoggedIn == loggedIn) _lastLoggedIn = null;
+        //_lastLoggedIn = null; // allow a later notification to retry
       },
           (userId) async {
         if (!_session.isLoggedIn) return; // logged out while we were awaiting
