@@ -52,16 +52,30 @@ class Pagination {
     required this.totalItems,
   });
 
+  factory Pagination.single(int totalItems) => Pagination(
+    currentPage: 1,
+    totalPages: 1,
+    limit: totalItems,
+    totalItems: totalItems,
+  );
+
   factory Pagination.fromJson(Map<String, dynamic> json) {
     return Pagination(
-      currentPage: json['page'] as int? ?? 1,
-      totalPages: json['totalPages'] as int? ?? 1,
-      limit: json['limit'] as int? ?? 20,
-      totalItems: json['totalItems'] as int? ?? 0,
+      currentPage: (json['current_page'] ?? json['page']) as int? ?? 1,
+      totalPages: (json['last_page'] ?? json['totalPages']) as int? ?? 1,
+      limit: (json['per_page'] ?? json['limit']) as int? ?? 20,
+      totalItems: (json['total'] ?? json['totalItems']) as int? ?? 0,
     );
   }
 
   bool get hasNextPage => currentPage < totalPages;
 
   bool get isFirstPage => currentPage == 1;
+}
+
+class PagedResponse<T> {
+  final List<T> items;
+  final Pagination pagination;
+
+  const PagedResponse({required this.items, required this.pagination});
 }
