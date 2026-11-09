@@ -14,6 +14,7 @@ import 'core/presentation/routes/route_generator.dart';
 import 'features/attendance/di/attendance_container.dart';
 import 'features/auth/di/auth_di_container.dart';
 import 'features/auth/di/onboarding_di_container.dart';
+import 'features/chat/di/chat_di_container.dart';
 import 'features/expense/di/expense_di_container.dart';
 import 'features/home/di/home_di_container.dart';
 import 'features/profile/di/profile_di_container.dart';
@@ -38,6 +39,7 @@ void main() async {
     await initTask();
     await initHome();
     await initRealtime();
+    await initChat();
 
     await sl<AppStartupService>().initialize();
     sl<RealtimeSessionBinder>();

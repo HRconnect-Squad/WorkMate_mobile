@@ -25,4 +25,6 @@ abstract class ChatRepository {
 
   Stream<Message> watchIncomingMessages();
   Stream<RealtimeConnectionStatus> watchConnectionStatus();
+
+  Stream<void> watchConnected();
 }

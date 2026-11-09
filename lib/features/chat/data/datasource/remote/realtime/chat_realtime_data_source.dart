@@ -1,17 +1,10 @@
-import '../../../../../../core/data/network/dto/response/api_response.dart';
-import '../dto/conversation_dto.dart';
+import '../../../../../../core/domain/model/realtime_connection_status.dart';
 import '../dto/message_dto.dart';
-import '../dto/request/send_message_request_dto.dart';
 
-abstract class ChatRemoteDataSource {
-  Future<PagedResponse<ConversationDto>> getConversations({int page = 1});
+abstract class ChatRealtimeDataSource {
+  Stream<MessageDto> watchIncomingMessages();
 
-  Future<PagedResponse<MessageDto>> getConversationMessages({
-    required int contactId,
-    int page = 1,
-  });
+  Stream<RealtimeConnectionStatus> watchConnectionStatus();
 
-  Future<MessageDto> sendMessage(SendMessageRequestDto request);
-
-  Future<void> markConversationRead(int contactId);
+  Stream<void> watchConnected();
 }
